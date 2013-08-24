@@ -1,6 +1,7 @@
 package ubs.model;
 
 public class User {
+	private String name;
 	private String email;
 	private String password;
 	private CreditWallet creditWallet;
@@ -10,13 +11,19 @@ public class User {
 	private String googleAccountID;
 	private String facebookID;
 	
-	public User(String email, String password, CreditWallet creditWallet) {
-		super();
+	public User(String name, String email, String password, CreditWallet creditWallet) {
+		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.creditWallet = creditWallet;
 		emailNotifications = true;
 		socialNetworkPosts = true;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getEmail() {
 		return email;
