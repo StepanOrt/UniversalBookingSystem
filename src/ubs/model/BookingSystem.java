@@ -26,6 +26,8 @@ public class BookingSystem {
 	public Iterable<Reservation> getReservations() {
 		return reservations;
 	}
-	
-	
+
+	public void sendEmail(User user, String message) {
+		// TODO Auto-generated method stub
+	}
 }
