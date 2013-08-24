@@ -1,26 +1,28 @@
 package ubs.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ReservationItem {
-	private Set<ReservationAttributeValue> attributeValues;
+	private Map<String, ReservationAttributeValue> attributeValues;
 	private ReservationCategoryNode category;
 	private Set<ReservationTag> tags;
 	
 	public ReservationItem(ReservationCategoryNode category) {
-		attributeValues = new HashSet<ReservationAttributeValue>();
+		attributeValues = new HashMap<String, ReservationAttributeValue>();
 		tags = new HashSet<ReservationTag>();
 		this.category = category;
 	}
 
 	public Iterable<ReservationAttributeValue> getAttributeValues() {
-		return attributeValues;
+		return attributeValues.values();
 	}
 
 	public void addAttributeValue(ReservationAttribute attribute, Object value) {
 		ReservationAttributeValue attributeValue = new ReservationAttributeValue(attribute, value);
-		attributeValues.add(attributeValue);
+		attributeValues.put(attribute.getName(), attributeValue);
 	}
 	
 	public void addTag(ReservationTag tag) {
@@ -41,5 +43,9 @@ public class ReservationItem {
 
 	public void setCategory(ReservationCategoryNode category) {
 		this.category = category;
+	}
+
+	public ReservationAttributeValue getAttribute(ReservationAttribute attribute) {
+		return attributeValues.get(attribute.getName());
 	}
 }

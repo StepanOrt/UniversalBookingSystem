@@ -14,8 +14,7 @@ public class ReservationSystemAttributeValue extends AttributeValue {
 	}
 
 	@Override
-	public void setValue(Object value) throws InvalidAttributeException {
-		// TODO Auto-generated method stub
+	public void setValue(Object value) throws InvalidAttributeValueException {
 		super.setValue(value);
 	}
 }

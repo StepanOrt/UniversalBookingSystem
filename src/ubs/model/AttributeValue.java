@@ -15,7 +15,7 @@ public abstract class AttributeValue {
 		return value;
 	}
 
-	public void setValue(Object value) throws InvalidAttributeException {
+	public void setValue(Object value) throws InvalidAttributeValueException {
 		if (attributeType == AttributeType.DATETIME && value instanceof Date) {
 			this.value = value;
 		} else if (attributeType == AttributeType.FLOAT && value instanceof Float) {
@@ -25,7 +25,7 @@ public abstract class AttributeValue {
 		} else if ((attributeType == AttributeType.TEXT || attributeType == AttributeType.URL || attributeType == AttributeType.PICTURE) && value instanceof String) {
 			this.value = value;			
 		} else {
-			throw new InvalidAttributeException(value, attributeType);
+			throw new InvalidAttributeValueException(value, attributeType);
 		}
 	}
 }
