@@ -22,6 +22,10 @@ public class BookingSystem {
 	public void createReservation(ReservationItem reservationItem, User user) {
 		//TODO
 	}
+
+	public Iterable<Reservation> getReservations() {
+		return reservations;
+	}
 	
 	
 }

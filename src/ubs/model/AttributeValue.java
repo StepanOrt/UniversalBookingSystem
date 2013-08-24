@@ -1,5 +1,7 @@
 package ubs.model;
 
+import java.util.Date;
+
 public abstract class AttributeValue {
 	private Object value;
 	protected AttributeType attributeType;
@@ -14,7 +16,9 @@ public abstract class AttributeValue {
 	}
 
 	public void setValue(Object value) throws InvalidAttributeException {
-		if (attributeType == AttributeType.FLOAT && value instanceof Float) {
+		if (attributeType == AttributeType.DATETIME && value instanceof Date) {
+			this.value = value;
+		} else if (attributeType == AttributeType.FLOAT && value instanceof Float) {
 			this.value = value;			
 		} else if (attributeType == AttributeType.INTEGER && value instanceof Integer) {
 			this.value = value;
