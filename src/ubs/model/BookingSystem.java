@@ -1,6 +1,7 @@
 package ubs.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ public class BookingSystem {
 	private Set<ReservationTag> reservationTags;
 	private Set<ReservationAttribute> 	reservationAtributes;
 	private Set<ReservationStatus> reservationStatuses;
+	private ReservationStatus defaultReservationStatus;
 	
 	private Set<User> users;
 	
@@ -30,14 +32,14 @@ public class BookingSystem {
 		this.reservationStatuses = reservationStatuses;
 		this.users = new HashSet<User>();
 		this.reservationItems = new HashSet<ReservationItem>();
-		this.reservations = reservations;
+		this.reservations = new HashSet<Reservation>();
 	}
 
 	public void createReservation(ReservationItem reservationItem, User user) {
-		//TODO
+		reservations.add(new Reservation(user, reservationItem, defaultReservationStatus));
 	}
 
-	public Iterable<Reservation> getReservations() {
+	public Collection<Reservation> getReservations() {
 		return reservations;
 	}
 
@@ -49,7 +51,7 @@ public class BookingSystem {
 		users.add(user);
 	}
 
-	public Iterable<User> getUsersByName(String string) {
+	public Collection<User> getUsersByName(String string) {
 		List<User> selectedUsers = new ArrayList<User>();
 		for (User user : users) {
 			if (user.getName().contains(string)) selectedUsers.add(user);
@@ -61,7 +63,17 @@ public class BookingSystem {
 		reservationItems.add(reservationItem);
 	}
 
-	public Iterable<ReservationItem> getReservationItems() {
+	public Collection<ReservationItem> getReservationItems() {
 		return reservationItems;
+	}
+
+	public Collection<Reservation> getReservationsBy(User user) {
+		List<Reservation> selected = new ArrayList<Reservation>();
+		for (Reservation reservation : reservations) {
+			if (reservation.getUser().equals(user)) {
+				selected.add(reservation);				
+			}
+		}
+		return selected;
 	}
 }

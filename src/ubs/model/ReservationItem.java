@@ -1,5 +1,6 @@
 package ubs.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,7 +17,7 @@ public class ReservationItem {
 		this.category = category;
 	}
 
-	public Iterable<ReservationAttributeValue> getAttributeValues() {
+	public Collection<ReservationAttributeValue> getAttributeValues() {
 		return attributeValues.values();
 	}
 
