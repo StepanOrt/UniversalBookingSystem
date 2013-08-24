@@ -1,22 +1,23 @@
 package ubs.model;
 
-import java.util.List;
+import java.util.Set;
 
 public class BookingSystem {
-	private List<AtributeValue> atributeValues;
-	private List<ReservationCategoryTree> reservationCategoryTrees;
-	private List<ReservationTag> reservationTags;
-	private List<ReservationAtributes> 	reservationAtributes;
-	private List<ReservationStatus> reservationStatuses;
+	private Set<ReservationSystemAttributeValue> atributeValues;
 	
-	private List<User> users;
+	private Set<ReservationCategoryTree> reservationCategoryTrees;
+	private Set<ReservationTag> reservationTags;
+	private Set<ReservationAttribute> 	reservationAtributes;
+	private Set<ReservationStatus> reservationStatuses;
+	
+	private Set<User> users;
 	
 	private boolean creditPayment;
 	private boolean prepay;
 	private boolean cashPayment;
 	
-	private List<ReservationItem> reservationItem;
-	private List<Reservation> reservations;
+	private Set<ReservationItem> reservationItem;
+	private Set<Reservation> reservations;
 	
 	public void createReservation(ReservationItem reservationItem, User user) {
 		//TODO
