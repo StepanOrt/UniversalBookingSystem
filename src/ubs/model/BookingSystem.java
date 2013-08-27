@@ -4,27 +4,39 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import ubs.model.events.Event;
 
 public class BookingSystem {
-	private Set<ReservationSystemAttributeValue> atributeValues;
+	private Collection<ReservationSystemAttributeValue> atributeValues;
 	
-	private Set<ReservationCategoryTree> reservationCategoryTrees;
-	private Set<ReservationTag> reservationTags;
-	private Set<ReservationAttribute> 	reservationAtributes;
-	private Set<ReservationStatus> reservationStatuses;
+	private Collection<ReservationCategoryTree> reservationCategoryTrees;
+	private Collection<ReservationTag> reservationTags;
+	private Collection<ReservationAttribute> 	reservationAtributes;
+	private Collection<ReservationStatus> reservationStatuses;
 	private ReservationStatus defaultReservationStatus;
 	
-	private Set<User> users;
+	private Collection<User> users;
+	
+	private Collection<Event> events;
 	
 	private boolean creditPayment;
 	private boolean prepay;
 	private boolean cashPayment;
 	
-	private Set<ReservationItem> reservationItems;
-	private Set<Reservation> reservations;
+	private Collection<ReservationItem> reservationItems;
+	private Collection<Reservation> reservations;
+
+	private BookingSystem singleton;
 	
-	public BookingSystem() {
+	public BookingSystem getInstance() {
+		if (singleton == null) {
+			singleton = new BookingSystem();
+		}
+		return singleton;
+	}
+	
+	private BookingSystem() {
 		this.atributeValues = atributeValues;
 		this.reservationCategoryTrees = reservationCategoryTrees;
 		this.reservationTags = reservationTags;
@@ -37,6 +49,7 @@ public class BookingSystem {
 
 	public void createReservation(ReservationItem reservationItem, User user) {
 		reservations.add(new Reservation(user, reservationItem, defaultReservationStatus));
+		
 	}
 
 	public Collection<Reservation> getReservations() {
