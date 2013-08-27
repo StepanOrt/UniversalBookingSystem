@@ -29,25 +29,12 @@ public class ReservationSystem {
 
 	private static ReservationSystem INSTANCE;
 	
-	public void init(	Collection<ReservationSystemAttributeValue> atributeValues,
-								Collection<ReservationCategoryTree> reservationCategoryTrees,
-								Collection<ReservationTag> reservationTags,
-								Collection<ReservationAttribute> reservationAtributes,
-								Collection<ReservationStatus> reservationStatuses) throws Exception {
-		INSTANCE = ReservationSystem.getInstance();
-		this.atributeValues = atributeValues;
-		this.reservationCategoryTrees = reservationCategoryTrees;
-		this.reservationTags = reservationTags;
-		this.reservationAtributes = reservationAtributes;
-		this.reservationStatuses = reservationStatuses;
-	}
-	
 	public static ReservationSystem getInstance() {
 		if (INSTANCE == null) 
 			INSTANCE = new ReservationSystem();
 		return INSTANCE;
 	}
-	
+
 	private ReservationSystem() {
 		this.users = new HashSet<User>();
 		this.reservationItems = new HashSet<ReservationItem>();
