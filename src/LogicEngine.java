@@ -1,5 +1,11 @@
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
@@ -25,13 +31,21 @@ public class LogicEngine {
 		Context cx = f.enterContext();
         try {
             Scriptable scope = cx.initStandardObjects();
-            String s = SCRIPT_HEADER;
-            int promena = 1;
+            Calendar c = Calendar.getInstance(Locale.US);
+            String s = "";//SCRIPT_HEADER;
+            c.set(2013, 7, 28, 0, 20, 0);
+            DateFormat df = new SimpleDateFormat("MMMMM d, yyyy HH:mm:ss", Locale.US);
+            String promena = "Date.parse('" + df.format(c.getTime()) + "')";
             s += "var promena"  + " = " + ((Object)promena).toString() + ";\n";
+            s += "var DAY = " +	24*60*60*1000 + ";\n";
+            s += "var NOW"  + " = new Date();\n";
+            s += "NOW.setHours(NOW.getHours()+30);\n";
             s += "\n";
             s += script;
             s += ";";
+            System.out.println(s + "\n--------------");
             Object result = cx.evaluateString(scope, s, "script", 1, null);
+            Date o = (Date) Context.jsToJava(scope.get("NOW", scope), Date.class);
             if (result instanceof Boolean)
             	return ((Boolean) result).booleanValue();
             else
@@ -43,7 +57,7 @@ public class LogicEngine {
 	}
 	
 	public void init() {
-		script = "(promena > 0)";
+		script = "(promena > NOW)";
 	}
 	
 	public boolean eval() throws Exception{
