@@ -6,7 +6,7 @@ import java.util.Calendar;
 import org.junit.Test;
 
 import ubs.model.AttributeType;
-import ubs.model.BookingSystem;
+import ubs.model.ReservationSystem;
 import ubs.model.ReservationAttribute;
 import ubs.model.ReservationCategoryNode;
 import ubs.model.ReservationItem;
@@ -17,7 +17,7 @@ public class ReservationItemTest {
 
 	@Test
 	public void reservationItemTest() {
-		BookingSystem bs = new BookingSystem();
+		ReservationSystem bs = ReservationSystem.getInstance();
 		ReservationItem ri = new ReservationItem(new ReservationCategoryNode("kategorie"));
 		ri.addTag(new ReservationTag("Tag1"));
 		ri.addAttributeValue(new ReservationAttribute("od", AttributeType.DATETIME), Calendar.getInstance().getTime());

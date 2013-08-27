@@ -9,7 +9,7 @@ public class StatusChangeAction implements Action {
 	}
 
 	@Override
-	public void execute(BookingSystem system, Reservation reservation) {
+	public void execute(ReservationSystem system, Reservation reservation) {
 		reservation.setStatus(status);
 	}
 

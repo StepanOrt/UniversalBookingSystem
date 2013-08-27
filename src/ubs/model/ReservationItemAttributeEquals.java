@@ -14,7 +14,7 @@ public class ReservationItemAttributeEquals implements Condition {
 	}
 
 	@Override
-	public boolean isSatisfiedFor(BookingSystem system, Reservation reservation) {
+	public boolean isSatisfiedFor(ReservationSystem system, Reservation reservation) {
 		ReservationAttributeValue attributeValue = reservation.getItem().getAttribute(attribute);
 		if (attributeValue.equals(value)) return true;
 		return false;

@@ -13,7 +13,7 @@ public class AndCondition implements Condition {
 	}
 
 	@Override
-	public boolean isSatisfiedFor(BookingSystem system, Reservation reservation) {
+	public boolean isSatisfiedFor(ReservationSystem system, Reservation reservation) {
 		for (Condition condition : subConditions) {
 			if (!condition.isSatisfiedFor(system, reservation)) return false;
 		}

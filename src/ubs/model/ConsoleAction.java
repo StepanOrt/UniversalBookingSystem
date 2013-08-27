@@ -9,7 +9,7 @@ public class ConsoleAction implements Action {
 	}
 	
 	@Override
-	public void execute(BookingSystem system, Reservation reservation) {
+	public void execute(ReservationSystem system, Reservation reservation) {
 		System.out.println(message);
 	}
 

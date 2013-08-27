@@ -9,7 +9,7 @@ public class EmailToUserAction implements Action {
 	}
 
 	@Override
-	public void execute(BookingSystem system, Reservation reservation) {
+	public void execute(ReservationSystem system, Reservation reservation) {
 		User user = reservation.getUser();
 		if (user.isEmailNotifications()) {
 			system.sendEmail(user, message);			

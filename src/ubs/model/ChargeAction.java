@@ -10,7 +10,7 @@ public class ChargeAction implements Action {
 	}
 
 	@Override
-	public void execute(BookingSystem system, Reservation reservation) {
+	public void execute(ReservationSystem system, Reservation reservation) {
 		CreditWallet wallet = reservation.getUser().getCreditWallet();
 		wallet.charge(amount);
 	}

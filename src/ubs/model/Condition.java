@@ -2,6 +2,6 @@ package ubs.model;
 
 public interface Condition {
 
-	public boolean isSatisfiedFor(BookingSystem system, Reservation reservation);
+	public boolean isSatisfiedFor(ReservationSystem system, Reservation reservation);
 
 }
