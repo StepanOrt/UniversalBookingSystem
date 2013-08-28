@@ -12,7 +12,10 @@ import java.util.regex.Pattern;
 
 import sun.org.mozilla.javascript.internal.Context;
 import sun.org.mozilla.javascript.internal.ContextFactory;
+import sun.org.mozilla.javascript.internal.NativeJavaObject;
+import sun.org.mozilla.javascript.internal.NativeObject;
 import sun.org.mozilla.javascript.internal.Scriptable;
+import sun.org.mozilla.javascript.internal.Undefined;
 
 public class LogicEngine {
 
@@ -29,27 +32,31 @@ public class LogicEngine {
 		this.contextFactory = new TimeLimitedSandboxedContextFactory(TIMEOUT);
 	}
 	
-	public boolean eval() throws Exception {
+	public Object eval() throws Exception {
 		
 		Context cx = null;
-        try {
-        	cx = contextFactory.enterContext();
-        	//sandbox context
-        	TimeLimitedSandboxedContextFactory.disableAccessToJavaClasses(cx);
-        	
-            Scriptable scope = cx.initStandardObjects();
-            loadVariables(cx, scope);
-            String s = "var NOW"  + " = new Date();\n\n";
-            s += script;
-            Object result = cx.evaluateString(scope, s, "script", 1, null);
-            if (result instanceof Boolean)
-            	return ((Boolean) result).booleanValue();
-            else
-            	throw new Exception("Invalid condition statement");
-        } finally {
-            // Exit from the context.
-            Context.exit();
+    	cx = contextFactory.enterContext();
+    	//sandbox context
+    	TimeLimitedSandboxedContextFactory.disableAccessToJavaClasses(cx);
+    	
+        Scriptable scope = cx.initStandardObjects();
+        loadVariables(cx, scope);
+        String s = "var NOW"  + " = new Date();\n\n";
+        s += script;
+        Object result = cx.evaluateString(scope, s, "script", 1, null);
+        if (result.getClass().getName().equals("sun.org.mozilla.javascript.internal.NativeDate"))
+        	result = Context.jsToJava(result, Date.class);
+        else if (result instanceof Undefined) 
+        	throw new Exception("Script has now return value!");
+        /*
+        for (String varName : variables.keySet()) {
+        	Object varValue = scope.get(varName, scope);
+        	System.out.println(varValue.getClass().getName());
+        	System.out.println(varName + "=" + varValue);
         }
+        */
+
+        return result;
 	}
 	
 	private void loadVariables(Context cx, Scriptable scope) {

@@ -63,11 +63,11 @@ class TimeLimitedSandboxedContextFactory extends ContextFactory {
 		TimeLimitedContext mcx = (TimeLimitedContext) cx;
 		long currentTime = System.currentTimeMillis();
 		if (currentTime - mcx.startTime > maxTime) {
-			// More then 10 seconds from Context creation time:
+			// More then 1 second from Context creation time:
 			// it is time to stop the script.
 			// Throw Error instance to ensure that script will never
 			// get control back through catch or finally.
-			throw new Error();
+			throw new Error("Script evaluation timeout!");
 		}
 	}
 
