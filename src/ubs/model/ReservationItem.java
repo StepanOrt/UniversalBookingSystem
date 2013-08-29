@@ -21,7 +21,7 @@ public class ReservationItem {
 		return attributeValues.values();
 	}
 
-	public void addAttributeValue(ReservationAttribute attribute, Object value) {
+	public void setAttributeValue(ReservationItemAttribute attribute, Object value) {
 		ReservationAttributeValue attributeValue = new ReservationAttributeValue(attribute, value);
 		attributeValues.put(attribute.getName(), attributeValue);
 	}
@@ -34,7 +34,7 @@ public class ReservationItem {
 		tags.remove(tag);
 	}
 
-	public Iterable<ReservationTag> getTags() {
+	public Collection<ReservationTag> getTags() {
 		return tags;
 	}
 
@@ -46,7 +46,7 @@ public class ReservationItem {
 		this.category = category;
 	}
 
-	public ReservationAttributeValue getAttribute(ReservationAttribute attribute) {
+	public ReservationAttributeValue getAttribute(ReservationItemAttribute attribute) {
 		return attributeValues.get(attribute.getName());
 	}
 }

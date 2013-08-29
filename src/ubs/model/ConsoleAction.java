@@ -1,5 +1,7 @@
 package ubs.model;
 
+import ubs.model.actions.Action;
+
 public class ConsoleAction implements Action {
 
 	private String message;
@@ -9,7 +11,7 @@ public class ConsoleAction implements Action {
 	}
 	
 	@Override
-	public void execute(ReservationSystem system, Reservation reservation) {
+	public void execute() {
 		System.out.println(message);
 	}
 

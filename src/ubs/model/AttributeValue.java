@@ -18,9 +18,9 @@ public abstract class AttributeValue {
 	public void setValue(Object value) throws InvalidAttributeValueException {
 		if (attributeType == AttributeType.DATETIME && value instanceof Date) {
 			this.value = value;
-		} else if (attributeType == AttributeType.FLOAT && value instanceof Float) {
+		} else if (attributeType == AttributeType.DECIMAL && value instanceof Float) {
 			this.value = value;			
-		} else if (attributeType == AttributeType.INTEGER && value instanceof Integer) {
+		} else if (attributeType == AttributeType.NUMERIC && value instanceof Integer) {
 			this.value = value;
 		} else if ((attributeType == AttributeType.TEXT || attributeType == AttributeType.URL || attributeType == AttributeType.PICTURE) && value instanceof String) {
 			this.value = value;			

@@ -3,7 +3,7 @@ package ubs.model;
 @SuppressWarnings("serial")
 public class NotComparableAttributeException extends Exception {
 	
-	public NotComparableAttributeException(ReservationAttribute attribute) {
+	public NotComparableAttributeException(ReservationItemAttribute attribute) {
 		super("Attribute " + attribute + "is not comparable!");
 	}
 	

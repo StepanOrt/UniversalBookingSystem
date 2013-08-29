@@ -1,24 +1,40 @@
 package ubs.model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-
-import ubs.model.events.Event;
+import java.util.Map;
 
 public class ReservationSystem {
+	
+	@SuppressWarnings("serial")
+	public static final Map<AttributeType, Class<?>> ATTRIBUTE_TYPE_CLASSES = new HashMap<AttributeType, Class<?>>() 
+	{
+		{ 
+			put(AttributeType.DATETIME, Date.class);
+			put(AttributeType.DECIMAL, Float.class);
+			put(AttributeType.NUMERIC, Long.class);
+			put(AttributeType.TEXT, String.class);
+			put(AttributeType.PICTURE, String.class);
+			put(AttributeType.URL, String.class);
+		}
+	};
+	
+	
 	private Collection<ReservationSystemAttributeValue> atributeValues;
 	
-	private Collection<ReservationCategoryTree> reservationCategoryTrees;
+	private ReservationCategoryTree reservationCategoryTrees;
 	private Collection<ReservationTag> reservationTags;
-	private Collection<ReservationAttribute> 	reservationAtributes;
+	private Collection<ReservationItemAttribute> 	reservationAtributes;
 	private Collection<ReservationStatus> reservationStatuses;
 	private ReservationStatus defaultReservationStatus;
 	
 	private Collection<User> users;
 	
-	private Collection<Event> events;
+	private Collection<Rule> rules;
 	
 	private boolean creditPayment;
 	private boolean prepay;
@@ -74,13 +90,72 @@ public class ReservationSystem {
 		return reservationItems;
 	}
 
-	public Collection<Reservation> getReservationsBy(User user) {
+	public Collection<Reservation> getReservations(User user) {
 		List<Reservation> selected = new ArrayList<Reservation>();
 		for (Reservation reservation : reservations) {
 			if (reservation.getUser().equals(user)) {
 				selected.add(reservation);				
 			}
 		}
+		if (selected.size() == 0) return null;
+		return selected;
+	}
+	
+	public Collection<Reservation> getReservations(ReservationItem item) {
+		List<Reservation> selected = new ArrayList<Reservation>();
+		for (Reservation reservation : reservations) {
+			if (reservation.getItem().equals(item)) {
+				selected.add(reservation);
+			}
+		}
+		if (selected.size() == 0) return null;
+		return selected;
+	}
+	
+	public Reservation getReservation(ReservationItem item, User user) {
+		Reservation selected = null;
+		for (Reservation reservation : reservations) {
+			if (reservation.getItem().equals(item) && reservation.getUser().equals(user)) {
+				selected = reservation;
+			}
+		}
+		return selected;
+	}
+	
+	public Collection<ReservationItem> getReservationItems(ReservationItemAttribute attribute, Object value) {
+		List<ReservationItem> selected = new ArrayList<ReservationItem>();
+		for (ReservationItem ri : reservationItems) {
+			if (ri.getAttribute(attribute).isSameValue(value)) {
+				selected.add(ri);
+			}
+		}
+		if (selected.size() == 0) return null;
+		return selected;
+	}
+
+	public Collection<ReservationItem> getReservationItems(ReservationTag[] tags) {
+		List<ReservationItem> selected = new ArrayList<ReservationItem>();
+		for (ReservationItem ri : reservationItems) {
+			boolean containsAll = true;
+			for (ReservationTag tag : tags) {			
+				if (!ri.getTags().contains(tag)) {
+					containsAll = false;
+					break;
+				}
+			}
+			if (containsAll) selected.add(ri);
+		}
+		if (selected.size() == 0) return null;
+		return selected;
+	}
+	
+	public Collection<ReservationItem> getReservationItems(ReservationCategoryNode node) {
+		List<ReservationItem> selected = new ArrayList<ReservationItem>();
+		for (ReservationItem ri : reservationItems) {
+			if (ri.getCategory().equals(node)) 
+				selected.add(ri);
+		}
+		if (selected.size() == 0) return null;
 		return selected;
 	}
 }

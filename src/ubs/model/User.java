@@ -73,4 +73,21 @@ public class User {
 	public void setFacebookID(String facebookID) {
 		this.facebookID = facebookID;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof User) {
+			User u = (User)obj;
+			if (email.equals(u.getEmail())) return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return (int)(((long)email.hashCode() + (long)this.hashCode()) % (long)Integer.MAX_VALUE + (long)1);
+	}
+	
+	
+	
 }

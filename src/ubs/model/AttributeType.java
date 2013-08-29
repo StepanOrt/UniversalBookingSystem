@@ -2,8 +2,8 @@ package ubs.model;
 
 public enum AttributeType {
 	TEXT,
-	INTEGER,
-	FLOAT,
+	NUMERIC,
+	DECIMAL,
 	DATETIME,
 	URL,
 	PICTURE

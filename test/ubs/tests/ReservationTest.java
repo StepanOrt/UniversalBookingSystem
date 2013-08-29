@@ -9,7 +9,7 @@ import org.junit.Test;
 import ubs.model.AttributeType;
 import ubs.model.ReservationSystem;
 import ubs.model.CreditWallet;
-import ubs.model.ReservationAttribute;
+import ubs.model.ReservationItemAttribute;
 import ubs.model.ReservationCategoryNode;
 import ubs.model.ReservationItem;
 import ubs.model.ReservationTag;
@@ -24,7 +24,7 @@ public class ReservationTest {
 		bs.addUser(user);
 		ReservationItem ri = new ReservationItem(new ReservationCategoryNode("kategorie"));
 		ri.addTag(new ReservationTag("Tag1"));
-		ri.addAttributeValue(new ReservationAttribute("od", AttributeType.DATETIME), Calendar.getInstance().getTime());
+		ri.setAttributeValue(new ReservationItemAttribute("od", AttributeType.DATETIME), Calendar.getInstance().getTime());
 		
 		bs.createReservation(ri, user);
 		
