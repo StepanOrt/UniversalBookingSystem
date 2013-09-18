@@ -12,13 +12,15 @@ public class Rule {
 	private EventType eventType;
 	private Condition condition;
 	private Collection<Action> actions;
+	private boolean cancels;
 	
 	public Rule(Class<? extends Event> event, EventType eventType, Condition condition,
-			Collection<Action> actions) {
+			Collection<Action> actions, boolean cancels) {
 		this.event = event;
 		this.eventType = eventType;
 		this.condition = condition;
 		this.actions = actions;
+		this.cancels = cancels;
 	}
 
 	public Class<? extends Event> getEvent() {
@@ -35,5 +37,9 @@ public class Rule {
 
 	public Collection<Action> getActions() {
 		return actions;
+	}
+
+	public boolean cancelDefaultAction() {
+		return cancels;
 	}
 }

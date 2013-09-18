@@ -8,13 +8,13 @@ import java.util.Set;
 
 public class ReservationItem {
 	private Map<String, ReservationAttributeValue> attributeValues;
-	private ReservationCategoryNode category;
+	private Set<ReservationCategoryNode> categories;
 	private Set<ReservationTag> tags;
 	
-	public ReservationItem(ReservationCategoryNode category) {
+	public ReservationItem(Set<ReservationCategoryNode> categories) {
 		attributeValues = new HashMap<String, ReservationAttributeValue>();
 		tags = new HashSet<ReservationTag>();
-		this.category = category;
+		this.categories = categories;
 	}
 
 	public Collection<ReservationAttributeValue> getAttributeValues() {
@@ -38,12 +38,12 @@ public class ReservationItem {
 		return tags;
 	}
 
-	public ReservationCategoryNode getCategory() {
-		return category;
+	public Collection<ReservationCategoryNode> getCategories() {
+		return categories;
 	}
 
-	public void setCategory(ReservationCategoryNode category) {
-		this.category = category;
+	public void setCategories(Set<ReservationCategoryNode> categories) {
+		this.categories = categories;
 	}
 
 	public ReservationAttributeValue getAttribute(ReservationItemAttribute attribute) {

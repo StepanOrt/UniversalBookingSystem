@@ -1,18 +1,18 @@
 package ubs.core.actions;
 
-import ubs.core.CreditWallet;
+import ubs.core.Wallet;
 
-public class TopUpAction implements Action {
+public class TopUpAction extends Action {
 
 	private float amount;
-	private CreditWallet wallet;
+	private Wallet wallet;
 	
 	public TopUpAction(float amount) {
 		super();
 		this.amount = amount;
 	}
 
-	public void setWallet(CreditWallet wallet) {
+	public void setWallet(Wallet wallet) {
 		this.wallet = wallet;
 	}
 

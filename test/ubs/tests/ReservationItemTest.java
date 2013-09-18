@@ -1,7 +1,9 @@
 package ubs.tests;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -18,7 +20,9 @@ public class ReservationItemTest {
 	@Test
 	public void reservationItemTest() {
 		ReservationSystem bs = ReservationSystem.getInstance();
-		ReservationItem ri = new ReservationItem(new ReservationCategoryNode("kategorie"));
+		Set<ReservationCategoryNode> cn = new HashSet<ReservationCategoryNode>();
+		cn.add(new ReservationCategoryNode("kategorie"));
+		ReservationItem ri = new ReservationItem(cn);
 		ri.addTag(new ReservationTag("Tag1"));
 		ri.setAttributeValue(new ReservationItemAttribute("od", AttributeType.DATETIME), Calendar.getInstance().getTime());
 		bs.createReservationItem(ri);

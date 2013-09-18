@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import ubs.core.actions.Action;
+import ubs.core.actions.ActionPlace;
 import ubs.core.events.Event;
-import ubs.core.events.Event.EventType;
 import ubs.core.events.ReservationEvent;
+import ubs.core.events.Event.EventType;
 
 public class ReservationSystem {
 	
@@ -31,7 +32,7 @@ public class ReservationSystem {
 	
 	private Collection<ReservationSystemAttributeValue> atributeValues;
 	
-	private ReservationCategoryTree reservationCategoryTrees;
+	private Collection<ReservationCategoryTree> reservationCategoryTrees;
 	private Collection<ReservationTag> reservationTags;
 	private Collection<ReservationItemAttribute> 	reservationAtributes;
 	private Collection<ReservationStatus> reservationStatuses;
@@ -67,11 +68,11 @@ public class ReservationSystem {
 		// TODO Auto-generated method stub
 	}
 	
-	public void addRule(Class<? extends Event> event, EventType type, Condition condition, Collection<Action> actions) {
-		rules.add(new Rule(event, type, condition, actions));
+	public void addRule(Class<? extends Event> event, EventType type, Condition condition, Collection<Action> actions, boolean cancels) {
+		rules.add(new Rule(event, type, condition, actions, cancels));
 	}
 	
-	public Collection<Rule> getRule(Class<? extends Event> event, EventType type) {
+	public Collection<Rule> getRules(Class<? extends Event> event, EventType type) {
 		List<Rule> selected = new ArrayList<Rule>();
 		for (Rule rule : rules) {
 			if (rule.getEvent().equals(event) && rule.getEventType().equals(type)) {
@@ -82,9 +83,41 @@ public class ReservationSystem {
 		return selected;
 	}
 	
-	public void handleEvent(ReservationEvent event) {
-		Collection<Rule> r = getRule(event.getClass(), event.getEventType());
-		//TODO
+	public void handleEvent(ReservationEvent event) throws Exception {
+		Collection<Rule> r = getRules(event.getClass(), event.getEventType());
+		Reservation reservation = event.getReservation();
+		Collection<Action> defaultActions = getDefaultActions(event.getClass(), event.getEventType());
+		Collection<Action> actionsBefore = new ArrayList<Action>();
+		Collection<Action> actionsAfter = new ArrayList<Action>();
+		for (Rule rule : r) {
+			if (rule.getCondition().isSatisfiedFor(this, reservation, defaultActions)) {
+				for (Action a : rule.getActions()) {
+					if (a.getActionPlace() == ActionPlace.BEFORE_DEFAULT) {
+						actionsBefore.add(a);
+					}
+					else if (a.getActionPlace() == ActionPlace.AFTER_DEFAULT) {
+						actionsAfter.add(a);
+					}
+				}
+			}
+			for (Action action : actionsBefore) {
+				action.execute();
+			}
+			if (!rule.cancelDefaultAction()) {
+				for (Action action : defaultActions) {
+					action.execute();					
+				}
+			}
+			for (Action action : actionsAfter) {
+				action.execute();
+			}
+		}
+	}
+
+	private Collection<Action> getDefaultActions(
+			Class<? extends ReservationEvent> class1, EventType eventType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void addUser(User user) {
@@ -178,7 +211,7 @@ public class ReservationSystem {
 	public Collection<ReservationItem> getReservationItems(ReservationCategoryNode node) {
 		List<ReservationItem> selected = new ArrayList<ReservationItem>();
 		for (ReservationItem ri : reservationItems) {
-			if (ri.getCategory().equals(node)) 
+			if (ri.getCategories().equals(node)) 
 				selected.add(ri);
 		}
 		if (selected.size() == 0) return null;

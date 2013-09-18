@@ -3,7 +3,7 @@ package ubs.core.actions;
 import ubs.core.ReservationItem;
 import ubs.core.ReservationItemAttribute;
 
-public class ChangeReservationItemAttributeValueAction implements Action {
+public class ChangeReservationItemAttributeValueAction extends Action {
 
 	private ReservationItemAttribute attribute;
 	private Object value;

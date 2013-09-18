@@ -1,5 +1,5 @@
 package ubs.model;
 
-public class Rule {
+public class Wallet {
 
 }

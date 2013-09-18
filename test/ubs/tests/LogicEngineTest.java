@@ -1,7 +1,7 @@
 package ubs.tests;
 
 import static org.junit.Assert.*;
-import pokus.LogicEngine;
+import ubs.core.logicengine.LogicEngine;
 
 import org.junit.Test;
 

@@ -3,7 +3,7 @@ package ubs.core.actions;
 import ubs.core.Reservation;
 import ubs.core.ReservationStatus;
 
-public class StatusChangeAction implements Action {
+public class StatusChangeAction extends Action {
 
 	private ReservationStatus status;
 	private Reservation reservation;

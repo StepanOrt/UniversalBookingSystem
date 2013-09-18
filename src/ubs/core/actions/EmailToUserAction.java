@@ -2,7 +2,7 @@ package ubs.core.actions;
 
 import ubs.core.User;
 
-public class EmailToUserAction implements Action {
+public class EmailToUserAction extends Action {
 
 	private String message;
 	private User user;

@@ -4,14 +4,14 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
-	private CreditWallet creditWallet;
+	private Wallet creditWallet;
 	private boolean emailNotifications;
 	private boolean socialNetworkPosts;
 	private boolean calendarUpdate;
 	private String googleAccountID;
 	private String facebookID;
 	
-	public User(String name, String email, String password, CreditWallet creditWallet) {
+	public User(String name, String email, String password, Wallet creditWallet) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -37,10 +37,10 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public CreditWallet getCreditWallet() {
+	public Wallet getCreditWallet() {
 		return creditWallet;
 	}
-	public void setCreditWallet(CreditWallet creditWallet) {
+	public void setCreditWallet(Wallet creditWallet) {
 		this.creditWallet = creditWallet;
 	}
 	public boolean isEmailNotifications() {
@@ -85,7 +85,9 @@ public class User {
 	
 	@Override
 	public int hashCode() {
-		return (int)(((long)email.hashCode() + (long)this.hashCode()) % (long)Integer.MAX_VALUE + (long)1);
+		int ehc = email.hashCode();
+		int hc = super.hashCode();
+		return (int)(((long)ehc + (long)hc) % (long)Integer.MAX_VALUE + (long)1);
 	}
 	
 	
