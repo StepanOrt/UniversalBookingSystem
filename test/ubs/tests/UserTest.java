@@ -3,9 +3,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import ubs.model.ReservationSystem;
-import ubs.model.CreditWallet;
-import ubs.model.User;
+import ubs.core.CreditWallet;
+import ubs.core.ReservationSystem;
+import ubs.core.User;
 
 
 public class UserTest {

@@ -5,12 +5,12 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
-import ubs.model.AttributeType;
-import ubs.model.ReservationSystem;
-import ubs.model.ReservationItemAttribute;
-import ubs.model.ReservationCategoryNode;
-import ubs.model.ReservationItem;
-import ubs.model.ReservationTag;
+import ubs.core.AttributeType;
+import ubs.core.ReservationCategoryNode;
+import ubs.core.ReservationItem;
+import ubs.core.ReservationItemAttribute;
+import ubs.core.ReservationSystem;
+import ubs.core.ReservationTag;
 
 
 public class ReservationItemTest {
@@ -23,7 +23,7 @@ public class ReservationItemTest {
 		ri.setAttributeValue(new ReservationItemAttribute("od", AttributeType.DATETIME), Calendar.getInstance().getTime());
 		bs.createReservationItem(ri);
 		
-		assertEquals(bs.getReservationItems().iterator().hasNext(), true);	
+		assertEquals(bs.getReservationAllItems().iterator().hasNext(), true);	
 	}
 
 }

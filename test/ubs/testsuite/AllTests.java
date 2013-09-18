@@ -3,7 +3,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import ubs.model.Reservation;
+import ubs.core.Reservation;
 import ubs.tests.ReservationItemTest;
 import ubs.tests.ReservationTest;
 import ubs.tests.UserTest;

@@ -6,14 +6,14 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
-import ubs.model.AttributeType;
-import ubs.model.ReservationSystem;
-import ubs.model.CreditWallet;
-import ubs.model.ReservationItemAttribute;
-import ubs.model.ReservationCategoryNode;
-import ubs.model.ReservationItem;
-import ubs.model.ReservationTag;
-import ubs.model.User;
+import ubs.core.AttributeType;
+import ubs.core.CreditWallet;
+import ubs.core.ReservationCategoryNode;
+import ubs.core.ReservationItem;
+import ubs.core.ReservationItemAttribute;
+import ubs.core.ReservationSystem;
+import ubs.core.ReservationTag;
+import ubs.core.User;
 
 public class ReservationTest {
 
@@ -28,7 +28,7 @@ public class ReservationTest {
 		
 		bs.createReservation(ri, user);
 		
-		assertTrue(bs.getReservationsBy(user).size() > 0);		
+		assertTrue(bs.getReservations(user).size() > 0);		
 	}
 
 }
