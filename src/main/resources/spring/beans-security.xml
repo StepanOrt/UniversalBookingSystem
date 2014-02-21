@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<http pattern="/favicon.ico" security="none" />
+	<http auto-config="true" use-expressions="true">	
+		<intercept-url pattern="/" method="GET" access="permitAll" />
+		<intercept-url pattern="/home" method="GET" access="permitAll" />
+		<intercept-url pattern="/account/login*" access="permitAll" />
+		<intercept-url pattern="/account/registration*" access="isAnonymous()" />
+		<intercept-url pattern="/account/password*" access="isFullyAuthenticated()" />
+		
+		<intercept-url pattern="/account*" access="isAuthenticated()" />
+		
+		<intercept-url pattern="/*" access="denyAll" />
+
+		<form-login login-page="/account/login"
+			authentication-failure-url="/account/login?failed=true"
+			default-target-url="/home" />
+		<remember-me />
+		<logout logout-success-url="/home" />
+	</http>
+
+	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userDetailsService">
+			<password-encoder ref="passwordEncoder" />
+		</authentication-provider>
+	</authentication-manager>
+
+</beans:beans>
