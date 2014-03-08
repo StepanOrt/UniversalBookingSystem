@@ -4,7 +4,6 @@ use ubs;
 
 create table account (
     id bigint unsigned not null auto_increment primary key,
-    username varchar(50) unique not null,
     first_name varchar(50) not null,
     last_name varchar(50) not null,
     email varchar(50) not null,
@@ -12,12 +11,20 @@ create table account (
     marketing_ok boolean not null,
     accept_terms boolean not null,
     enabled boolean not null,
+    calendar_ok boolean not null,
+    twitter_ok boolean not null,
+    email_ok boolean not null,
+    credit decimal(6,2) not null default 0.0,
+    group_id smallint unsigned default null,
     date_created timestamp default 0,
     date_modified timestamp default current_timestamp on update current_timestamp,
-    unique index account_idx_1 (username),
-    unique index account_idx_2 (email)
+    unique index account_idx (email)
 ) engine = InnoDb;
 
+create table account_group (
+	id smallint unsigned not null auto_increment primary key,
+    name varchar(50) not null unique
+) engine = InnoDb;
 
 create table role (
     id smallint unsigned not null auto_increment primary key,

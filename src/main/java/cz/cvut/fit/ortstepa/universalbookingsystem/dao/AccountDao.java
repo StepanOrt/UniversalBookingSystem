@@ -6,7 +6,7 @@ public interface AccountDao extends Dao<Account> {
 
 	void create(Account account, String password);
 	
-	void updatePassword(String username, String password);
+	void updatePassword(String email, String password);
 
-	Account findByUsername(String username);
+	Account findByEmail(String email);
 }

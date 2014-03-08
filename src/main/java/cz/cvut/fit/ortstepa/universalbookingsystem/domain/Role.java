@@ -31,8 +31,9 @@ public class Role implements GrantedAuthority {
 	@Column(name = "id")
 	public Long getId() { return id; }
 
-	@SuppressWarnings("unused")
-	private void setId(Long id) { this.id = id; }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	@Column(name = "name")
 	public String getName() { return name; }

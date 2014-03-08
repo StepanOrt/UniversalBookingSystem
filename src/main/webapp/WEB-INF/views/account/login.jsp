@@ -21,12 +21,12 @@
 		</c:if>
 		<div class="panel grid" style="width:420px">
 			<div class="gridRow yui-gf">
-				<div class="fieldLabel yui-u first">Username:</div>
-				<div class="yui-u"><input type="text" name="j_username" class="short" /></div>
+				<div class="fieldLabel yui-u first">Email:</div>
+				<div class="yui-u"><input type="email" autocomplete="on" required="required"  name="j_username" class="short" /></div>
 			</div>
 			<div class="gridRow yui-gf">
 				<div class="fieldLabel yui-u first">Password:</div>
-				<div class="yui-u"><input type="password" name="j_password" class="short" /></div>
+				<div class="yui-u"><input type="password" required="required" name="j_password" class="short" /></div>
 			</div>
 			<div class="gridRow yui-gf">
 				<div class="yui-u first"></div>

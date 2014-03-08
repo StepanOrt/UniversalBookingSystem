@@ -3,9 +3,9 @@ package cz.cvut.fit.ortstepa.universalbookingsystem.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -70,7 +70,7 @@ public class Resource {
 		this.visible = visible;
 	}
 
-	@OneToMany(mappedBy = "pk.resource", cascade=CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy = "resource", fetch = FetchType.LAZY)
     public Set<ResourcePropertyValue> getPropertyValues() {
         return this.values ;
     }

@@ -27,44 +27,37 @@
 
 			<div class="panel grid">
 				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.username" /></div>
-					<div class="yui-u">
-						<div><form:input path="username" cssClass="short" cssErrorClass="short error" /></div>
-						<form:errors path="username" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.password" /></div>
-					<div class="yui-u">
-						<div><form:password path="password" showPassword="false" cssClass="short" cssErrorClass="short error" /></div>
-						<form:errors path="password" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.confirmPassword" /></div>
-					<div class="yui-u">
-						<div><form:password path="confirmPassword" showPassword="false" cssClass="short" /></div>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
 					<div class="fieldLabel yui-u first"><spring:message code="account.label.firstName" /></div>
 					<div class="yui-u">
-						<div><form:input path="firstName" cssClass="short" cssErrorClass="short error" /></div>
+						<div><form:input path="firstName" cssClass="short" cssErrorClass="short error" required="required"/></div>
 						<form:errors path="firstName" element="div" cssClass="errorMessage" htmlEscape="false"/>
 					</div>
 				</div>
 				<div class="gridRow yui-gf">
 					<div class="fieldLabel yui-u first"><spring:message code="account.label.lastName" /></div>
 					<div class="yui-u">
-						<div><form:input path="lastName" cssClass="short" cssErrorClass="short error" /></div>
+						<div><form:input path="lastName" cssClass="short" cssErrorClass="short error" required="required"/></div>
 						<form:errors path="lastName" element="div" cssClass="errorMessage" htmlEscape="false"/>
 					</div>
 				</div>
 				<div class="gridRow yui-gf">
 					<div class="fieldLabel yui-u first"><spring:message code="account.label.email" /></div>
 					<div class="yui-u">
-						<div><form:input path="email" cssClass="medium" cssErrorClass="medium error" /></div>
+						<div><form:input type="email" path="email" cssClass="medium" cssErrorClass="medium error" required="required"/></div>
 						<form:errors path="email" element="div" cssClass="errorMessage" htmlEscape="false"/>
+					</div>
+				</div>
+				<div class="gridRow yui-gf">
+					<div class="fieldLabel yui-u first"><spring:message code="account.label.password"/></div>
+					<div class="yui-u">
+						<div><form:password path="password" showPassword="false" cssClass="short" cssErrorClass="short error" required="required"/></div>
+						<form:errors path="password" element="div" cssClass="errorMessage" htmlEscape="false"/>
+					</div>
+				</div>
+				<div class="gridRow yui-gf">
+					<div class="fieldLabel yui-u first"><spring:message code="account.label.confirmPassword"/></div>
+					<div class="yui-u">
+						<div><form:password path="confirmPassword" showPassword="false" cssClass="short" required="required"/></div>
 					</div>
 				</div>
 				<div class="gridRow yui-gf">
@@ -78,8 +71,8 @@
 					<div class="yui-u first"></div>
 					<div class="yui-u">
 						<div>
-							<form:checkbox id="acceptTerms" path="acceptTerms" cssErrorClass="error" />
-							<label for="acceptTerms"><spring:message code="newUserRegistration.label.acceptTerms" /></label>
+							<form:checkbox id="acceptTerms" path="acceptTerms" cssErrorClass="error" required="required"/>
+							<label for="acceptTerms"><spring:message code="newUserRegistration.label.acceptTerms"/></label>
 						</div>
 						<form:errors path="acceptTerms" element="div" cssClass="errorMessage" htmlEscape="false"/>
 					</div>

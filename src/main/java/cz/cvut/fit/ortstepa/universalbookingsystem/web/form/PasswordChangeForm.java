@@ -10,9 +10,15 @@ import org.hibernate.validator.constraints.ScriptAssert;
 		script = "_this.confirmPassword.equals(_this.password)",
 		message = "account.password.mismatch.message")
 public class PasswordChangeForm {
-	private String password;
-	private String confirmPassword;
+	private String currentPassword, password, confirmPassword;
 
+
+	@NotNull
+	@Size(min = 6, max = 50)
+	public String getCurrentPassword() { return currentPassword; }
+
+	public void setCurrentPassword(String currentPassword) { this.currentPassword = currentPassword; }
+	
 	@NotNull
 	@Size(min = 6, max = 50)
 	public String getPassword() { return password; }

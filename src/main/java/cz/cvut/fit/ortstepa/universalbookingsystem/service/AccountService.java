@@ -7,7 +7,7 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.web.form.AccountForm;
 
 public interface AccountService {
 	boolean registerAccount(Account account, String password, Errors errors);
-	Account getAccountByUsername(String username);
-	boolean changePassword(String username, String password, Errors errors);
-	boolean updateAccount(String username, AccountForm form, Errors errors);
+	Account getAccountByEmail(String email);
+	boolean changePassword(String email, String password, Errors errors);
+	boolean updateAccount(String email, AccountForm form, Errors errors);
 }

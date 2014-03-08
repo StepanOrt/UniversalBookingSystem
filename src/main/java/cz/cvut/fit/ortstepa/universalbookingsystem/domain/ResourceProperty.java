@@ -1,9 +1,5 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,7 +7,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -26,7 +21,6 @@ public class ResourceProperty {
     private String name;
     @Enumerated(EnumType.ORDINAL)
     private PropertyType type;
-    private Set<ResourcePropertyValue> values = new HashSet<ResourcePropertyValue>(0);
     private String defaultValue;
  
     public ResourceProperty() {}
@@ -61,15 +55,6 @@ public class ResourceProperty {
     }
     public void setType(PropertyType type) {
         this.type = type;
-    }
-         
-    @OneToMany(mappedBy = "pk.attribute", cascade=CascadeType.ALL, orphanRemoval=true)
-    public Set<ResourcePropertyValue> getValues() {
-        return this.values ;
-    }
-  
-    public void setValues(Set<ResourcePropertyValue> values) {
-        this.values = values;
     }
      
     @Column(name = "default", nullable=false)

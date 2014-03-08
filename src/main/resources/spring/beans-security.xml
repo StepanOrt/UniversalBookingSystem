@@ -12,9 +12,8 @@
 		<intercept-url pattern="/" method="GET" access="permitAll" />
 		<intercept-url pattern="/home" method="GET" access="permitAll" />
 		<intercept-url pattern="/account/login*" access="permitAll" />
-		<intercept-url pattern="/account/registration*" access="isAnonymous()" />
-		<intercept-url pattern="/account/password*" access="isFullyAuthenticated()" />
-		
+        <intercept-url pattern="/account/registration*" access="isAnonymous()" />
+		<intercept-url pattern="/account/password*" access="isAuthenticated()" />
 		<intercept-url pattern="/account*" access="isAuthenticated()" />
 		
 		<intercept-url pattern="/*" access="denyAll" />
@@ -28,7 +27,7 @@
 
 	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
 
-	<authentication-manager alias="authenticationManager">
+	<authentication-manager alias="authenticationManager" erase-credentials="false">
 		<authentication-provider user-service-ref="userDetailsService">
 			<password-encoder ref="passwordEncoder" />
 		</authentication-provider>

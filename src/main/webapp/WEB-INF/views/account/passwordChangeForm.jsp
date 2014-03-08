@@ -23,16 +23,23 @@
 
 			<div class="panel grid">
 				<div class="gridRow yui-gf">
+					<div class="fieldLabel yui-u first"><spring:message code="account.label.currentPassword" /></div>
+					<div class="yui-u">
+						<div><form:password path="currentPassword" showPassword="false" cssClass="short" cssErrorClass="short error" required="required"/></div>
+						<form:errors path="currentPassword" element="div" cssClass="errorMessage" htmlEscape="false"/>
+					</div>
+				</div>
+				<div class="gridRow yui-gf">
 					<div class="fieldLabel yui-u first"><spring:message code="account.label.password" /></div>
 					<div class="yui-u">
-						<div><form:password path="password" showPassword="false" cssClass="short" cssErrorClass="short error" /></div>
+						<div><form:password path="password" showPassword="false" cssClass="short" cssErrorClass="short error" required="required"/></div>
 						<form:errors path="password" element="div" cssClass="errorMessage" htmlEscape="false"/>
 					</div>
 				</div>
 				<div class="gridRow yui-gf">
 					<div class="fieldLabel yui-u first"><spring:message code="account.label.confirmPassword" /></div>
 					<div class="yui-u">
-						<div><form:password path="confirmPassword" showPassword="false" cssClass="short" /></div>
+						<div><form:password path="confirmPassword" showPassword="false" cssClass="short" required="required"/></div>
 					</div>
 				</div>
 				<div class="gridRow yui-gf">

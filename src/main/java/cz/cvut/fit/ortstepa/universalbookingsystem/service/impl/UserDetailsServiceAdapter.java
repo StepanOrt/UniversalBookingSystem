@@ -22,19 +22,19 @@ public class UserDetailsServiceAdapter implements UserDetailsService {
 	UserDetailsDao userDetailsDao;
 
 	@Override
-	public UserDetails loadUserByUsername(String username)
+	public UserDetails loadUserByUsername(String email)
 			throws UsernameNotFoundException, DataAccessException {
 
-		Account account = accountService.getAccountByUsername(username);
+		Account account = accountService.getAccountByEmail(email);
 
 		if (account == null) {
-			throw new UsernameNotFoundException("No such user: " + username);
+			throw new UsernameNotFoundException("No user with email: " + email);
 		} else if (account.getRoles().isEmpty()) {
-			throw new UsernameNotFoundException("User " + username + " has no authorities");
+			throw new UsernameNotFoundException("User with email " + email + " has no authorities");
 		}
 
 		UserDetailsAdapter user = new UserDetailsAdapter(account);
-		user.setPassword(userDetailsDao.findPasswordByUsername(username));
+		user.setPassword(userDetailsDao.findPasswordByEmail(email));
 		return user;
 	}
 }

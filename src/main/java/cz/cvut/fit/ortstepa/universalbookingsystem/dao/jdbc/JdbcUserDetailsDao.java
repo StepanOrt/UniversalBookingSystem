@@ -11,11 +11,11 @@ public class JdbcUserDetailsDao implements UserDetailsDao {
 	@Autowired private JdbcTemplate jdbcTemplate;
 
 	private static final String FIND_PASSWORD_SQL =
-		"select password from account where username = ?";
+		"select password from account where email = ?";
 
 	@Override
-	public String findPasswordByUsername(String username) {
+	public String findPasswordByEmail(String email) {
 		return jdbcTemplate.queryForObject(
-			FIND_PASSWORD_SQL, new Object[] { username }, String.class);
+			FIND_PASSWORD_SQL, new Object[] { email }, String.class);
 	}
 }

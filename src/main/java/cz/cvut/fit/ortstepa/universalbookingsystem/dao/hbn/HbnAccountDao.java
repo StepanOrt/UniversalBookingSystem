@@ -16,7 +16,7 @@ public class HbnAccountDao extends AbstractHbnDao<Account> implements AccountDao
 	private static final Logger log = LoggerFactory.getLogger(HbnAccountDao.class);
 
 	private static final String UPDATE_PASSWORD_SQL =
-			"update account set password = ? where username = ?";
+			"update account set password = ? where email = ?";
 
 	@Autowired 
 	private JdbcTemplate jdbcTemplate;
@@ -29,20 +29,20 @@ public class HbnAccountDao extends AbstractHbnDao<Account> implements AccountDao
 		create(account);
 
 		log.debug("Updating password");
-		updatePassword(account.getUsername(), password);
+		updatePassword(account.getEmail(), password);
 	}
 
 	@Override
-	public Account findByUsername(String username) {
+	public Account findByEmail(String email) {
 		return (Account) getSession()
-				.getNamedQuery("findAccountByUsername")
-				.setParameter("username", username)
+				.getNamedQuery("findAccountByEmail")
+				.setParameter("email", email)
 				.uniqueResult();
 	}
 
 	@Override
-	public void updatePassword(String username, String password) {
+	public void updatePassword(String email, String password) {
 		String encPassword = passwordEncoder.encode(password);
-		jdbcTemplate.update(UPDATE_PASSWORD_SQL, encPassword, username);
+		jdbcTemplate.update(UPDATE_PASSWORD_SQL, encPassword, email);
 	}
 }

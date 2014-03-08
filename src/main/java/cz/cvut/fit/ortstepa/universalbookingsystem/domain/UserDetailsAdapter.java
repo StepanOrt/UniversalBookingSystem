@@ -25,7 +25,7 @@ public class UserDetailsAdapter implements UserDetails {
 	public String getEmail() { return account.getEmail(); }
 
 	@Override
-	public String getUsername() { return account.getUsername(); }
+	public String getUsername() { return account.getEmail(); }
 
 	@Override
 	public String getPassword() { return password; }

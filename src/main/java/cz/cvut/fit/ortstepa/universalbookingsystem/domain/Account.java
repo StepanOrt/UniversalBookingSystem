@@ -27,34 +27,28 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 
 @NamedQuery(
-		name = "findAccountByUsername",
-		query = "from Account where username = :username")
+		name = "findAccountByEmail",
+		query = "from Account where email = :email")
 @Entity
 @Table(name = "account")
 public class Account {
 	private Long id;
-	private Double credit;
-	private String username, firstName, lastName, email;
-	private boolean marketingOk = true, acceptTerms = false, enabled = true, emailOK = true, calendarOk = true, twitterOk = true;
+	private Double credit = 0.0d;
+	private String firstName, lastName, email;
+	private boolean marketingOk = true, acceptTerms = false, enabled = true, emailOk = true, calendarOk = true, twitterOk = true;
 	private Date dateCreated;
 	private Collection<Role> roles = new HashSet<Role>();
-	private Group group;
+	private AccountGroup group = null;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	public Long getId() { return id; }
 
-	@SuppressWarnings("unused")
-	private void setId(Long id) { this.id = id; }
-
-	@NotNull
-	@Size(min = 1, max = 50)
-	@Column(name = "username")
-	public String getUsername() { return username; }
-
-	public void setUsername(String username) { this.username = username; }
-
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	@NotNull
 	@Size(min = 1, max = 50)
 	@Column(name = "first_name")
@@ -97,12 +91,12 @@ public class Account {
 	public void setEnabled(boolean enabled) { this.enabled = enabled; }
 
 	@Column(name = "email_ok")
-	public boolean isEmailOK() {
-		return emailOK;
+	public boolean isEmailOk() {
+		return emailOk;
 	}
 
-	public void setEmailOK(boolean emailOK) {
-		this.emailOK = emailOK;
+	public void setEmailOk(boolean emailOk) {
+		this.emailOk = emailOk;
 	}
 
 	@Column(name = "calendar_ok")
@@ -125,11 +119,11 @@ public class Account {
 	
 	@ManyToOne
 	@JoinColumn(name = "group_id", nullable = false)
-	public Group getGroup() {
+	public AccountGroup getGroup() {
 		return group;
 	}
 	
-	public void setGroup(Group group) {
+	public void setGroup(AccountGroup group) {
 		this.group = group;
 	}
 	
@@ -174,7 +168,6 @@ public class Account {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-			.append("username", username)
 			.append("firstName", firstName)
 			.append("lastName", lastName)
 			.append("email", email)

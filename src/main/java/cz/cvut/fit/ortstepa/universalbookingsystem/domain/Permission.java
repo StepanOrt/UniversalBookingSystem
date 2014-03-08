@@ -21,10 +21,10 @@ public class Permission implements GrantedAuthority {
 	@Column(name = "id")
 	public Long getId() { return id; }
 
-	@SuppressWarnings("unused")
-	private void setId(Long id) { this.id = id; }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-	@Column(name = "name")
 	public String getName() { return name; }
 
 	public void setName(String name) { this.name = name; }

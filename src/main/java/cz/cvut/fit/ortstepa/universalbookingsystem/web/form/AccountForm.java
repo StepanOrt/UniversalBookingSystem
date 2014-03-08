@@ -8,14 +8,8 @@ import org.hibernate.validator.constraints.Email;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
 
 public class AccountForm {
-	private String username, firstName, lastName, email;
-	private boolean marketingOk = true;
-
-	@NotNull
-	@Size(min = 1, max = 50)
-	public String getUsername() { return username; }
-
-	public void setUsername(String userName) { this.username = userName; }
+	private String firstName, lastName, email, currentPassword; 
+	private boolean marketingOk = true, emailOk = true, calendarOk = true, twitterOk = true;
 
 	@NotNull
 	@Size(min = 1, max = 50)
@@ -39,6 +33,22 @@ public class AccountForm {
 	public boolean isMarketingOk() { return marketingOk; }
 
 	public void setMarketingOk(boolean marketingOk) { this.marketingOk = marketingOk; }
+	
+	public boolean isEmailOk() { return emailOk; }
+
+	public void setEmailOk(boolean emailOk) { this.emailOk = emailOk; }
+
+	public boolean isCalendarOk() {	return calendarOk; }
+
+	public void setCalendarOk(boolean calendarOk) {	this.calendarOk = calendarOk; }
+
+	public boolean isTwitterOk() { return twitterOk; }
+
+	public void setTwitterOk(boolean twitterOk) { this.twitterOk = twitterOk; }
+
+	public String getCurrentPassword() { return currentPassword; }
+
+	public void setCurrentPassword(String currentPassword) { this.currentPassword = currentPassword; }
 
 	public static AccountForm create(Account account) {
 		AccountForm form = new AccountForm();
@@ -46,7 +56,9 @@ public class AccountForm {
 		form.setFirstName(account.getFirstName());
 		form.setLastName(account.getLastName());
 		form.setMarketingOk(account.isMarketingOk());
-		form.setUsername(account.getUsername());
+		form.setEmailOk(account.isEmailOk());
+		form.setCalendarOk(account.isCalendarOk());
+		form.setTwitterOk(account.isTwitterOk());
 		return form;
 	}
 
@@ -55,6 +67,8 @@ public class AccountForm {
 		account.setFirstName(firstName);
 		account.setLastName(lastName);
 		account.setMarketingOk(marketingOk);
-		account.setUsername(username);
+		account.setEmailOk(emailOk);
+		account.setCalendarOk(calendarOk);
+		account.setTwitterOk(twitterOk);
 	}
 }

@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional(readOnly = false)
 	public boolean registerAccount(Account account, String password,
 			Errors errors) {
-		validateUsername(account.getUsername(), errors);
+		validateEmailUnique(account.getEmail(), errors);
 		boolean valid = !errors.hasErrors();
 
 		if (valid) {
@@ -47,44 +47,44 @@ public class AccountServiceImpl implements AccountService {
 		return valid;
 	}
 	
-	private void validateUsername(String username, Long id, Errors errors) {
-		Account account = accountDao.findByUsername(username);
+	private void validateEmailUnique(String email, Long id, Errors errors) {
+		Account account = accountDao.findByEmail(email);
 		if (account != null)  {
 			if (id == null || !account.getId().equals(id)) {
-				log.debug("Validation failed: duplicate username");
-				errors.rejectValue("username", "error.duplicate", new String[] { username }, null);
+				log.debug("Validation failed: duplicate email");
+				errors.rejectValue("email", "error.duplicate", new String[] { email }, null);
 			}
 		}
 	}
 	
-	private void validateUsername(String username, Errors errors) {
-		validateUsername(username, null, errors);
+	private void validateEmailUnique(String email, Errors errors) {
+		validateEmailUnique(email, null, errors);
 	}
 
 	@Override
-	public Account getAccountByUsername(String username) {
-		Account account = accountDao.findByUsername(username);
+	public Account getAccountByEmail(String email) {
+		Account account = accountDao.findByEmail(email);
 		if (account != null) { Hibernate.initialize(account.getRoles()); }
 		return account;
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public boolean changePassword(String username, String password,
+	public boolean changePassword(String email, String password,
 			Errors errors) {
 		boolean valid = !errors.hasErrors();
 		if (valid) {
-			accountDao.updatePassword(username, password);
+			accountDao.updatePassword(email, password);
 		}
 		return valid;
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public boolean updateAccount(String username, AccountForm form, Errors errors) {
-		Account account = getAccountByUsername(username);
+	public boolean updateAccount(String email, AccountForm form, Errors errors) {
+		Account account = getAccountByEmail(email);
 		form.fill(account);
-		validateUsername(account.getUsername(), account.getId(), errors);
+		validateEmailUnique(account.getEmail(), account.getId(), errors);
 		boolean valid = !errors.hasErrors();
 
 		if (valid) {

@@ -3,8 +3,6 @@ package cz.cvut.fit.ortstepa.universalbookingsystem.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,11 +14,6 @@ import javax.persistence.Table;
  
 @Entity
 @Table(name="schedule")
-@AssociationOverrides({
-        @AssociationOverride(name = "pk.schedule", 
-            joinColumns = @JoinColumn(name = "schedule_id")),
-        @AssociationOverride(name = "pk.account", 
-            joinColumns = @JoinColumn(name = "USER_ID")) })
 public class Schedule implements Serializable {
      
     private Long id, capacity, duration;
@@ -35,9 +28,10 @@ public class Schedule implements Serializable {
 	@Column(name = "id")
 	public Long getId() { return id; }
 
-	@SuppressWarnings("unused")
-	private void setId(Long id) { this.id = id; }
-     
+    public void setId(Long id) {
+		this.id = id;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "resource_id", nullable = false)
     public Resource getResource() {

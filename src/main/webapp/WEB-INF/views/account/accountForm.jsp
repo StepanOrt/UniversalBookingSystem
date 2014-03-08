@@ -37,13 +37,6 @@
 	
 			<div class="panel grid">			
 				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.username" /></div>
-					<div class="yui-u">
-						<div><form:input path="username" cssClass="short" cssErrorClass="short error" /></div>
-						<form:errors path="username" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
 					<div class="fieldLabel yui-u first"><spring:message code="account.label.firstName" /></div>
 					<div class="yui-u">
 						<div><form:input path="firstName" cssClass="short" cssErrorClass="short error" /></div>
@@ -69,6 +62,34 @@
 					<div class="yui-u">
 						<form:checkbox id="marketingOk" path="marketingOk" />
 						<label for="marketingOk"><spring:message code="account.label.marketingOk" /></label>
+					</div>
+				</div>
+				<div class="gridRow yui-gf">
+					<div class="yui-u first"></div>
+					<div class="yui-u">
+						<form:checkbox id="emailOk" path="emailOk" />
+						<label for="emailOk"><spring:message code="account.label.emailOk" /></label>
+					</div>
+				</div>
+				<div class="gridRow yui-gf">
+					<div class="yui-u first"></div>
+					<div class="yui-u">
+						<form:checkbox id="calendarOk" path="calendarOk" />
+						<label for="calendarOk"><spring:message code="account.label.calendarOk" /></label>
+					</div>
+				</div>
+				<div class="gridRow yui-gf">
+					<div class="yui-u first"></div>
+					<div class="yui-u">
+						<form:checkbox id="twitterOk" path="twitterOk" />
+						<label for="twitterOk"><spring:message code="account.label.twitterOk" /></label>
+					</div>
+				</div>
+				<div class="gridRow yui-gf">
+					<div class="fieldLabel yui-u first"><spring:message code="account.label.currentPassword" /></div>
+					<div class="yui-u">
+						<div><form:password path="currentPassword" showPassword="false" cssClass="short" cssErrorClass="short error" required="required"/></div>
+						<form:errors path="currentPassword" element="div" cssClass="errorMessage" htmlEscape="false"/>
 					</div>
 				</div>
 				<div class="gridRow yui-gf">

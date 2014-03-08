@@ -14,14 +14,8 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
 		script = "_this.confirmPassword.equals(_this.password)",
 		message = "account.password.mismatch.message")
 public class RegistrationForm {
-	private String username, password, confirmPassword, firstName, lastName, email;
+	private String password, confirmPassword, firstName, lastName, email;
 	private boolean marketingOk = true, acceptTerms = false;
-
-	@NotNull
-	@Size(min = 1, max = 50)
-	public String getUsername() { return username; }
-
-	public void setUsername(String userName) { this.username = userName; }
 
 	@NotNull
 	@Size(min = 6, max = 50)
@@ -64,7 +58,6 @@ public class RegistrationForm {
 	public void setAcceptTerms(boolean acceptTerms) { this.acceptTerms = acceptTerms; }
 
 	public void fill(Account account) {
-		account.setUsername(username);
 		account.setFirstName(firstName);
 		account.setLastName(lastName);
 		account.setEmail(email);

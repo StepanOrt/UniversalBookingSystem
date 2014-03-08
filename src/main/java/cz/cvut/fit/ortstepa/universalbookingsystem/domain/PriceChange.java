@@ -1,15 +1,19 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.domain;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.PropertyType;
 
+@Entity
+@Table(name="price")
 public class PriceChange {
 
 	private Long id;
@@ -24,8 +28,7 @@ public class PriceChange {
 		return id;
 	}
 
-	@SuppressWarnings("unused")
-	private void setId(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
