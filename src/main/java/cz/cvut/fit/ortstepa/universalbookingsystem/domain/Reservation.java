@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Status;
@@ -76,4 +77,10 @@ public class Reservation implements Serializable {
 	public Date getDateCanceled() { return dateCanceled; }
 
 	public void setDateCanceled(Date dateCanceled) { this.dateCanceled = dateCanceled; }
+	
+	@Transient
+	public boolean isValid() {
+		if (status == Status.RESERVED) return true;
+		return false;
+	}
 }

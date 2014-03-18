@@ -1,0 +1,15 @@
+GET, POST		/resource							vypisuje seznam resource
+GET			/resource?form							formulář pro vytvoření resource	
+GET, PUT, DELETE	/resource/{id}							detail resource, úprava, smazání
+GET			/resource/{id}?form 						formulář pro úpravu resource
+GET, POST		/resource/{id}/schedule						vypisuje seznam
+GET			/resource/{id}/schedule?form					form
+GET, PUT, DELETE	/resource/{id}/schedule/{id}
+GET 			/resource/{id}/schedule/{id}?form
+GET, POST		/resource/{id}/schedule/{id}/reservation
+POST			/resource/{id}/schedule/{id}/reservation?create
+POST			/resource/{id}/schedule/{id}/reservation?cancel
+GET			/resource/{id}/schedule/{id}/reservation?form
+GET, PUT, DELETE	/resource/{id}/schedule/{id}/reservation/{id}
+GET			/resource/{id}/schedule/{id}/reservation/{id}?form
+

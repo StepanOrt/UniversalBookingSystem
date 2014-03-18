@@ -1,4 +1,4 @@
-package cz.cvut.fit.ortstepa.universalbookingsystem.service.impl;
+package cz.cvut.fit.ortstepa.universalbookingsystem.service;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,16 +20,16 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.web.form.AccountForm;
 
 @Service
 @Transactional(readOnly = true)
-public class AccountServiceImpl implements AccountService {
+public class AccountService {
 	
-	private static final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(AccountService.class);
 	
 	@Autowired 
 	private AccountDao accountDao;
 	@Autowired 
 	private RoleDao roleDao;
 
-	@Override
+	
 	@Transactional(readOnly = false)
 	public boolean registerAccount(Account account, String password,
 			Errors errors) {
@@ -61,14 +61,14 @@ public class AccountServiceImpl implements AccountService {
 		validateEmailUnique(email, null, errors);
 	}
 
-	@Override
+	
 	public Account getAccountByEmail(String email) {
 		Account account = accountDao.findByEmail(email);
 		if (account != null) { Hibernate.initialize(account.getRoles()); }
 		return account;
 	}
 
-	@Override
+	
 	@Transactional(readOnly = false)
 	public boolean changePassword(String email, String password,
 			Errors errors) {
@@ -79,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
 		return valid;
 	}
 
-	@Override
+	
 	@Transactional(readOnly = false)
 	public boolean updateAccount(String email, AccountForm form, Errors errors) {
 		Account account = getAccountByEmail(email);

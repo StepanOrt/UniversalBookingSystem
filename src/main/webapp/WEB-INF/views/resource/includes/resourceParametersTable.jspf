@@ -1,0 +1,29 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+<c:if test="${not empty resource}">
+<c:if test="${not empty resource.propertyValuesMap}">
+<table>
+	<caption><spring:message code="resource.label.properties.${type}" /></caption>
+	<tbody>
+		<c:forEach var="property" items="${resource.propertyValuesMap}">
+			<c:set var="propertyName" value="${property.key}" />
+			<c:set var="propertyValue" value="${property.value}"/>
+			<c:if test="${propertyTypeMap[propertyName]==type}">
+			<tr>
+				<td>${propertyName}</td>
+				<c:if test="${not editation}">
+					<td>${propertyValue}</td>
+				</c:if>
+				<c:if test="${editation}">
+					<td><form:textarea path="propertyValuesMap['${propertyName}']"/></td>
+					<form:errors path="propertyValuesMap['${propertyName}']" element="td" cssClass="errorMessage"/>
+				</c:if>
+			</tr>						
+			</c:if>
+		</c:forEach>
+	</tbody>
+</table>
+</c:if>
+</c:if>

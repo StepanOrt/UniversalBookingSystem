@@ -18,7 +18,7 @@ create table account (
     group_id smallint unsigned default null,
     date_created timestamp default 0,
     date_modified timestamp default current_timestamp on update current_timestamp,
-    unique index account_idx (email)
+    unique index account_id (email)
 ) engine = InnoDb;
 
 create table account_group (
@@ -42,7 +42,7 @@ create table account_role (
     role_id smallint unsigned not null,
     foreign key (account_id) references account (id) on delete cascade,
     foreign key (role_id) references role(id) on delete cascade,
-    unique index account_role_idx_1 (account_id, role_id)
+    unique index account_id_role_id (account_id, role_id)
 ) engine = InnoDb;
 
 create table role_permission (
@@ -51,7 +51,56 @@ create table role_permission (
     permission_id smallint unsigned not null,
     foreign key (role_id) references role (id) on delete cascade,
     foreign key (permission_id) references permission (id) on delete cascade,
-    unique index role_permission_idx1 (role_id, permission_id)
+    unique index role_id_permission_id (role_id, permission_id)
+) engine = InnoDb;
+
+create table resource (
+	id bigint unsigned not null auto_increment primary key,
+	visible boolean not null,
+    price decimal(10,2),
+    capacity int(10) not null,
+    duration int(10) not null
+) engine = InnoDb;
+
+create table resource_property (
+	id bigint unsigned not null auto_increment primary key,
+	name varchar(50),
+    type smallint not null,
+    default_value varchar(1000),
+	unique index name (name)
+) engine = InnoDb;
+
+create table resource_property_value (
+	id bigint unsigned not null auto_increment primary key,
+	value varchar(1000),
+	resource_id bigint unsigned not null,
+	resource_property_id bigint unsigned not null, 
+    foreign key (resource_id) references resource (id) on delete cascade,
+	foreign key (resource_property_id) references resource_property (id) on delete cascade,
+	unique index resource_id_resource_property_id (resource_id, resource_property_id) 
+) engine = InnoDb;
+
+create table schedule (
+	id bigint unsigned not null auto_increment primary key,
+    start timestamp not null,
+    duration int(10),
+    capacity int(10),
+    note varchar(1000),
+    resource_id bigint unsigned not null,
+    visible boolean not null,
+	foreign key (resource_id) references resource (id) on delete cascade
+) engine = InnoDb;
+
+create table reservation (
+	id bigint unsigned not null auto_increment primary key,
+	status smallint,
+    amount int(10),
+	date_created timestamp default 0,
+	date_canceled timestamp default 0,
+	schedule_id bigint unsigned not null,
+    account_id bigint unsigned not null,
+	foreign key (schedule_id) references schedule (id) on delete cascade,
+    foreign key (account_id) references account (id) on delete cascade
 ) engine = InnoDb;
 
 delimiter //
@@ -74,9 +123,9 @@ begin
     insert into role_permission (role_id, permission_id) values ($role_id, _perm_id);
 end //
 
-create procedure createAccount($name varchar(50), $first_name varchar(50), $last_name varchar(50), $email varchar(50), out $id int)
+create procedure createAccount($pass varchar(80), $first_name varchar(50), $last_name varchar(50), $email varchar(50), out $id int)
 begin
-    insert into account (username, password, first_name, last_name, email, enabled) values ($name, 'p@ssword', $first_name, $last_name, $email, 1);
+    insert into account (password, first_name, last_name, email, enabled) values ($pass, $first_name, $last_name, $email, 1, $);
     set $id := last_insert_id();
 end //
 

@@ -16,7 +16,7 @@ import javax.persistence.UniqueConstraint;
  
 @Entity
 @Table(name = "resource_property_value", 
-uniqueConstraints = @UniqueConstraint(columnNames = { "resource_id", "property_id" }))
+uniqueConstraints = @UniqueConstraint(columnNames = { "resource_id", "resource_property_id" }))
 public class ResourcePropertyValue implements Serializable {
      
     private Long id;
@@ -48,7 +48,7 @@ public class ResourcePropertyValue implements Serializable {
     }
      
     @ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "property_id", nullable = false)
+	@JoinColumn(name = "resource_property_id", nullable = false)
     public ResourceProperty getProperty() {
         return property;
     }

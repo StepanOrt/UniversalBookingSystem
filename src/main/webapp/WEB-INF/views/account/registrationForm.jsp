@@ -12,12 +12,12 @@
 
 <html>
 	<head>
-		<title><c:out value="${pageTitle}" /></title>
+		<title>${pageTitle}</title>
 		<%@ include file="../includes/head.jspf" %>
 	</head>
 	<body>
 		<%@ include file="../includes/message.jspf" %>
-		<h1><c:out value="${pageTitle}" /></h1>
+		<h1>${pageTitle}</h1>
 		<form:form cssClass="main" action="${submitRegistrationUrl}" modelAttribute="form" acceptCharset="UTF-8">
 			<form:errors path="*">
 				<div class="alert"><spring:message code="error.global" /></div>

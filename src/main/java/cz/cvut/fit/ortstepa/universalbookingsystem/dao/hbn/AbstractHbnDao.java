@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +37,19 @@ public abstract class AbstractHbnDao<T extends Object> implements Dao<T> {
 		return getDomainClass().getName();
 	}
 
-	@Override
-	public void create(T t) {
-		Method method = ReflectionUtils.findMethod(getDomainClass(), "setDateCreated", new Class[] { Date.class });
+	private void setTimestamp(T t, String name) {
+		String validMethodName = WordUtils.capitalize(name).replace(" ", "");
+		Method method = ReflectionUtils.findMethod(getDomainClass(), "setDate" + validMethodName, new Class[] { Date.class });
 		if (method != null) {
 			try {
 				method.invoke(t, Calendar.getInstance().getTime());
 			} catch (Exception e) { /* Ignore */ }
-		}
-		
+		}		
+	}
+	
+	@Override
+	public void create(T t) {
+		setTimestamp(t, "created");
 		getSession().save(t);
 	}
 
@@ -65,6 +70,7 @@ public abstract class AbstractHbnDao<T extends Object> implements Dao<T> {
 
 	@Override
 	public void update(T t) {
+		setTimestamp(t, "updated");
 		getSession().update(t);
 	}
 

@@ -12,7 +12,7 @@ public interface Dao<T extends Object> {
 	T load(Serializable id);
 	
 	List<T> getAll();
-	
+		
 	void update(T t);
 	
 	void delete(T t);

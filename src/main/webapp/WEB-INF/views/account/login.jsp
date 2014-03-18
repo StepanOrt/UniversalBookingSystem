@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:url var="postLoginUrl" value="/j_spring_security_check" />
+<spring:message var="pageTitle" code="login.pageTitle" />
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Please log in</title>
+<title>${pageTitle}</title>
 <%@ include file="../includes/head.jspf" %>
 </head>
 <body>
 	<%@ include file="../includes/message.jspf" %>
-	<h1>Please log in</h1>
+	<h1>${pageTitle}</h1>
 	
 	<form class="main" action="${postLoginUrl}" method="post">
 		<c:if test="${param.failed == true}">

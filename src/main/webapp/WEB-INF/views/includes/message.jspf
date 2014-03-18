@@ -6,3 +6,13 @@
 		<spring:message code="${message}" />
 	</div>
 </c:if>
+<c:if test="${not empty success}">
+	<span class="success">
+		<spring:message code="${success}" />
+	</span>
+</c:if>
+<c:if test="${not empty error}">
+	<span class="error">
+		<spring:message code="${error}" />
+	</span>
+</c:if>

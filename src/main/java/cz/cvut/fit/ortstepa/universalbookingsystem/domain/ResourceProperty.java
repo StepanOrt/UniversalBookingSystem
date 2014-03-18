@@ -57,11 +57,11 @@ public class ResourceProperty {
         this.type = type;
     }
      
-    @Column(name = "default", nullable=false)
-    public String getDefault() {
+    @Column(name = "default_value", nullable=false)
+    public String getDefaultValue() {
         return defaultValue;
     }
-    public void setDefault(String defaultValue) {
+    public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
 }

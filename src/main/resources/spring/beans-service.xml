@@ -34,7 +34,7 @@
 
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.dao.hbn" />
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.dao.jdbc" />
-	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.service.impl" />
+	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.service" />
 
 	<tx:annotation-driven />
 
