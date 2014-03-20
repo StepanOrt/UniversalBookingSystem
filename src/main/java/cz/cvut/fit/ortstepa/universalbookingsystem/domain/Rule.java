@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Event;
+import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Action;
 
 @Entity
 @Table(name = "rule")
@@ -21,7 +21,7 @@ public class Rule {
 	private Long id;
 	private String name, expression;
 	private boolean enabled = true;
-	private Event event;
+	private Action action;
 	private PriceChange priceChange;
 
 	@Id
@@ -60,13 +60,14 @@ public class Rule {
 		this.enabled = enabled;
 	}
 
+	@Column(name = "action")
 	@Enumerated(value=EnumType.ORDINAL)
-	public Event getEvent() {
-		return event;
+	public Action getAction() {
+		return action;
 	}
 
-	public void setEvent(Event event) {
-		this.event = event;
+	public void setAction(Action event) {
+		this.action = event;
 	}
 	
 	@ManyToOne

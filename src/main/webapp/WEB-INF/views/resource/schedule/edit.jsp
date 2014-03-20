@@ -58,6 +58,11 @@
 						<td><form:input path="note"/></td>
 						<form:errors path="note" element="td" cssClass="errorMessage"/>
 					</tr>
+					<tr>
+						<td><spring:message code="schedule.label.visible" /></td>
+						<td><form:checkbox path="visible"/></td>
+						<form:errors path="visible" element="td" cssClass="errorMessage"/>
+					</tr>
 				</tbody>
 			</table>
 			<span>

@@ -12,6 +12,8 @@
 <spring:message var="remove" code="label.remove" />
 <spring:message var="add" code="label.add" />
 <spring:message var="back" code="label.back" />
+<spring:message var="cancel" code="label.cancel" />
+<spring:message var="reserve" code="label.reserve" />
 <c:url var="baseUrl" value="/resource/${resource.id}/schedule" />
 
 <html>
@@ -33,17 +35,22 @@
 					<th><spring:message code="schedule.label.end"/></th>
 					<th><spring:message code="schedule.label.capacity"/></th>
 					<th><spring:message code="schedule.label.available"/></th>
-					<security:authorize ifAllGranted="PERM_RESERVATION_CREATE">
+					<security:authorize ifAllGranted="PERM_RESERVE">
 					<th><spring:message code="schedule.label.reserve"/></th>
 					</security:authorize>
 					<security:authorize ifAllGranted="PERM_SCH_EDIT">
+						<th><spring:message code="schedule.label.visible"/></th>
 						<th><spring:message code="label.edit"/></th>
 						<th><spring:message code="label.remove"/></th>		
 					</security:authorize>
 				</tr>				
 			</thead>
 			<tbody>
-				<c:forEach var="schedule" items="${resource.schedules}">
+				<c:set var="schedulesSet" value="${resource.visibleSchedules}" />
+				<security:authorize ifAllGranted="PERM_SCH_EDIT">
+					<c:set var="schedulesSet" value="${resource.schedules}" />
+				</security:authorize>
+				<c:forEach var="schedule" items="${schedulesSet}">
 				<tr>
 					<fmt:formatDate value="${schedule.start}" var="startDateTimeString" pattern="dd/MM/yyyy HH:mm" />
 					<fmt:formatDate value="${schedule.end}" var="endDateTimeString" pattern="dd/MM/yyyy HH:mm" />
@@ -51,10 +58,24 @@
 					<td>${endDateTimeString}</td>
 					<td>${schedule.capacity}</td>
 					<td>${schedule.capacityAvailable}</td>
-					<security:authorize ifAllGranted="PERM_RESERVATION_CREATE">
-						<td><input type="button" value="${reserve}" onClick="parent.location='${baseUrl}/${schedule.id}/reservation?create'"/></td>
+					<security:authorize ifAllGranted="PERM_RESERVE">
+						<td>
+						<c:choose>
+						<c:when test="${reservationMap[schedule].status.toString().equals('RESERVED')}">
+							<form:form action="${baseUrl}/${schedule.id}/reservation?cancel" method="PUT">
+								<input type="submit" value="${cancel}">
+							</form:form>
+						</c:when>
+						<c:otherwise>
+							<form:form action="${baseUrl}/${schedule.id}/reservation?reserve" method="PUT">
+								<input type="submit" value="${reserve}">
+							</form:form>
+						</c:otherwise>
+						</c:choose>
+						</td>
 					</security:authorize>
 					<security:authorize ifAllGranted="PERM_SCH_EDIT">
+						<td>${schedule.visible}</td>
 						<td><input type="button" value="${edit}" onClick="parent.location='${baseUrl}/${schedule.id}?form'"/></td>
 						<td>
 						<form:form action="${baseUrl}/${schedule.id}" method="DELETE">

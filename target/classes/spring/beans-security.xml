@@ -30,6 +30,8 @@
 		<intercept-url pattern="^/resource/[0-9]+/schedule/[0-9]+(/$|$)" method="PUT" access="hasRole('PERM_SCH_EDIT')"/>
 		<intercept-url pattern="^/resource/[0-9]+/schedule/[0-9]+(/$|$)" method="DELETE" access="hasRole('PERM_SCH_EDIT')"/>
 		<intercept-url pattern="^/resource/[0-9]+/schedule(/$|$)" method="GET" access="permitAll"/>
+		<intercept-url pattern="^/resource/[0-9]+/schedule/[0-9]+/reservation?\?reserve$" method="PUT" access="hasRole('PERM_RESERVE')"/>
+		<intercept-url pattern="^/resource/[0-9]+/schedule/[0-9]+/reservation?\?cancel$" method="PUT" access="hasRole('PERM_RESERVE')"/>
 		
 
 		<intercept-url pattern="^/account/login(/$|$)" access="permitAll" />

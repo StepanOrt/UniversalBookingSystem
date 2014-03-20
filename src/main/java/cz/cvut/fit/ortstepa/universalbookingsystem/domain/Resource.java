@@ -1,5 +1,6 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.domain;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -93,6 +94,16 @@ public class Resource {
     
     public void setSchedules(Set<Schedule> schedules) {
 		this.schedules = schedules;
+	}
+    
+    @Transient
+    public Set<Schedule> getVisibleSchedules() {
+		Set<Schedule> selection = new HashSet<Schedule>();
+		for (Schedule schedule : getSchedules()) {
+			if (schedule.isVisible())
+				selection.add(schedule);
+		}
+		return selection;
 	}
     
     @Transient

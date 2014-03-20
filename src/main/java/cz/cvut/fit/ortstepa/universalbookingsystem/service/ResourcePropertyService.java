@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,6 @@ import org.springframework.validation.Errors;
 import cz.cvut.fit.ortstepa.universalbookingsystem.dao.ResourcePropertyDao;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.ResourceProperty;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.PropertyType;
-import cz.cvut.fit.ortstepa.universalbookingsystem.service.ResourcePropertyService;
 
 @Service
 @Transactional(readOnly = true)

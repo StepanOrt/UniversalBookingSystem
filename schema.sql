@@ -103,6 +103,25 @@ create table reservation (
     foreign key (account_id) references account (id) on delete cascade
 ) engine = InnoDb;
 
+drop table rule;
+drop table price_change;
+create table price_change (
+	id bigint unsigned not null auto_increment primary key,
+	value DECIMAL(10,2),
+    type smallint,
+    name varchar(50)
+) engine = InnoDb;
+
+create table rule (
+	id bigint unsigned not null auto_increment primary key,
+	expression varchar(1000),
+	action smallint,
+	name varchar(50),
+    enabled boolean,
+    price_change_id bigint unsigned not null,
+	foreign key (price_change_id) references price_change (id) on delete cascade
+) engine = InnoDb;
+
 delimiter //
 
 create procedure createPermission($name varchar(50))

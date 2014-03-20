@@ -2,10 +2,11 @@ package cz.cvut.fit.ortstepa.universalbookingsystem.web;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Reservation;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Resource;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Schedule;
+import cz.cvut.fit.ortstepa.universalbookingsystem.service.ReservationService;
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.ResourcePropertyService;
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.ResourceService;
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.ScheduleService;
@@ -40,6 +43,8 @@ public class ScheduleController {
 	private ResourceService resourceService;
 	@Autowired 
 	private ResourcePropertyService resourcePropertyService;
+	@Autowired
+	private ReservationService reservationService;
 	
 	private static final String VN_SCH_LIST = "resource/schedule/list";
 	//private static final String VN_SCH_DETAIL = "resource/schedule/detail";
@@ -56,7 +61,14 @@ public class ScheduleController {
 	            dateFormat, false));
 	}
 	
-	private String page(Model model) {
+	private String page(Model model, Long resourceId) {
+		Resource resource = resourceService.getEager(resourceId);
+		Map<Schedule, Reservation> reservationMap = new HashMap<Schedule, Reservation>();
+		for (Schedule schedule : resource.getVisibleSchedules()) {
+			 reservationMap.put(schedule, reservationService.get(schedule));
+		}
+		model.addAttribute("reservationMap", reservationMap);
+		model.addAttribute("resource", resource);
 		model.addAttribute("propertyTypeMap", resourcePropertyService.getMap());
 		return VN_SCH_LIST;
 	}
@@ -66,13 +78,7 @@ public class ScheduleController {
 		model.addAttribute("schedule", schedule);
 		return VN_SCH_EDIT;
 	}
-/*
-	private String detail(Model model, Schedule schedule) {
-		model.addAttribute("propertyTypeMap", resourcePropertyService.getMap());
-		model.addAttribute("schedule", schedule);
-		return VN_SCH_DETAIL;
-	}
-	*/
+
 	@RequestMapping(method = RequestMethod.GET, params={"form"})
 	public String create(Model model, @PathVariable Long resourceId) {
 		Resource resource = resourceService.get(resourceId);
@@ -84,13 +90,11 @@ public class ScheduleController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(Model model, @PathVariable Long resourceId, @RequestParam(required=false) String success,final RedirectAttributes redirectAttributes) {
 		if (success != null) redirectAttributes.addFlashAttribute("success", success);
-		Resource resource = resourceService.getEager(resourceId);
-		model.addAttribute("resource", resource);
-		return page(model);				
+		return page(model, resourceId);				
 	}
 	
 
-	@RequestMapping(value="/{id}", method=RequestMethod.GET) 
+	@RequestMapping(value="/{id}", method=RequestMethod.GET, params={"form"}) 
 	public String item(Model model, @PathVariable Long resourceId, @PathVariable Long id, @RequestParam(required=false) String form, final RedirectAttributes redirectAttributes) {
 		Resource resource = resourceService.get(resourceId);
 		Schedule schedule = scheduleService.get(id);
@@ -100,10 +104,6 @@ public class ScheduleController {
 		}
 		schedule.setResource(resource);
 		return form(model, schedule);
-/*		if (form != null) {
-		}
-		return detail(model, schedule);
-*/
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)

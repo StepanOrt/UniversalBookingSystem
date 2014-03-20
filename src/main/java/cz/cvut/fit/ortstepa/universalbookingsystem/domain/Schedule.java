@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Formula;
-import org.springframework.transaction.annotation.Transactional;
  
 @Entity
 @Table(name="schedule")
@@ -123,7 +122,7 @@ public class Schedule implements Serializable {
 	public void setReservations(Set<Reservation> reservations) {
 		this.reservations = reservations;
 	}
-	
+		
 	@Transient
 	public Set<Reservation> getValidReservations() {
 		Set<Reservation> valids = new HashSet<Reservation>();
