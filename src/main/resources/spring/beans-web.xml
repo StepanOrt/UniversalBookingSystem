@@ -11,15 +11,12 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
-	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
-	<mvc:default-servlet-handler />
 	
 	<mvc:view-controller path="/" view-name="redirect:/home" />
 	<mvc:view-controller path="/home" view-name="home" />
 	<mvc:view-controller path="/account/login" view-name="account/login"/>
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	<mvc:default-servlet-handler />
 	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
@@ -28,6 +25,11 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="exposedContextBeanNames">
+			<beans:list>
+				<beans:value>accountService</beans:value>
+			</beans:list>
+		</beans:property>
 	</beans:bean>
 	
 	<beans:bean id="messageSource"
@@ -35,4 +37,15 @@
 		p:basename="classpath:/spring/messages" />
 		
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.web" />
+	
+	<beans:bean id="conversionService"	class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+			<beans:property name="formatters">
+				<beans:set>
+					<beans:ref bean="priceChangeFormatter"/>
+				</beans:set>
+			</beans:property>
+	</beans:bean>
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven conversion-service="conversionService" />
 </beans:beans>

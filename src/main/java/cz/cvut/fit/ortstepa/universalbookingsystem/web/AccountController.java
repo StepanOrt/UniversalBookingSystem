@@ -1,5 +1,7 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.web;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -17,8 +19,10 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
@@ -26,6 +30,7 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.service.AccountService;
 import cz.cvut.fit.ortstepa.universalbookingsystem.web.form.AccountForm;
 import cz.cvut.fit.ortstepa.universalbookingsystem.web.form.PasswordChangeForm;
 import cz.cvut.fit.ortstepa.universalbookingsystem.web.form.RegistrationForm;
+import cz.cvut.fit.ortstepa.universalbookingsystem.web.form.TopupForm;
 
 @Controller
 @RequestMapping("/account")
@@ -39,6 +44,13 @@ public class AccountController {
 	private static final String VN_REG_OK = "redirect:/home";
 	private static final String VN_PASS_FORM = "account/passwordChangeForm";
 	private static final String VN_PASS_OK = "redirect:/account";
+	private static final String VN_ACC_ADMIN_LIST = "account/admin/list";
+	private static final String VN_ACC_ADMIN_FORM = "account/admin/edit";
+	private static final String VN_ACC_ADMIN_TOPUP = "account/admin/topup";
+	private static final String VN_ACC_ADMIN_OK = "redirect:/account?admin";
+
+
+
 
 	@Autowired 
 	private AccountService accountService;
@@ -51,18 +63,18 @@ public class AccountController {
 	public void initBinder(WebDataBinder binder) {
 		binder.setAllowedFields(new String[] { 
 			"currentPassword", "password", "confirmPassword", "firstName", "lastName",
-			"email", "marketingOk", "acceptTerms"
+			"email", "marketingOk", "acceptTerms", "enabled", "emailOk", "amount", "credit"
 		});
 	}
 	
 	
-	@RequestMapping(value = "password", method = RequestMethod.GET)
+	@RequestMapping(value = "/password", method = RequestMethod.GET)
 	public String getPasswordChangeForm(Model model) {
 		model.addAttribute("form", new PasswordChangeForm());
 		return VN_PASS_FORM;
 	}
 	
-	@RequestMapping(value = "password", method = RequestMethod.POST)
+	@RequestMapping(value = "/password", method = RequestMethod.POST)
 	public String postPasswordChangeForm(
 			@ModelAttribute("form") @Valid PasswordChangeForm form,
 			BindingResult result, final RedirectAttributes redirectAttributes) {
@@ -87,14 +99,14 @@ public class AccountController {
 		return VN_PASS_FORM;
 	}
 
-	@RequestMapping(value = "registration", method = RequestMethod.GET)
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public String getRegistrationForm(Model model) {
 		log.debug("GET registration auth=" + SecurityContextHolder.getContext().getAuthentication().getName());
 		model.addAttribute("form", new RegistrationForm());
 		return VN_REG_FORM;
 	}
 
-	@RequestMapping(value = "registration", method = RequestMethod.POST)
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public String postRegistrationForm(
 			@ModelAttribute("form") @Valid RegistrationForm form,
 			BindingResult result, final RedirectAttributes redirectAttributes) {
@@ -114,7 +126,86 @@ public class AccountController {
 		}
 		return VN_REG_FORM;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, params = {"admin"})
+	public String list(Model model, @RequestParam(required=false) String success, final RedirectAttributes redirectAttributes) {
+		if (success != null) redirectAttributes.addFlashAttribute("success", success);
+		return page(model);
+	}
 
+
+	private String page(Model model) {
+		List<Account> list = accountService.getAll();
+		model.addAttribute("accountList", list);
+		return VN_ACC_ADMIN_LIST;
+	}
+	
+	@RequestMapping(value="/login", method=RequestMethod.GET)
+	public String login(Model model,  @RequestParam(required=false) String failed, final RedirectAttributes redirectAttributes) {
+		if (failed != null)	{
+			redirectAttributes.addFlashAttribute("error", "account.login.fail");
+			return "redirect:/account/login";
+		}
+		return "account/login";
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public String item(Model model, @PathVariable Long id) {
+		return adminForm(model, accountService.get(id));
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public String itemPut(Model model, @PathVariable Long id, Account account, BindingResult result, final RedirectAttributes redirectAttributes) {
+		account.setId(id);		
+		accountService.update(id, account, result);
+		if (!result.hasErrors()) {
+			redirectAttributes.addFlashAttribute("success", "account.message.sucess");
+			return VN_ACC_ADMIN_OK;
+		}
+		return adminForm(model, account);
+	}
+	
+
+	private String adminForm(Model model, Account account) {
+		model.addAttribute("account", account);
+		return VN_ACC_ADMIN_FORM;
+	}
+	
+	@RequestMapping(value="/{id}/topup", method=RequestMethod.GET)
+	public String topupGet(Model model, @PathVariable Long id) {
+		return topup(model, accountService.get(id), new TopupForm());
+	}
+	
+	@RequestMapping(value="/{id}/topup", method=RequestMethod.PUT)
+	public String topupPut(Model model, TopupForm topup, BindingResult result, @PathVariable Long id,  final RedirectAttributes redirectAttributes) {
+		if (topup.getAmount() > 0) {
+			accountService.topup(id,  topup.getAmount());			
+			redirectAttributes.addFlashAttribute("success", "account.admin.topup.success");
+			return VN_ACC_ADMIN_OK;
+		}
+		result.rejectValue("amount", "account.admin.topup.zeroOrLess");
+		return topup(model, accountService.get(id), topup);
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT, params={"makeAdmin"})
+	public String makeAdmin(Model model, @PathVariable Long id,  final RedirectAttributes redirectAttributes) {
+		accountService.makeAdmin(id);
+		redirectAttributes.addFlashAttribute("success", "account.admin.makeAdmin.success");
+		return VN_ACC_ADMIN_OK;
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT, params={"makeUser"})
+	public String makeUser(Model model, @PathVariable Long id,  final RedirectAttributes redirectAttributes) {
+		accountService.makeUser(id);
+		redirectAttributes.addFlashAttribute("success", "account.admin.makeUser.success");
+		return VN_ACC_ADMIN_OK;
+	}
+	
+	private String topup(Model model, Account account, TopupForm topup) {
+		model.addAttribute("account", account);
+		model.addAttribute("topup", topup);
+		return VN_ACC_ADMIN_TOPUP;
+	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String getAccountForm(Model model) {

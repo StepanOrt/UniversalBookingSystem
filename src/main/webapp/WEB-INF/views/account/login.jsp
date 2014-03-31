@@ -12,33 +12,24 @@
 <%@ include file="../includes/head.jspf" %>
 </head>
 <body>
-	<%@ include file="../includes/message.jspf" %>
-	<h1>${pageTitle}</h1>
-	
-	<form class="main" action="${postLoginUrl}" method="post">
-		<c:if test="${param.failed == true}">
-			<div class="alert">
-				Your login attempt failed. Please try again, or contact technical support for further assistance.
-			</div>
-		</c:if>
-		<div class="panel grid" style="width:420px">
-			<div class="gridRow yui-gf">
-				<div class="fieldLabel yui-u first">Email:</div>
-				<div class="yui-u"><input type="email" autocomplete="on" required="required"  name="j_username" class="short" /></div>
-			</div>
-			<div class="gridRow yui-gf">
-				<div class="fieldLabel yui-u first">Password:</div>
-				<div class="yui-u"><input type="password" required="required" name="j_password" class="short" /></div>
-			</div>
-			<div class="gridRow yui-gf">
-				<div class="yui-u first"></div>
-				<div class="yui-u"><input type="checkbox" name="_spring_security_remember_me" /> Remember me</div>
-			</div>
-			<div class="gridRow yui-gf">
-				<div class="yui-u first"></div>
-				<div class="yui-u"><input type="submit" value="Log in" /></div>
-			</div>
-		</div>
-	</form>
+	<c:set var="active" value="login" />
+	<%@ include file="../includes/navigation.jspf" %>
+	<div class="container">
+	  <%@ include file="../includes/message.jspf" %>
+      <form class="form-signin" role="form" action="${postLoginUrl}" method="post" novalidate="novalidate">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <div class="control-group">
+	        <input name="j_username" type="email" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
+        </div>
+        <div class="control-group">
+        	<input name="j_password" type="password" class="form-control" placeholder="Password" required="required" minlength="6">
+        </div>
+        <label class="checkbox">
+        	<input name="_spring_security_remember_me" type="checkbox" value="remember-me"> Remember me
+        </label>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+    </div> <!-- /container -->
+    <%@ include file="../includes/footer.jspf" %>
 </body>
 </html>

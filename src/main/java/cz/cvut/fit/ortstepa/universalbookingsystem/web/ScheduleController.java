@@ -26,6 +26,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Reservation;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Resource;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Schedule;
+import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Action;
+import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Status;
+import cz.cvut.fit.ortstepa.universalbookingsystem.helper.PriceEngine;
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.ReservationService;
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.ResourcePropertyService;
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.ResourceService;
@@ -45,9 +48,10 @@ public class ScheduleController {
 	private ResourcePropertyService resourcePropertyService;
 	@Autowired
 	private ReservationService reservationService;
+	@Autowired
+	private PriceEngine priceEngine;
 	
 	private static final String VN_SCH_LIST = "resource/schedule/list";
-	//private static final String VN_SCH_DETAIL = "resource/schedule/detail";
 	private static final String VN_SCH_EDIT = "resource/schedule/edit";
 	private static final String VN_SCH_REDIRECT = "redirect:/resource/{resourceId}/schedule";
 	
@@ -64,10 +68,16 @@ public class ScheduleController {
 	private String page(Model model, Long resourceId) {
 		Resource resource = resourceService.getEager(resourceId);
 		Map<Schedule, Reservation> reservationMap = new HashMap<Schedule, Reservation>();
+		Map<Schedule, Double> priceMap = new HashMap<Schedule, Double>();
 		for (Schedule schedule : resource.getVisibleSchedules()) {
-			 reservationMap.put(schedule, reservationService.get(schedule));
+			Reservation reservation = reservationService.get(schedule);
+			reservationMap.put(schedule, reservation);
+			Action action = Action.CREATE;
+			if (reservation != null && reservation.getStatus().equals(Status.RESERVED)) action = Action.CANCEL;
+			priceMap.put(schedule, priceEngine.calculatePrice(schedule, action));
 		}
 		model.addAttribute("reservationMap", reservationMap);
+		model.addAttribute("priceMap", priceMap);
 		model.addAttribute("resource", resource);
 		model.addAttribute("propertyTypeMap", resourcePropertyService.getMap());
 		return VN_SCH_LIST;

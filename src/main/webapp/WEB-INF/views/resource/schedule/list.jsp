@@ -35,6 +35,7 @@
 					<th><spring:message code="schedule.label.end"/></th>
 					<th><spring:message code="schedule.label.capacity"/></th>
 					<th><spring:message code="schedule.label.available"/></th>
+					<th><spring:message code="schedule.label.price"/></th>
 					<security:authorize ifAllGranted="PERM_RESERVE">
 					<th><spring:message code="schedule.label.reserve"/></th>
 					</security:authorize>
@@ -58,6 +59,7 @@
 					<td>${endDateTimeString}</td>
 					<td>${schedule.capacity}</td>
 					<td>${schedule.capacityAvailable}</td>
+					<td>${priceMap[schedule]}</td>
 					<security:authorize ifAllGranted="PERM_RESERVE">
 						<td>
 						<c:choose>

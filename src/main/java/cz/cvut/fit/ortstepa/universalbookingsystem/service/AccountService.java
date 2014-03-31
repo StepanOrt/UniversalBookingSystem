@@ -1,6 +1,8 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.service;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Hibernate;
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 
 import cz.cvut.fit.ortstepa.universalbookingsystem.dao.AccountDao;
@@ -91,6 +94,74 @@ public class AccountService {
 			accountDao.update(account);
 		}
 		return valid;
+	}
+
+	public List<Account> getAll() {
+		return accountDao.getAll();
+	}
+
+	public Account get(Long id) {
+		List<Account> list = accountDao.getAll();
+		Account account = accountDao.get(id);
+		return account;
+	}
+
+	@Transactional(readOnly = false)
+	public void topup(Long id, Double topup) {
+		Account account = get(id);
+		account.setCredit(account.getCredit() + topup);
+		accountDao.update(account);		
+	}
+	
+	@Transactional(readOnly = false)
+	public void makeAdmin(Long id) {
+		makeAdmin(get(id));
+	}
+	
+	@Transactional(readOnly = false)
+	public void makeUser(Long id) {
+		makeUser(get(id));
+	}
+	
+	private void makeAdmin(Account account) {
+		removeRole(account, "ROLE_ADMIN");
+		removeRole(account, "ROLE_USER");
+		account.getRoles().add(roleDao.findByName("ROLE_ADMIN"));
+		accountDao.update(account);
+	}
+	
+	
+	private void removeRole(Account account, String roleName) {
+		for (Iterator<Role> iterator = account.getRoles().iterator(); iterator.hasNext();) {
+			Role role = (Role) iterator.next();
+			if (role.getName().equals(roleName)) {
+				account.getRoles().remove(role);
+				return;
+			}
+		}
+	}
+
+	private void makeUser(Account account) {
+		removeRole(account, "ROLE_ADMIN");
+		removeRole(account, "ROLE_USER");
+		account.getRoles().add(roleDao.findByName("ROLE_USER"));
+		accountDao.update(account);
+	}
+
+	@Transactional(readOnly = false)
+	public void update(Long id, Account newAccount, BindingResult errors) {
+		validateEmailUnique(newAccount.getEmail(), id, errors);
+		if (!errors.hasErrors()) {
+			Account account = accountDao.get(id);
+			account.setCredit(newAccount.getCredit());
+			account.setEmail(newAccount.getEmail());
+			account.setEnabled(newAccount.isEnabled());
+			account.setFirstName(newAccount.getFirstName());
+			account.setLastName(newAccount.getLastName());
+			account.setGroup(newAccount.getGroup());
+			account.setEmailOk(newAccount.isEmailOk());
+			accountDao.update(account);
+		}
 	}
 
 }

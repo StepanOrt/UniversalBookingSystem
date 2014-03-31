@@ -3,7 +3,6 @@ package cz.cvut.fit.ortstepa.universalbookingsystem.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +14,7 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Permission;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Reservation;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Schedule;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.UserDetailsAdapter;
+import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Action;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Status;
 import cz.cvut.fit.ortstepa.universalbookingsystem.helper.PriceEngine;
 
@@ -35,16 +35,18 @@ public class ReservationService {
 	@PreAuthorize("hasRole('PERM_RESERVE')")
 	public void reserve(Long scheduleId) {
 		Schedule schedule = scheduleDao.get(scheduleId);
+		if (schedule.getCapacityAvailable() == 0)
+			throw new ScheduleFullException();
 		Reservation reservation = get(schedule);
+		Account account = getLoggedAccount();
 		if (reservation == null) {
 			reservation = new Reservation();
-			String email = getLoggedAccount().getEmail();
-			Account account = accountDao.findByEmail(email);
 			if (priceEngine.canReserve(account, schedule)) {
 				reservation.setAccount(account);
 				reservation.setSchedule(schedule);
 				reservation.setStatus(Status.RESERVED);
 				reservationDao.create(reservation);
+				updateCredit(account, getPrice(schedule, Action.CREATE));
 				return;
 			}
 			throw new NotEnoughCreditException();
@@ -52,9 +54,21 @@ public class ReservationService {
 		if (reservation.getStatus().equals(Status.CANCELED)) {
 			reservation.setStatus(Status.RESERVED);
 			reservationDao.update(reservation);
+			updateCredit(account, getPrice(schedule, Action.CREATE));
 			return;
 		}
 		throw new ReservationAlreadyExistsException();
+	}
+
+	private double getPrice(Schedule schedule, Action action) {
+		return priceEngine.calculatePrice(schedule, action);
+	}
+
+	private void updateCredit(Account account, double price) {
+		double credit = account.getCredit();
+		credit -= price;
+		account.setCredit(credit);
+		accountDao.update(account);
 	}
 
 	@Transactional(readOnly = false)
@@ -66,6 +80,7 @@ public class ReservationService {
 		if (reservation == null) throw new ReservationNotExistException();
 		reservation.setStatus(Status.CANCELED);
 		reservationDao.update(reservation);
+		updateCredit(account, getPrice(schedule, Action.CANCEL));
 	}
 	
 	public Reservation get(Schedule schedule) {
@@ -81,11 +96,13 @@ public class ReservationService {
 	}
 
 	private Account getLoggedAccount() {
-		Account account = ((UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAccount();
+		String email = ((UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
+		Account account = accountDao.findByEmail(email);
 		return account;
 	}
 	
 	public class ReservationNotExistException extends RuntimeException {}
 	public class NotEnoughCreditException extends RuntimeException {}
 	public class ReservationAlreadyExistsException extends RuntimeException {}
+	public class ScheduleFullException extends RuntimeException {}
 }

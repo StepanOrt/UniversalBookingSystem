@@ -8,16 +8,18 @@
 <c:url var="accountDetailsUrl" value="/account" />
 
 
-<div class="yui-u">
+<ul class="nav navbar-nav navbar-right">
 	<security:authorize access="isAnonymous()">
-		<div id="sessionInfo">
-			Hi, guest. <a href="${loginUrl}">Log in</a> or <a href="${registerUrl}">Register</a>
-		</div>
+        <li class="${active=='login' ? 'active' : '' }"><a href="${loginUrl}">Log in</a></li>
+        <li class="${active=='register' ? 'active' : '' }"><a href="${registerUrl}">Register</a></li>
 	</security:authorize>
 	<security:authorize access="isAuthenticated()">
-		<div id="sessionInfo">
-			<a href="${accountDetailsUrl}"><security:authentication property="principal.fullName" /></a>
-			<a href="${logoutUrl}">Log out</a>
-		</div>
+		<security:authentication property="principal.username" var="email"/>
+		<c:set var="account" value="${accountService.getAccountByEmail(email)}"/>
+		<li><a href="${accountDetailsUrl}">${account.fullName}</a></li>
+		<c:if test="account.isUser()">
+			<li><span>${account.credit}</span></li>
+		</c:if>
+		<li><a href="${logoutUrl}">Log out</a></li>
 	</security:authorize>
-</div>
+</ul>

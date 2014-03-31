@@ -6,12 +6,11 @@
 <%@ include file="includes/head.jspf" %>
 </head>
 <body>
-	<div id="subhd" class="yui-g">
-		<%@ include file="includes/navigation.jspf" %>
-		<%@ include file="includes/sessionInfo.jspf" %>
+	<%@ include file="includes/navigation.jspf" %>
+	<div class="container">
+		<%@ include file="includes/message.jspf" %>
+		<h1>Home page</h1>
+		<p>You can login!</p>
 	</div>
-	<%@ include file="includes/message.jspf" %>
-	<h1>Home page</h1>
-	<p>You can login!</p>
 </body>
 </html>

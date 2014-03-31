@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,6 +25,7 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 
 @NamedQuery(
@@ -136,7 +138,7 @@ public class Account {
 		this.credit = credit;
 	}
 
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(
 		name = "account_role",
 		joinColumns = { @JoinColumn(name = "account_id", referencedColumnName = "id") },
@@ -158,6 +160,22 @@ public class Account {
 		authorities.addAll(getRoles());
 		authorities.addAll(getPermissions());
 		return authorities;
+	}
+	
+	@Transient
+	public boolean isAdmin() {
+		for (Role role : getRoles()) {
+			if (role.getName().equals("ROLE_ADMIN")) return true;
+		}
+		return false;
+	}
+	
+	@Transient
+	public boolean isUser() {
+		for (Role role : getRoles()) {
+			if (role.getName().equals("ROLE_USER")) return true;
+		}
+		return false;
 	}
 
 	@Column(name = "date_created")

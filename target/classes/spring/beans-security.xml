@@ -11,6 +11,15 @@
 	<http pattern="/favicon.ico" security="none" />
 	<http use-expressions="true" request-matcher="regex">	
 
+		<intercept-url pattern="^/account/login/?\?failed$" access="permitAll" />
+		<intercept-url pattern="^/account/login$" access="permitAll" />
+		<form-login login-page="/account/login"
+			authentication-failure-url="/account/login?failed"
+			default-target-url="/home" />
+		<remember-me />
+
+		<logout logout-success-url="/home" />
+
 		<intercept-url pattern="^/$"  method="GET" access="permitAll" />
 		<intercept-url pattern="^/home$" method="GET" access="permitAll" />
 
@@ -32,20 +41,24 @@
 		<intercept-url pattern="^/resource/[0-9]+/schedule(/$|$)" method="GET" access="permitAll"/>
 		<intercept-url pattern="^/resource/[0-9]+/schedule/[0-9]+/reservation?\?reserve$" method="PUT" access="hasRole('PERM_RESERVE')"/>
 		<intercept-url pattern="^/resource/[0-9]+/schedule/[0-9]+/reservation?\?cancel$" method="PUT" access="hasRole('PERM_RESERVE')"/>
-		
 
-		<intercept-url pattern="^/account/login(/$|$)" access="permitAll" />
+		<intercept-url pattern="^/rule.*$" access="hasRole('PERM_RULE')"/>
+		<intercept-url pattern="^/priceChange.*$" access="hasRole('PERM_PRICE')"/>		
+
+		<intercept-url pattern="^/account/?\?admin$" method="GET" access="hasRole('PERM_MANAGE_USERS')"/>
+		<intercept-url pattern="^/account/[0-9]+(/$|$)" method="GET" access="hasRole('PERM_MANAGE_USERS')"/>
+		<intercept-url pattern="^/account/[0-9]+(/$|$)" method="PUT" access="hasRole('PERM_MANAGE_USERS')"/>
+		<intercept-url pattern="^/account/[0-9]+/topup(/$|$)" method="GET" access="hasRole('PERM_MANAGE_USERS')"/>
+		<intercept-url pattern="^/account/[0-9]+/topup(/$|$)" method="PUT" access="hasRole('PERM_MANAGE_USERS')"/>
+		<intercept-url pattern="^/account/[0-9]+/?\?makeUser$" method="PUT" access="hasRole('PERM_MANAGE_ROLES')"/>
+		<intercept-url pattern="^/account/[0-9]+/?\?makeAdmin$" method="PUT" access="hasRole('PERM_MANAGE_ROLES')"/>
+
         <intercept-url pattern="^/account/registration(/$|$)" access="isAnonymous()" />
 		<intercept-url pattern="^/account/password(/$|$)" access="isAuthenticated()" />
 		<intercept-url pattern="^/account(/$|$)" access="isAuthenticated()" />
 		
 		<intercept-url pattern="^/.*$" access="denyAll" />
 
-		<form-login login-page="/account/login"
-			authentication-failure-url="/account/login?failed=true"
-			default-target-url="/home" />
-		<remember-me />
-		<logout logout-success-url="/home" />
 	</http>
 
 

@@ -17,7 +17,7 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.PriceChangeType
 public class PriceChange {
 
 	private Long id;
-	private String value;
+	private Double value;
 	private PriceChangeType type;
 	private String name;
 
@@ -43,11 +43,11 @@ public class PriceChange {
 	}
 
 	@Column(name = "value")
-	public String getValue() {
+	public Double getValue() {
 		return this.value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
@@ -58,12 +58,5 @@ public class PriceChange {
 
 	public void setType(PriceChangeType type) {
 		this.type = type;
-	}
-
-	@Override
-	public String toString() {
-		return this.name;
-	}
-	
-	
+	}	
 }

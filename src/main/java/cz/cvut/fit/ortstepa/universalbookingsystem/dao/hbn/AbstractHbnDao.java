@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang3.text.WordUtils;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,9 @@ public abstract class AbstractHbnDao<T extends Object> implements Dao<T> {
 
 	@Override
 	public boolean exists(Serializable id) {
-		return (get(id) != null);
+		Query query = getSession().createQuery("select count(*) from " + getDomainClassName() +" where id=:id");
+		query.setParameter("id", id);
+		int count = (Integer)query.uniqueResult();
+		return (count == 1);
 	}
 }
