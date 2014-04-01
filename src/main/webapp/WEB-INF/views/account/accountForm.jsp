@@ -6,10 +6,9 @@
 <!DOCTYPE html>
 
 <c:url var="submitAccountUrl" value="/account" />
-<c:url var="changePasswordUrl" value="/account/password" />
 
 <spring:message var="pageTitle" code="account.pageTitle" />
-<spring:message var="edit" code="account.label.edit" />
+<spring:message var="edit" code="label.edit" />
 
 <html>
 	<head>
@@ -17,86 +16,110 @@
 		<%@ include file="../includes/head.jspf" %>
 	</head>
 	<body>
-		<%@ include file="../includes/message.jspf" %>
-		<h1>${pageTitle}</h1>
-
-		<form:form cssClass="main" action="${submitAccountUrl}" modelAttribute="form" acceptCharset="UTF-8">
-			<form:errors path="*">
-				<div class="alert"><spring:message code="error.global" /></div>
-			</form:errors>
-
-			<p>
-				<a href="${changePasswordUrl}">
-					<spring:message code="account.label.changePassword" />
-				</a>
-			</p>
-
-			<p><spring:message code="account.message.allFieldsRequired" /></p>
-
-			
-	
-			<div class="panel grid">			
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.firstName" /></div>
-					<div class="yui-u">
-						<div><form:input path="firstName" cssClass="short" cssErrorClass="short error" /></div>
-						<form:errors path="firstName" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.lastName" /></div>
-					<div class="yui-u">
-						<div><form:input path="lastName" cssClass="short" cssErrorClass="short error" /></div>
-						<form:errors path="lastName" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.email" /></div>
-					<div class="yui-u">
-						<div><form:input path="email" cssClass="medium" cssErrorClass="medium error" /></div>
-						<form:errors path="email" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="yui-u first"></div>
-					<div class="yui-u">
-						<form:checkbox id="marketingOk" path="marketingOk" />
-						<label for="marketingOk"><spring:message code="account.label.marketingOk" /></label>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="yui-u first"></div>
-					<div class="yui-u">
-						<form:checkbox id="emailOk" path="emailOk" />
-						<label for="emailOk"><spring:message code="account.label.emailOk" /></label>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="yui-u first"></div>
-					<div class="yui-u">
-						<form:checkbox id="calendarOk" path="calendarOk" />
-						<label for="calendarOk"><spring:message code="account.label.calendarOk" /></label>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="yui-u first"></div>
-					<div class="yui-u">
-						<form:checkbox id="twitterOk" path="twitterOk" />
-						<label for="twitterOk"><spring:message code="account.label.twitterOk" /></label>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.currentPassword" /></div>
-					<div class="yui-u">
-						<div><form:password path="currentPassword" showPassword="false" cssClass="short" cssErrorClass="short error" required="required"/></div>
-						<form:errors path="currentPassword" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="yui-u first"></div>
-					<div class="yui-u"><input type="submit" value="${edit}"></input></div>
-				</div>
+		<c:set var="active" value="account" />
+		<%@ include file="../includes/navigation.jspf"%>
+		<div class="container">
+			<%@ include file="../includes/message.jspf" %>
+			<div class="page-header">
+				<h1>${pageTitle}</h1>
 			</div>
-		</form:form>
+			<form:form cssClass="form-horizontal"  action="${submitAccountUrl}" modelAttribute="form" acceptCharset="UTF-8">
+				<form:errors path="*">
+					<div class="alert alert-danger"><spring:message code="error.global" /></div>
+				</form:errors>
+				
+				<c:set var="groupError"><form:errors path='firstName'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+	       			<label class="control-label col-xs-2" for="firstName"><spring:message code="account.label.firstName"/></label>
+	       			<div class="controls col-xs-10">
+	       				<form:input path="firstName" cssClass="form-control" id="firstName" required="required" maxlength="50"/>
+	       			</div>
+	       			<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+	   			</div>
+				
+				<c:set var="groupError"><form:errors path='lastName'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+	       			<label class="control-label col-xs-2" for="lastName"><spring:message code="account.label.lastName"/></label>
+	       			<div class="controls col-xs-10">
+	       				<form:input path="lastName" cssClass="form-control" id="lastName" required="required" maxlength="50"/>
+	       			</div>
+	       			<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+	   			</div>
+		
+				<c:set var="groupError"><form:errors path='email'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+		      		<label class="control-label col-xs-2" for="email"><spring:message code="account.label.email"/></label>
+		      		<div class="controls col-xs-10">
+		      			<form:input path="email" type="email" cssClass="form-control" id="email" required="required" maxlength="50"/>
+		      		</div>
+		      		<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+		  		</div>
+		  		
+				<c:set var="groupError"><form:errors path='marketingOk'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+					<div class="controls col-xs-offset-2 col-xs-10">
+						<label class="checkbox" for="marketingOk"><form:checkbox id="marketingOk" path="marketingOk" /> <spring:message code="account.label.marketingOk" /></label>
+						<c:if test="${not empty groupError}">
+							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+						</c:if>
+					</div>
+				</div>
+				
+				<c:set var="groupError"><form:errors path='emailOk'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+					<div class="controls col-xs-offset-2 col-xs-10">
+						<label class="checkbox" for="emailOk"><form:checkbox id="emailOk" path="emailOk" /> <spring:message code="account.label.emailOk" /></label>
+						<c:if test="${not empty groupError}">
+							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+						</c:if>
+					</div>
+				</div>
+				
+				<c:set var="groupError"><form:errors path='calendarOk'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+					<div class="controls col-xs-offset-2 col-xs-10">
+						<label class="checkbox" for="calendarOk"><form:checkbox id="calendarOk" path="calendarOk" /> <spring:message code="account.label.calendarOk" /></label>
+						<c:if test="${not empty groupError}">
+							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+						</c:if>
+					</div>
+				</div>
+				
+				<c:set var="groupError"><form:errors path='twitterOk'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+					<div class="controls col-xs-offset-2 col-xs-10">
+						<label class="checkbox" for="twitterOk"><form:checkbox id="twitterOk" path="twitterOk" /> <spring:message code="account.label.twitterOk" /></label>
+						<c:if test="${not empty groupError}">
+							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+						</c:if>
+					</div>
+				</div>
+				
+				<c:set var="groupError"><form:errors path='currentPassword'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+	       			<label class="control-label col-xs-2" for="currentPassword"><spring:message code="account.label.currentPassword"/></label>
+	       			<div class="controls col-xs-10">
+	       				<form:password path="currentPassword" cssClass="form-control" id="currentPassword" showcurrentPassword="false" required="required" minlength="6" maxlength="50"/>
+	       			</div>
+	       			<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+	   			</div>
+				
+				<div class="form-group">
+					<div class="col-xs-2"></div>
+					<div class="col-xs-offset-2 col-xs-10">
+						<button type="submit" class="btn btn-primary">${edit}</button>
+					</div>
+				</div>
+			</form:form>
+		</div>
+		<%@ include file="../includes/footer.jspf" %>
 	</body>
 </html>

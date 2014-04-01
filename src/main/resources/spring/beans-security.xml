@@ -10,6 +10,7 @@
 	<global-method-security pre-post-annotations="enabled"/>
 	<http pattern="/favicon.ico" security="none" />
 	<http use-expressions="true" request-matcher="regex">	
+		<intercept-url pattern="^/static/.*$"  method="GET" access="permitAll" />
 
 		<intercept-url pattern="^/account/login/?\?failed$" access="permitAll" />
 		<intercept-url pattern="^/account/login$" access="permitAll" />
@@ -23,11 +24,11 @@
 		<intercept-url pattern="^/$"  method="GET" access="permitAll" />
 		<intercept-url pattern="^/home$" method="GET" access="permitAll" />
 
-		<intercept-url pattern="^/resource/?\?form$" access="hasRole('PERM_RES_EDIT')"/>
-		<intercept-url pattern="^/resource/[0-9]+/?\?form$" access="hasRole('PERM_RES_EDIT')"/>
+		<intercept-url pattern="^/resource/?\?form$" method="GET" access="hasRole('PERM_RES_EDIT')"/>
+		<intercept-url pattern="^/resource/[0-9]+/?\?form$" method="GET" access="hasRole('PERM_RES_EDIT')"/>
 		<intercept-url pattern="^/resource(/$|$)" method="POST" access="hasRole('PERM_RES_EDIT')"/>
 		<intercept-url pattern="^/resource/[0-9]+(/$|$)" method="PUT" access="hasRole('PERM_RES_EDIT')"/>
-		<intercept-url pattern="^/resource(/$|$)" method="DELETE" access="hasRole('PERM_RES_EDIT')"/>
+		<intercept-url pattern="^/resource/[0-9]+(/$|$)" method="DELETE" access="hasRole('PERM_RES_EDIT')"/>
 		<intercept-url pattern="^/resource(/$|$)" method="GET" access="permitAll"/>
 		<intercept-url pattern="^/resource/[0-9]+(/$|$)" method="GET" access="permitAll"/>
 

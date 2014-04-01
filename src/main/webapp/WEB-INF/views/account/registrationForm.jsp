@@ -23,7 +23,7 @@
 		<div class="page-header">
 			<h1>${pageTitle}</h1>
 		</div>
-		<form:form cssClass="form-horizontal" action="${submitRegistrationUrl}" modelAttribute="form" acceptCharset="UTF-8" novalidate="novalidate">
+		<form:form cssClass="form-horizontal" action="${submitRegistrationUrl}" modelAttribute="form" acceptCharset="UTF-8">
 			<form:errors path="*">
 				<div class="alert alert-danger"><spring:message code="error.global" /></div>
 			</form:errors>
@@ -75,7 +75,7 @@
        			<label class="control-label col-xs-2" for="confirmPassword"><spring:message code="account.label.confirmPassword"/></label>
        			<div class="controls col-xs-10">
        				<c:set var="matchesMessage"><spring:message code="error.mismatch.password"/></c:set>
-       				<form:password path="confirmPassword" data-validation-matches-match="password" data-validation-matches-message="${matchesMessage}" cssClass="form-control" id="confirmPassword" showPassword="false"/>
+       				<form:password path="confirmPassword" data-validation-matches-match="password" data-validation-matches-message="${matchesMessage}" required="required" cssClass="form-control" id="confirmPassword" showPassword="false"/>
        			</div>
    			</div>
 			<c:set var="groupError"><form:errors path='marketingOk'/></c:set>

@@ -14,39 +14,55 @@
 		<%@ include file="../includes/head.jspf" %>
 	</head>
 	<body>
-		<%@ include file="../includes/message.jspf" %>
-		<h1><c:out value="${pageTitle}" /></h1>
-		<form:form cssClass="main" action="${submitPasswordChangeUrl}" modelAttribute="form" acceptCharset="UTF-8">
-			<form:errors path="*">
-				<div class="alert"><spring:message code="error.global" /></div>
-			</form:errors>
-
-			<div class="panel grid">
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.currentPassword" /></div>
-					<div class="yui-u">
-						<div><form:password path="currentPassword" showPassword="false" cssClass="short" cssErrorClass="short error" required="required"/></div>
-						<form:errors path="currentPassword" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.password" /></div>
-					<div class="yui-u">
-						<div><form:password path="password" showPassword="false" cssClass="short" cssErrorClass="short error" required="required"/></div>
-						<form:errors path="password" element="div" cssClass="errorMessage" htmlEscape="false"/>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="fieldLabel yui-u first"><spring:message code="account.label.confirmPassword" /></div>
-					<div class="yui-u">
-						<div><form:password path="confirmPassword" showPassword="false" cssClass="short" required="required"/></div>
-					</div>
-				</div>
-				<div class="gridRow yui-gf">
-					<div class="yui-u first"></div>
-					<div class="yui-u"><input type="submit" value="${passwordChange}"></input></div>
-				</div>
+		<c:set var="active" value="account" />
+		<%@ include file="../includes/navigation.jspf"%>
+		<div class="container">
+			<%@ include file="../includes/message.jspf" %>
+			<div class="page-header">
+				<h1>${pageTitle}</h1>
 			</div>
-		</form:form>
+			<form:form cssClass="form-horizontal"  action="${submitPasswordChangeUrl}" modelAttribute="form" acceptCharset="UTF-8">
+				<form:errors path="*">
+					<div class="alert"><spring:message code="error.global" /></div>
+				</form:errors>
+	
+				<c:set var="groupError"><form:errors path='currentPassword'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+	       			<label class="control-label col-xs-2" for="currentPassword"><spring:message code="account.label.currentPassword"/></label>
+	       			<div class="controls col-xs-10">
+	       				<form:password path="currentPassword" cssClass="form-control" id="currentPassword" showcurrentPassword="false" required="required" minlength="6" maxlength="50"/>
+	       			</div>
+	       			<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+	   			</div>
+	   			
+				<c:set var="groupError"><form:errors path='password'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+	       			<label class="control-label col-xs-2" for="password"><spring:message code="account.label.password"/></label>
+	       			<div class="controls col-xs-10">
+	       				<form:password path="password" cssClass="form-control" id="password" showPassword="false" required="required" minlength="6" maxlength="50"/>
+	       			</div>
+	       			<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+	   			</div>			
+				<div class="control-group form-group">
+	       			<label class="control-label col-xs-2" for="confirmPassword"><spring:message code="account.label.confirmPassword"/></label>
+	       			<div class="controls col-xs-10">
+	       				<c:set var="matchesMessage"><spring:message code="error.mismatch.password"/></c:set>
+	       				<form:password path="confirmPassword" data-validation-matches-match="password" data-validation-matches-message="${matchesMessage}" required="required" cssClass="form-control" id="confirmPassword" showPassword="false"/>
+	       			</div>
+	   			</div>
+	   			
+	   			<div class="form-group">
+					<div class="col-xs-2"></div>
+					<div class="col-xs-offset-2 col-xs-10">
+						<button type="submit" class="btn btn-primary">${passwordChange}</button>
+					</div>
+				</div>
+			</form:form>
+		</div>
+		<%@ include file="../includes/footer.jspf" %>
 	</body>
 </html>

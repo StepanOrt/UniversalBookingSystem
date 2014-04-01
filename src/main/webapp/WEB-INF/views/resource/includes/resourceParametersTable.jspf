@@ -4,26 +4,54 @@
 
 <c:if test="${not empty resource}">
 <c:if test="${not empty resource.propertyValuesMap}">
-<table>
-	<caption><spring:message code="resource.label.properties.${type}" /></caption>
-	<tbody>
+
+<c:if test="${propertyTypeMap.containsValue(type)}">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h2 class="panel-title"><spring:message code="resource.label.properties.${type}" /></h2>
+  	</div>
+	<div class="panel-body">
 		<c:forEach var="property" items="${resource.propertyValuesMap}">
 			<c:set var="propertyName" value="${property.key}" />
 			<c:set var="propertyValue" value="${property.value}"/>
+			<c:set var="escapedPropertyValue"><c:out value="${propertyValue}"/></c:set>
 			<c:if test="${propertyTypeMap[propertyName]==type}">
-			<tr>
-				<td>${propertyName}</td>
-				<c:if test="${not editation}">
-					<td>${propertyValue}</td>
-				</c:if>
-				<c:if test="${editation}">
-					<td><form:textarea path="propertyValuesMap['${propertyName}']"/></td>
-					<form:errors path="propertyValuesMap['${propertyName}']" element="td" cssClass="errorMessage"/>
-				</c:if>
-			</tr>						
+			<c:choose>
+				<c:when test="${editation}">
+					<div class="control-group form-group">
+						<label class="control-label col-xs-2" for="${propertyName}">${propertyName}</label>
+						<div class="controls col-xs-10">
+							<form:textarea cssClass="form-control" id="${propertyName}"  path="propertyValuesMap['${propertyName}']"/>
+						</div>
+					</div>				
+				</c:when>
+				<c:otherwise>
+					<div class="row">
+						<label class="col-xs-2">${propertyName}</label>
+						<c:choose>
+							<c:when test="${type == 'DETAIL'}">
+								<c:choose>
+									<c:when test="${escapedPropertyValue.equals(propertyValue)}">
+										<span class="col-xs-10">${escapedPropertyValue}</span>
+									</c:when>
+									<c:otherwise>
+										<div class="col-xs-10 panel panel-default">
+											<div class="panel-body">${propertyValue}</div>
+										</div>
+									</c:otherwise>
+								</c:choose>
+							</c:when>
+							<c:otherwise>
+								<span class="col-xs-10">${escapedPropertyValue}</span>
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</c:otherwise>
+			</c:choose>
 			</c:if>
 		</c:forEach>
-	</tbody>
-</table>
+	</div>
+</div>
+</c:if>
 </c:if>
 </c:if>
