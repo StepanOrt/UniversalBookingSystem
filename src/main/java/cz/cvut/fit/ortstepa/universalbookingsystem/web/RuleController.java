@@ -47,7 +47,8 @@ public class RuleController {
 		allowedFields.addAll(Arrays.asList(new String[] { 
 				"expression", "event", "name", "enabled", "priceChange"
 			}));
-		binder.setAllowedFields((String[])allowedFields.toArray());
+		String[] sArray = allowedFields.toArray(new String[]{});
+		binder.setAllowedFields(sArray);
 	}
 		
 	private String page(Model model) {

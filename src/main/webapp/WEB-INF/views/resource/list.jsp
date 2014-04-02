@@ -89,7 +89,7 @@
 										</span>
 									</td>
 									<td class="col-lg-1">
-										<button class="btn btn-default" onClick="parent.location='${baseUrl}/${resource.id}?form'"><span class="icon-fallback-glyph"><i class="icon ion-edit"></i><span class="text">${edit}</span></span></button>
+										<a href="${baseUrl}/${resource.id}?form"><button class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-edit"></i><span class="text">${edit}</span></span></button></a>
 									</td>
 									<td class="col-lg-1">
 										<form:form action="${baseUrl}/${resource.id}"
@@ -98,8 +98,8 @@
 										</form:form>
 									</td>
 								</security:authorize>
-								<td class="col-lg-1"><button class="btn btn-default" onClick="parent.location='${baseUrl}/${resource.id}'"><span class="icon-fallback-glyph"><i class="icon ion-more"></i><span class="text">${detail}</span></span></button></td>
-								<td class="col-lg-1"><button class="btn btn-default" onClick="parent.location='${baseUrl}/${resource.id}/schedule'"><span class="icon-fallback-glyph"><i class="icon ion-android-alarm"></i><span class="text">${schedules}</span></span></button></td>
+								<td class="col-lg-1"><a href="${baseUrl}/${resource.id}"><button class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-more"></i><span class="text">${detail}</span></span></button></a></td>
+								<td class="col-lg-1"><a href="${baseUrl}/${resource.id}/schedule"><button class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-android-alarm"></i><span class="text">${schedules}</span></span></button></a></td>
 							</tr>
 						</c:if>
 					</c:forEach>

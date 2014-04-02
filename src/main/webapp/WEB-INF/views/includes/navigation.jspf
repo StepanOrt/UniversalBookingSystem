@@ -4,7 +4,9 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <c:url var="homeUrl" value="/home" />
 <c:url var="resourceUrl" value="/resource"/>
-<c:url var="accountsUrl" value="/account?admin" />
+<c:url var="accountUrl" value="/account?admin" />
+<c:url var="ruleUrl" value="/rule" />
+<c:url var="priceChangeUrl" value="/priceChange" />
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -15,7 +17,13 @@
           <ul class="nav navbar-nav">
             <li class="${active=='resources' ? 'active' : '' }"><a href="${resourceUrl}">Resources</a></li>
             <security:authorize ifAllGranted="PERM_MANAGE_USERS">
-            	<li class="${active=='accounts' ? 'active' : '' }"><a href="${accountsUrl}">Accounts</a></li>
+            	<li class="${active=='accounts' ? 'active' : '' }"><a href="${accountUrl}">Accounts</a></li>
+            </security:authorize>
+            <security:authorize ifAllGranted="PERM_RULE">
+            	<li class="${active=='rules' ? 'active' : '' }"><a href="${ruleUrl}">Rules</a></li>
+            </security:authorize>
+            <security:authorize ifAllGranted="PERM_PRICE">
+            	<li class="${active=='priceChanges' ? 'active' : '' }"><a href="${priceChangeUrl}">Price changes</a></li>
             </security:authorize>
           </ul>
           <%@ include file="sessionInfo.jspf" %>

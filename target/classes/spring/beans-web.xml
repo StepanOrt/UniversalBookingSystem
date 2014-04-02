@@ -15,6 +15,7 @@
 	<mvc:view-controller path="/" view-name="redirect:/home" />
 	<mvc:view-controller path="/home" view-name="home" />
 	<mvc:view-controller path="/account/login" view-name="account/login"/>
+	
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	<mvc:default-servlet-handler />
 	

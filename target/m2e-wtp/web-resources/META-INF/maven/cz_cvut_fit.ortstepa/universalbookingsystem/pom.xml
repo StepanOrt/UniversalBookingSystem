@@ -17,6 +17,7 @@
 		<hibernate.version>3.6.0.Final</hibernate.version>
 		<log4j.version>1.2.15</log4j.version>
 		<apache.commons.version>3.2.1</apache.commons.version>
+		<google.api.version>1.18.0-rc</google.api.version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -174,6 +175,24 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- Google API -->
+        <dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client</artifactId>
+			<version>${google.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+		    <artifactId>google-api-client</artifactId>
+		    <version>${google.api.version}</version>
+	    </dependency>
+	    <dependency>
+    		<groupId>com.google.http-client</groupId>
+    		<artifactId>google-http-client-jackson</artifactId>
+    		<version>${google.api.version}</version>
+		</dependency>
+            
+        
 		<!-- Others -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

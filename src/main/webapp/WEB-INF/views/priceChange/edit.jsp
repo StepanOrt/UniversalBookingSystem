@@ -14,50 +14,68 @@
 <c:url var="baseUrl" value="/priceChange" />
 
 <html>
-<head>
-<title>${pageTitle}</title>
-<%@ include file="../includes/head.jspf"%>
-</head>
-<body>
-	<h1>
-		
-	</h1>
-
-	<div class="container">
-		<%@ include file="../includes/message.jspf"%>
-		
-		<c:set var="_method" value="POST" />
-		<c:set var="_action" value="${baseUrl}" />
-		<c:if test="${not empty priceChange.id}">
-			<c:set var="_action" value="${baseUrl}/${priceChange.id}" />
-			<c:set var="_method" value="PUT" />
-		</c:if>
-		<form:form method="${_method}" modelAttribute="priceChange" action="${_action}">
-			<table>
-				<caption>${pageTitle}</caption>
-				<tbody>
-					<tr>
-						<td><spring:message code="priceChange.label.name" /></td>
-						<td><form:input path="name"/></td>
-						<form:errors path="name" element="td" cssClass="errorMessage"/>
-					</tr>
-					<tr>
-						<td><spring:message code="priceChange.label.value" /></td>
-						<td><form:input path="value"/></td>
-						<form:errors path="value" element="td" cssClass="errorMessage"/>
-					</tr>
-					<tr>
-						<td><spring:message code="priceChange.label.type" /></td>
-						<td><form:select path="type"><form:options/></form:select></td>
-						<form:errors path="type" element="td" cssClass="errorMessage"/>
-					</tr>
-				</tbody>
-			</table>
-			<span>
-				<input type="button" value="${back}" onClick="parent.location='${baseUrl}'" />
-			 	<input type="submit" name="submit" value="${edit}">
-			</span>
+	<head>
+		<title>${pageTitle}</title>
+		<%@ include file="../includes/head.jspf"%>
+	</head>
+	<body>
+		<%@ include file="../includes/navigation.jspf" %>
+		<div class="container"> 
+			<%@ include file="../includes/message.jspf" %>
+			<div class="page-header">
+				<h1>${pageTitle}</h1>
+			</div>
+			<c:set var="_method" value="POST" />
+			<c:set var="_action" value="${baseUrl}" />
+			<c:if test="${not empty priceChange.id}">
+				<c:set var="_action" value="${baseUrl}/${priceChange.id}" />
+				<c:set var="_method" value="PUT" />
+			</c:if>
+			<form:form cssClass="form-horizontal" method="${_method}" modelAttribute="priceChange" action="${_action}">
+				<form:errors path="*">
+					<div class="alert alert-danger"><spring:message code="error.global" /></div>
+				</form:errors>
+				
+				<c:set var="groupError"><form:errors path='name'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+       				<label class="control-label col-xs-2" for="name"><spring:message code="priceChange.label.name"/></label>
+       				<div class="controls col-xs-10">
+       					<form:input path="name" cssClass="form-control" id="name" required="required"/>
+       				</div>
+       				<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+   				</div>
+   				
+   				<c:set var="groupError"><form:errors path='value'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+       				<label class="control-label col-xs-2" for="value"><spring:message code="priceChange.label.value"/></label>
+       				<div class="controls col-xs-10">
+       					<form:input path="value" cssClass="form-control" id="value" required="required"/>
+       				</div>
+       				<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+   				</div>
+   				
+   				<c:set var="groupError"><form:errors path='type'/></c:set>
+				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+       				<label class="control-label col-xs-2" for="type"><spring:message code="priceChange.label.type"/></label>
+       				<div class="controls col-xs-10">
+       					<form:select path="type" cssClass="form-control" id="type" required="required"><form:options/></form:select>
+       				</div>
+       				<c:if test="${not empty groupError}">
+						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+					</c:if>
+   				</div>
+				
+				<div class="form-group">
+					<div class="col-xs-offset-2 col-xs-10">				
+						<button type="submit" class="btn btn-primary">${edit}</button>
+					</div>
+				</div>
 		</form:form>
 	</div>
+	<%@ include file="../includes/footer.jspf" %>
 </body>
 </html>

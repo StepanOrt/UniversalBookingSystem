@@ -21,10 +21,15 @@
 <%@ include file="../includes/head.jspf"%>
 </head>
 <body>
+	<c:set var="active" value="resources" />
+	<%@ include file="../includes/navigation.jspf"%>
 	<div class="container">
 		<%@ include file="../includes/message.jspf"%>
-		   	<table>
-				<caption>${pageTitle}</caption>
+		<div class="page-header">
+			<h1>${pageTitle}</h1>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped">
 			<thead>
 			<tr>
 				<th><spring:message code="priceChange.label.name" /></th>
@@ -40,19 +45,25 @@
 						<td><c:out value="${priceChange.name}"/></td>
 						<td><c:out value="${priceChange.type}"/></td>
 						<td><c:out value="${priceChange.value}"/></td>
-						<td>
-							<input type="button" value="${edit}" onClick="parent.location='${baseUrl}/${priceChange.id}?form'" />
+						<td class="col-lg-1">
+							<a href="${baseUrl}/${priceChange.id}?form"><button class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-edit"></i><span class="text">${edit}</span></span></button></a>
 						</td>
-						<td>
-							<form:form action="${baseUrl}/${priceChange.id}" method="DELETE">
-								<input type="submit" value="${remove}" />
+						<td class="col-lg-1">
+							<form:form action="${baseUrl}/${priceChange.id}"
+								method="DELETE">
+								<a data-target="#confirmDelete" data-toggle="modal"><button  type="submit" class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-trash-a"></i><span class="text">${remove}</span></span></button></a>
 							</form:form>
 						</td>
 				</tr>
 			</c:forEach>
 			</tbody>
 			</table>
-			<input type="button" value="${add}" onClick="parent.location='${baseUrl}?form'" />			
+			<a href="${baseUrl}?form" title="${add}"><button class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-plus-round"></i><span class="text">${add}</span></span></button></a>		
 	    </div>
+	</div>
+	<%@ include file="../includes/footer.jspf" %>
+	<div class="modals" hidden="hidden">
+		<%@ include file="../includes/confirmDelete.jspf" %>
+	</div>
 </body>
 </html>
