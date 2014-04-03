@@ -17,7 +17,9 @@
 		<hibernate.version>3.6.0.Final</hibernate.version>
 		<log4j.version>1.2.15</log4j.version>
 		<apache.commons.version>3.2.1</apache.commons.version>
-		<google.api.version>1.18.0-rc</google.api.version>
+		<google.api.client.version>1.18.0-rc</google.api.client.version>
+		<google.api.services.version>v2-rev66-1.17.0-rc</google.api.services.version>
+		<spring.social.version>1.0.3.RELEASE</spring.social.version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -91,6 +93,19 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring.security.version}</version>
+		</dependency>
+		
+		<!-- Spring Social -->
+		
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-twitter</artifactId>
+		    <version>${spring.social.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-web</artifactId>
+			<version>${spring.social.version}</version>
 		</dependency>
 		
 		<!-- Hibernate -->
@@ -179,18 +194,28 @@
         <dependency>
 			<groupId>com.google.http-client</groupId>
 			<artifactId>google-http-client</artifactId>
-			<version>${google.api.version}</version>
+			<version>${google.api.client.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.api-client</groupId>
 		    <artifactId>google-api-client</artifactId>
-		    <version>${google.api.version}</version>
+		    <version>${google.api.client.version}</version>
 	    </dependency>
 	    <dependency>
     		<groupId>com.google.http-client</groupId>
     		<artifactId>google-http-client-jackson</artifactId>
-    		<version>${google.api.version}</version>
+    		<version>${google.api.client.version}</version>
 		</dependency>
+		<dependency>
+    		<groupId>com.google.http-client</groupId>
+    		<artifactId>google-http-client-jdo</artifactId>
+    		<version>${google.api.client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-oauth2</artifactId>
+			<version>${google.api.services.version}</version>
+	    </dependency>
             
         
 		<!-- Others -->
@@ -204,7 +229,13 @@
 			<groupId>rhino</groupId>
 			<artifactId>js</artifactId>
 			<version>1.7R2</version>
-		</dependency>     
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.cedarsoftware</groupId>
+		  <artifactId>json-io</artifactId>
+		  <version>2.5.2</version>
+		</dependency>   
 	</dependencies>
     <build>
         <plugins>

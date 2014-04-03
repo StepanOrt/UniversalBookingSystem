@@ -9,4 +9,6 @@ public interface AccountDao extends Dao<Account> {
 	void updatePassword(String email, String password);
 
 	Account findByEmail(String email);
+
+	Account getByGoogleCredentials(String state);
 }

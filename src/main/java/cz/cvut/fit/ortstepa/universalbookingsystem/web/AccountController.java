@@ -2,6 +2,7 @@ package cz.cvut.fit.ortstepa.universalbookingsystem.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.api.services.oauth2.Oauth2.Userinfo;
+import com.google.api.services.oauth2.model.Userinfoplus;
 
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.AccountService;
@@ -48,9 +52,6 @@ public class AccountController {
 	private static final String VN_ACC_ADMIN_FORM = "account/admin/edit";
 	private static final String VN_ACC_ADMIN_TOPUP = "account/admin/topup";
 	private static final String VN_ACC_ADMIN_OK = "redirect:/account?admin";
-
-
-
 
 	@Autowired 
 	private AccountService accountService;
@@ -208,13 +209,31 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String getAccountForm(Model model) {
+	public String getAccountForm(Model model, HttpSession session) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Account account = accountService.getAccountByEmail(email);
+		Userinfoplus userInfo = accountService.getGoogleUserinfo();
+		model.addAttribute("googleUserinfo", userInfo);
+		if (userInfo == null) {
+			model.addAttribute("googleConnectUrl", accountService.googleConnectUrl(session));
+		}
 		model.addAttribute("form", AccountForm.create(account));
 		return VN_ACC_FORM;
 	}
-
+	
+	@RequestMapping(value = "oauth2callback", method = RequestMethod.GET, params = { "state" })
+	public String oauth2callback(Model model, @RequestParam(required=false) String error, @RequestParam String state, @RequestParam(required=false) String code, HttpSession session) {
+		if (error==null && code != null) {
+			accountService.authorizeGoogle(code, state, session);
+		}
+		return VN_ACC_OK;
+	}
+	
+	@RequestMapping(method=RequestMethod.PUT, params={"forgetGoogle"})
+	public String forgetGoogle(Model model) {
+		accountService.forgetGoogle();
+		return VN_ACC_OK;
+	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String postAccountForm(

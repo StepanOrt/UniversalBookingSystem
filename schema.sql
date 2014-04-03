@@ -11,6 +11,7 @@ create table account (
     marketing_ok boolean not null,
     accept_terms boolean not null,
     enabled boolean not null,
+	google_credentials varchar(200),
     calendar_ok boolean not null,
     twitter_ok boolean not null,
     email_ok boolean not null,
@@ -103,8 +104,6 @@ create table reservation (
     foreign key (account_id) references account (id) on delete cascade
 ) engine = InnoDb;
 
-drop table rule;
-drop table price_change;
 create table price_change (
 	id bigint unsigned not null auto_increment primary key,
 	value DECIMAL(10,2),

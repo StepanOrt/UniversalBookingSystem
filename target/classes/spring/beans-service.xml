@@ -32,6 +32,19 @@
 		class="org.springframework.orm.hibernate3.HibernateTransactionManager"
 		p:sessionFactory-ref="sessionFactory" />
 
+	<bean id="accountDao" class="cz.cvut.fit.ortstepa.universalbookingsystem.dao.hbn.HbnAccountDao"/>
+	<bean id="googleAuthHelper" class="cz.cvut.fit.ortstepa.universalbookingsystem.helper.GoogleAuthHelper">
+		<constructor-arg name="clientSecretsJsonLocation">
+			<value>/client_secret_647374944578-sdfbmidtqona2e6tkcjg28ing5ls2f11.apps.googleusercontent.com.json</value>
+		</constructor-arg>
+		<property name="scopes">
+			<list>
+				<value>calendar</value>
+			</list>
+		</property>
+	</bean>
+
+
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.dao.hbn" />
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.dao.jdbc" />
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.service" />

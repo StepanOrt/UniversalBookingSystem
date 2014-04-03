@@ -1,24 +1,33 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.service;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 
+import com.google.api.client.auth.oauth2.StoredCredential;
+import com.google.api.services.oauth2.model.Userinfoplus;
+
 import cz.cvut.fit.ortstepa.universalbookingsystem.dao.AccountDao;
 import cz.cvut.fit.ortstepa.universalbookingsystem.dao.RoleDao;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Role;
-import cz.cvut.fit.ortstepa.universalbookingsystem.service.AccountService;
+import cz.cvut.fit.ortstepa.universalbookingsystem.domain.UserDetailsAdapter;
+import cz.cvut.fit.ortstepa.universalbookingsystem.helper.GoogleAuthHelper;
 import cz.cvut.fit.ortstepa.universalbookingsystem.web.form.AccountForm;
 
 @Service
@@ -27,11 +36,24 @@ public class AccountService {
 	
 	private static final Logger log = LoggerFactory.getLogger(AccountService.class);
 	
+	@Autowired
+	private GoogleAuthHelper googleAuthHelper;
 	@Autowired 
 	private AccountDao accountDao;
 	@Autowired 
 	private RoleDao roleDao;
-
+	
+	public String getGoogleCredentials(String email) {
+		Account account = accountDao.findByEmail(email);
+		return account.getGoogleCredentials();
+	}
+	
+	@Transactional(readOnly=false)
+	public void updateGoogleCredentials(String email, String value) {
+		Account account = accountDao.findByEmail(email);
+		account.setGoogleCredentials(value);
+		accountDao.update(account);
+	}
 	
 	@Transactional(readOnly = false)
 	public boolean registerAccount(Account account, String password,
@@ -162,6 +184,86 @@ public class AccountService {
 			account.setEmailOk(newAccount.isEmailOk());
 			accountDao.update(account);
 		}
+	}
+	
+	@Transactional(readOnly=false)
+	public Userinfoplus getGoogleUserinfo() {
+		registerTokensDataStoreListeners();
+		return googleAuthHelper.getUserinfo(authorizedUserEmail());
+	}
+	
+
+	private void deleteGoogleCredentials(String id) {
+		updateGoogleCredentials(id, null);
+	}
+	
+	private void registerTokensDataStoreListeners() {
+		if (authorizedUserEmail() != null) {
+			StoredCredentialDataStoreFactory.getInstance().new ChangeNotifyListener(authorizedUserEmail()) {
+
+				@Override
+				public <V extends Serializable> void onChange(String id, StoredCredential value) {
+					if (value == null) 
+						deleteGoogleCredentials(id);
+					else {
+						Object[] values = new Object[] { value.getAccessToken(),
+								value.getRefreshToken(),
+								value.getExpirationTimeMilliseconds()}; 						
+						String serialized = "";
+						for (Object v : values) {
+							if (v != null)	
+								serialized += v.toString();
+							else serialized += "null";
+							if (v!=values[values.length-1]) serialized += "\t";
+						}
+						updateGoogleCredentials(id, serialized);
+					}
+				}
+			};
+			
+			StoredCredentialDataStoreFactory.getInstance().new UpdateRequestListener(authorizedUserEmail()) {
+				
+				@Override
+				public <V extends Serializable> StoredCredential onRequest(String id, StoredCredential value) {
+					String dbCredentials = getGoogleCredentials(id);
+					if (dbCredentials != null) {
+						String[] values = dbCredentials.split("\t");
+						if (value == null) value = new StoredCredential();
+						if (!values[0].equals("null")) value.setAccessToken(values[0]); else value.setAccessToken(null);
+						if (!values[1].equals("null")) value.setRefreshToken(values[1]); else value.setExpirationTimeMilliseconds(null);
+						if (!values[2].equals("null")) value.setExpirationTimeMilliseconds(Long.parseLong(values[2])); else value.setExpirationTimeMilliseconds(null);
+						return value;
+					}
+					return null;
+				}
+				
+			};
+		}
+	}
+
+	@Transactional(readOnly=false)
+	public String googleConnectUrl(HttpSession session) {
+		String url = googleAuthHelper.buildLoginUrl();
+		session.setAttribute("state", googleAuthHelper.getStateToken());
+		return url;
+	}
+
+	@Transactional(readOnly=false)
+	public void authorizeGoogle(String code, String state, HttpSession session) {
+		if (session.getAttribute("state").equals(state))
+			googleAuthHelper.authorize(code, authorizedUserEmail());
+	}
+	
+	private String authorizedUserEmail() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		try {
+			return ((UserDetailsAdapter)auth.getPrincipal()).getEmail();
+		} catch (Exception e) {}
+		return null;
+	}
+
+	public void forgetGoogle() {
+		deleteGoogleCredentials(authorizedUserEmail());
 	}
 
 }

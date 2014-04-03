@@ -46,6 +46,7 @@
 		<intercept-url pattern="^/rule.*$" access="hasRole('PERM_RULE')"/>
 		<intercept-url pattern="^/priceChange.*$" access="hasRole('PERM_PRICE')"/>		
 
+		<intercept-url pattern="^/account/?\?forgetGoogle$" method="PUT" access="hasRole('PERM_SOCIAL')"/>
 		<intercept-url pattern="^/account/?\?admin$" method="GET" access="hasRole('PERM_MANAGE_USERS')"/>
 		<intercept-url pattern="^/account/[0-9]+(/$|$)" method="GET" access="hasRole('PERM_MANAGE_USERS')"/>
 		<intercept-url pattern="^/account/[0-9]+(/$|$)" method="PUT" access="hasRole('PERM_MANAGE_USERS')"/>
@@ -57,6 +58,7 @@
         <intercept-url pattern="^/account/registration(/$|$)" access="isAnonymous()" />
 		<intercept-url pattern="^/account/password(/$|$)" access="isAuthenticated()" />
 		<intercept-url pattern="^/account(/$|$)" access="isAuthenticated()" />
+		<intercept-url pattern="^/account/oauth2callback.*$" access="isAuthenticated()" />
 		
 		<intercept-url pattern="^/.*$" access="denyAll" />
 

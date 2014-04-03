@@ -32,7 +32,7 @@ INSERT INTO `ubs`.`account`
 `date_modified`)
 VALUES
 (
-3, 'Superadmin', 'account', 'superadmin@ubs.cz', '3be403f37f83a1ff0411087b67c5e0e6f23f25c7b4cf1f071f3d142d8fd7f93a7c91bf28aaf7ff00', 0, 1, 1, 1, 1, 1, 0.00, NULL, '2014-03-13 22:59:31', '2014-03-13 22:59:31'
+1, 'Superadmin', 'account', 'superadmin@ubs.cz', '3be403f37f83a1ff0411087b67c5e0e6f23f25c7b4cf1f071f3d142d8fd7f93a7c91bf28aaf7ff00', 0, 1, 1, 1, 1, 1, 0.00, NULL, '2014-03-13 22:59:31', '2014-03-13 22:59:31'
 );
 INSERT INTO `ubs`.`account`
 ( `id`,

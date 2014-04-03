@@ -25,7 +25,6 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.Email;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 
 @NamedQuery(
@@ -38,6 +37,7 @@ public class Account {
 	private Double credit = 0.0d;
 	private String firstName, lastName, email;
 	private boolean marketingOk = true, acceptTerms = false, enabled = true, emailOk = true, calendarOk = true, twitterOk = true;
+	private String googleCredentials;
 	private Date dateCreated;
 	private Collection<Role> roles = new HashSet<Role>();
 	private AccountGroup group = null;
@@ -192,5 +192,16 @@ public class Account {
 			.append("marketingOk", marketingOk)
 			.append("acceptTerms", acceptTerms)
 			.toString();			
+	}
+
+	@Column(name = "google_credentials")
+	public String getGoogleCredentials() {
+		return googleCredentials;
+	}
+
+	public void setGoogleCredentials(String googleCredentials) {
+		this.googleCredentials = googleCredentials;
 	}	
+	
+	
 }

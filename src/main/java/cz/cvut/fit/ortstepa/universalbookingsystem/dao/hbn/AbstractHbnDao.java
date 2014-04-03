@@ -26,7 +26,7 @@ public abstract class AbstractHbnDao<T extends Object> implements Dao<T> {
 		return sessionFactory.getCurrentSession();
 	}
 	
-	private Class<T> getDomainClass() {
+	protected Class<T> getDomainClass() {
 		if (domainClass == null) {
 			ParameterizedType thisType = (ParameterizedType) getClass().getGenericSuperclass();
 			this.domainClass = (Class<T>) thisType.getActualTypeArguments()[0];
@@ -34,7 +34,7 @@ public abstract class AbstractHbnDao<T extends Object> implements Dao<T> {
 		return domainClass;
 	}
 	
-	private String getDomainClassName() {
+	protected String getDomainClassName() {
 		return getDomainClass().getName();
 	}
 
