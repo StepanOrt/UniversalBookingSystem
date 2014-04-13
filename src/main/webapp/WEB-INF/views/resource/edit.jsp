@@ -62,7 +62,7 @@
 				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
        				<label class="control-label col-xs-2" for="price"><spring:message code="resource.label.price"/> [<spring:message code="currency.sign"/>]</label>
        				<div class="controls col-xs-10">
-       					<form:input path="price" cssClass="form-control" id="price" required="required" type="number" min="1"/>
+       					<form:input path="price" cssClass="form-control" id="price" required="required" type="number" />
        				</div>
        				<c:if test="${not empty groupError}">
 						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>

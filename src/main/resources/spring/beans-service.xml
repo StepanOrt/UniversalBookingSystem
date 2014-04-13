@@ -37,14 +37,18 @@
 		<constructor-arg name="clientSecretsJsonLocation">
 			<value>/client_secret_647374944578-sdfbmidtqona2e6tkcjg28ing5ls2f11.apps.googleusercontent.com.json</value>
 		</constructor-arg>
-		<property name="scopes">
-			<list>
-				<value>calendar</value>
-			</list>
-		</property>
+	</bean>
+	<bean id="googleCalendarHelper" class="cz.cvut.fit.ortstepa.universalbookingsystem.helper.GoogleCalendarHelper">
+		<property name="googleAuthHelper" ref="googleAuthHelper" />
 	</bean>
 
-
+	<bean id="googlePlusHelper" class="cz.cvut.fit.ortstepa.universalbookingsystem.helper.GooglePlusHelper">
+		<property name="googleAuthHelper" ref="googleAuthHelper"/>			
+		<property name="urlPattern">
+			<value>http://stepan-storage.tk:85/resource/{id}</value>
+		</property>
+	</bean>
+	
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.dao.hbn" />
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.dao.jdbc" />
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.service" />

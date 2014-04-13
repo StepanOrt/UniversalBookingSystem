@@ -9,7 +9,7 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
 
 public class AccountForm {
 	private String firstName, lastName, email, currentPassword; 
-	private boolean marketingOk = true, emailOk = true, calendarOk = true, twitterOk = true;
+	private boolean marketingOk = true, emailOk = true, calendarOk = true, googlePlusOk = true;
 
 	@NotNull
 	@Size(min = 1, max = 50)
@@ -42,14 +42,17 @@ public class AccountForm {
 
 	public void setCalendarOk(boolean calendarOk) {	this.calendarOk = calendarOk; }
 
-	public boolean isTwitterOk() { return twitterOk; }
+	
+	public boolean isGooglePlusOk() { return googlePlusOk; }
 
-	public void setTwitterOk(boolean twitterOk) { this.twitterOk = twitterOk; }
+	public void setGooglePlusOk(boolean googlePlusOk) { this.googlePlusOk = googlePlusOk; }
 
 	public String getCurrentPassword() { return currentPassword; }
 
 	public void setCurrentPassword(String currentPassword) { this.currentPassword = currentPassword; }
 
+	
+	
 	public static AccountForm create(Account account) {
 		AccountForm form = new AccountForm();
 		form.setEmail(account.getEmail());
@@ -58,7 +61,7 @@ public class AccountForm {
 		form.setMarketingOk(account.isMarketingOk());
 		form.setEmailOk(account.isEmailOk());
 		form.setCalendarOk(account.isCalendarOk());
-		form.setTwitterOk(account.isTwitterOk());
+		form.setGooglePlusOk(account.isGooglePlusOk());
 		return form;
 	}
 
@@ -69,6 +72,6 @@ public class AccountForm {
 		account.setMarketingOk(marketingOk);
 		account.setEmailOk(emailOk);
 		account.setCalendarOk(calendarOk);
-		account.setTwitterOk(twitterOk);
+		account.setGooglePlusOk(googlePlusOk);
 	}
 }

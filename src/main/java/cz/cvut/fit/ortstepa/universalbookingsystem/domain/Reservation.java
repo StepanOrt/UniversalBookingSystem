@@ -27,6 +27,8 @@ public class Reservation implements Serializable {
 	private Date dateCreated, dateCanceled;
 	private Schedule schedule;
 	private Account account;
+	private String calendarEventId;
+	private String googlePlusMomentId;
      
     public Reservation() {}
      
@@ -83,4 +85,24 @@ public class Reservation implements Serializable {
 		if (status == Status.RESERVED) return true;
 		return false;
 	}
+	
+	@Column(name = "calendar_event_id")
+	public String getCalendarEventId() {
+		return calendarEventId;
+	}
+
+	public void setCalendarEventId(String calendarEventId) {
+		this.calendarEventId = calendarEventId;
+	}
+
+	@Column(name = "google_plus_moment_id")
+	public String getGooglePlusMomentId() {
+		return googlePlusMomentId;
+	}
+
+	public void setGooglePlusMomentId(String googlePlusMomentId) {
+		this.googlePlusMomentId = googlePlusMomentId;
+	}
+	
+	
 }

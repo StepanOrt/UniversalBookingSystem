@@ -68,7 +68,7 @@ public class StoredCredentialDataStoreFactory implements DataStoreFactory {
 			for (UpdateRequestListener updateRequestListener : list) {
 				StoredCredential sc = storedCredentialsDataStore.dataStoreMap.get(id);
 				sc = updateRequestListener.onRequest(id, sc);
-				if (sc != null)	storedCredentialsDataStore.dataStoreMap.put(id, sc);
+				storedCredentialsDataStore.dataStoreMap.put(id, sc);
 				log.debug("fromDb: " + sc);
 			}
 	}
@@ -137,6 +137,7 @@ public class StoredCredentialDataStoreFactory implements DataStoreFactory {
 		public DataStore<StoredCredential> set(String key,	StoredCredential value) throws IOException {
 			dataStoreMap.put(key, value);
 			singleton.notifyChange(key, value);
+			log.debug(key + " => " + value);
 			return this;
 		}
 		@Override

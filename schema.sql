@@ -13,7 +13,7 @@ create table account (
     enabled boolean not null,
 	google_credentials varchar(200),
     calendar_ok boolean not null,
-    twitter_ok boolean not null,
+    google_plus_ok boolean not null,
     email_ok boolean not null,
     credit decimal(6,2) not null default 0.0,
     group_id smallint unsigned default null,
@@ -100,6 +100,8 @@ create table reservation (
 	date_canceled timestamp default 0,
 	schedule_id bigint unsigned not null,
     account_id bigint unsigned not null,
+	calendar_event_id varchar(100),
+	google_plus_moment_id varchar(100),
 	foreign key (schedule_id) references schedule (id) on delete cascade,
     foreign key (account_id) references account (id) on delete cascade
 ) engine = InnoDb;

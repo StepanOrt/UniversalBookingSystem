@@ -24,7 +24,7 @@
 				<h1>${pageTitle}</h1>
 			</div>
 			<div class="form-horizontal">
-				<c:set var="calendarOkDisabled" value="true"/>
+				<c:set var="googleDisabled" value="true"/>
 				<div class="form-group">
 					<label class="control-label col-xs-2"><spring:message code="account.label.googleAccount"/></label>
 					<div class="controls col-xs-10">
@@ -33,7 +33,7 @@
 								<form:form method="PUT" action="${baseUrl}?forgetGoogle">	
 								<span>${googleUserinfo.name} <button class="btn btn-default" type="submit"><spring:message code="account.label.forgetGoogle"/></button></span>
 								</form:form>
-								<c:set var="calendarOkDisabled" value="false"/>						
+								<c:set var="googleDisabled" value="false"/>						
 							</c:when>
 							<c:otherwise>
 								<a href="${googleConnectUrl}"><spring:message code="account.label.connectToGoogle"/></a>
@@ -102,17 +102,17 @@
 				<c:set var="groupError"><form:errors path='calendarOk'/></c:set>
 				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
 					<div class="controls col-xs-offset-2 col-xs-10">
-						<label class="checkbox" for="calendarOk"><form:checkbox id="calendarOk" path="calendarOk" disabled="${calendarOkDisabled}"/> <spring:message code="account.label.calendarOk" /></label>
+						<label class="checkbox" for="calendarOk"><form:checkbox id="calendarOk" path="calendarOk" disabled="${googleDisabled}"/> <spring:message code="account.label.calendarOk" /></label>
 						<c:if test="${not empty groupError}">
 							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
 						</c:if>
 					</div>
 				</div>
 				
-				<c:set var="groupError"><form:errors path='twitterOk'/></c:set>
+				<c:set var="groupError"><form:errors path='googlePlusOk'/></c:set>
 				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
 					<div class="controls col-xs-offset-2 col-xs-10">
-						<label class="checkbox" for="twitterOk"><form:checkbox id="twitterOk" path="twitterOk" /> <spring:message code="account.label.twitterOk" /></label>
+						<label class="checkbox" for="googlePlusOk"><form:checkbox id="googlePlusOk" path="googlePlusOk" disabled="${googleDisabled}"/> <spring:message code="account.label.googlePlusOk" /></label>
 						<c:if test="${not empty groupError}">
 							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
 						</c:if>

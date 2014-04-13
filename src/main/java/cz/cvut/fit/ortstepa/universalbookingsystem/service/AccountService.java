@@ -261,7 +261,8 @@ public class AccountService {
 		} catch (Exception e) {}
 		return null;
 	}
-
+	
+	@Transactional(readOnly=false)
 	public void forgetGoogle() {
 		deleteGoogleCredentials(authorizedUserEmail());
 	}

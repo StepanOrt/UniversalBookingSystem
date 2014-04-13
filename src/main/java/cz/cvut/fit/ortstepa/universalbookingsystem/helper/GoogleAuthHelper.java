@@ -2,10 +2,18 @@ package cz.cvut.fit.ortstepa.universalbookingsystem.helper;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.http.util.EncodingUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.type.StandardClassMetadata;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -15,18 +23,18 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
+import com.google.api.client.repackaged.com.google.common.base.Joiner;
 import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.services.oauth2.Oauth2;
+import com.google.api.services.oauth2.Oauth2Scopes;
 import com.google.api.services.oauth2.model.Userinfoplus;
+import com.google.api.services.plus.PlusScopes;
 
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.StoredCredentialDataStoreFactory;
 
-/**
- * A helper class for Google's OAuth2 authentication API.
- * @version 20130224
- * @author Matyas Danter, Štěpán Ort
- */
-public final class GoogleAuthHelper {
+public class GoogleAuthHelper {
+	
+	private static final Logger log = LoggerFactory.getLogger(GoogleAuthHelper.class);
 
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -35,6 +43,8 @@ public final class GoogleAuthHelper {
 	private List<String> scopes = null;
 	private GoogleClientSecrets clientSecrets = null;
 	private DataStoreFactory dataStoreFactory;
+
+	private List<String> requestVisibleActions = new ArrayList<String>();
 	
 	public GoogleAuthHelper() throws IOException {
 		this("/client_secrets.json");
@@ -47,12 +57,8 @@ public final class GoogleAuthHelper {
 	}
 
 	private void defaultScopes() {
-		scopes = new ArrayList<String>(
-				Arrays.asList(
-						"https://www.googleapis.com/auth/userinfo.profile",
-						"https://www.googleapis.com/auth/userinfo.email"
-						)
-						);
+		scopes = new ArrayList<String>();
+		scopes.add(Oauth2Scopes.USERINFO_PROFILE);
 	}
 
 	public GoogleAuthHelper(String clientId, String clientSecret, String callbackUri) {
@@ -62,22 +68,10 @@ public final class GoogleAuthHelper {
 		clientSecrets.getDetails().setClientSecret(clientSecret);
 		clientSecrets.getDetails().setRedirectUris(Arrays.asList(new String[] { callbackUri }));
 	}
-	
-	public List<String> getScopes() {
-		return scopes;
-	}
-	
-	public void setScopes(List<String> additional) {
-		for (String scope : additional) {
-			if (!scope.startsWith(GOOGLEAPISAUTH_URL)) 
-				scope = GOOGLEAPISAUTH_URL + scope;
-			if (!scopes.contains(scope)) scopes.add(scope);
-		}
-	}
-	
+
 	private GoogleAuthorizationCodeFlow getFlow() {
 		try {
-			return new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT,	JSON_FACTORY, clientSecrets, scopes).setAccessType("offline").setDataStoreFactory(dataStoreFactory).build();
+			return new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT,	JSON_FACTORY, clientSecrets, scopes).setAccessType("offline").setApprovalPrompt("force").setScopes(scopes).setDataStoreFactory(dataStoreFactory).build();
 		} catch (IOException e) {}
 		return null;
 	}
@@ -88,8 +82,20 @@ public final class GoogleAuthHelper {
 
 	public String buildLoginUrl() {
 		generateStateToken();		
-		final GoogleAuthorizationCodeRequestUrl url = getFlow().newAuthorizationUrl();
+		GoogleAuthorizationCodeRequestUrl url = getFlow().newAuthorizationUrl();
+		url = addRequestVisibleActions(url);
+		url.put("include_granted_scopes", "false");
 		return url.setRedirectUri(getRedirectUri()).setState(stateToken).build();
+	}
+
+	private GoogleAuthorizationCodeRequestUrl addRequestVisibleActions(GoogleAuthorizationCodeRequestUrl url) {
+		if (requestVisibleActions.size() > 0)			
+			url.put("request_visible_actions", Joiner.on(' ').join(requestVisibleActions.toArray(new String[] {})));
+		return url;
+	}
+	
+	public void addRequestVisibleAction(String requestVisibleAction) {
+		requestVisibleActions.add(requestVisibleAction);
 	}
 
 	private void generateStateToken(){
@@ -101,10 +107,17 @@ public final class GoogleAuthHelper {
 		return stateToken;
 	}
 	
+	public Credential getCredential(String email) {
+		try {
+			return getFlow().loadCredential(email);
+		} catch (Exception e) {}
+		return null;
+	}
+	
 	public Userinfoplus getUserinfo(String email) {
 		try {
-			Credential credential= getFlow().loadCredential(email);
-			Oauth2 oauth2 = new Oauth2.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName("Google-OAuth2Sample/1.0").setHttpRequestInitializer(credential).build();
+			Credential credential= getCredential(email);
+			Oauth2 oauth2 = new Oauth2.Builder(credential.getTransport(), credential.getJsonFactory(), credential).setApplicationName("universal-booking-system").setHttpRequestInitializer(credential).build();
 			return oauth2.userinfo().get().execute();
 		} catch (Exception e) {}
 		return null;
@@ -114,5 +127,17 @@ public final class GoogleAuthHelper {
 		try {
 			getFlow().createAndStoreCredential(getFlow().newTokenRequest(authCode).setRedirectUri(getRedirectUri()).execute(), email);
 		} catch (Exception e) {}
+	}
+
+	public void addScope(String scope) {
+		if (!scope.startsWith(GOOGLEAPISAUTH_URL)) 
+			scope = GOOGLEAPISAUTH_URL + scope;
+		if (!scopes.contains(scope)) scopes.add(scope);
+	}
+
+	public void addScopes(Set<String> all) {
+		for (String string : all) {
+			addScope(string);
+		}
 	}
 }

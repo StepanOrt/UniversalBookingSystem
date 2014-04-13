@@ -36,7 +36,7 @@ public class Account {
 	private Long id;
 	private Double credit = 0.0d;
 	private String firstName, lastName, email;
-	private boolean marketingOk = true, acceptTerms = false, enabled = true, emailOk = true, calendarOk = true, twitterOk = true;
+	private boolean marketingOk = true, acceptTerms = false, enabled = true, emailOk = true, calendarOk = true, googlePlusOk = true;
 	private String googleCredentials;
 	private Date dateCreated;
 	private Collection<Role> roles = new HashSet<Role>();
@@ -105,20 +105,21 @@ public class Account {
 	public boolean isCalendarOk() {
 		return calendarOk;
 	}
+	
+	@Column(name = "google_plus_ok")
+	public boolean isGooglePlusOk() {
+		return googlePlusOk;
+	}
 
 	public void setCalendarOk(boolean calendarOk) {
 		this.calendarOk = calendarOk;
 	}
-
-	@Column(name = "twitter_ok")
-	public boolean isTwitterOk() {
-		return twitterOk;
-	}
-
-	public void setTwitterOk(boolean twitterOk) {
-		this.twitterOk = twitterOk;
-	}
 	
+	
+	public void setGooglePlusOk(boolean googlePlusOk) {
+		this.googlePlusOk = googlePlusOk;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "group_id", nullable = false)
 	public AccountGroup getGroup() {
@@ -202,6 +203,4 @@ public class Account {
 	public void setGoogleCredentials(String googleCredentials) {
 		this.googleCredentials = googleCredentials;
 	}	
-	
-	
 }

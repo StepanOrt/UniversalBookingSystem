@@ -1,7 +1,8 @@
 call createPermission('PERM_CHANGE_PASSWORD');
 call createPermission('PERM_RES_EDIT');
 call createPermission('PERM_SCH_EDIT');
-call createPermission('PERM_RESERVATION_CREATE');
+call createPermission('PERM_RESERVE');
+call createPermission('PERM_GOOGLE');
 call createPermission('PERM_MANAGE_USERS');
 call createPermission('PERM_MANAGE_ROLES');
 call createRole('ROLE_SUPERADMIN', @role_superadmin);
@@ -12,8 +13,9 @@ call roleHasPermission(@role_registered, 'PERM_CHANGE_PASSWORD');
 call roleHasPermission(@role_admin, 'PERM_RES_EDIT');
 call roleHasPermission(@role_admin, 'PERM_SCH_EDIT');
 call roleHasPermission(@role_admin, 'PERM_MANAGE_USERS');
-call roleHasPermission(@role_user, 'PERM_RESERVATION_CREATE');
+call roleHasPermission(@role_user, 'PERM_RESERVE');
 call roleHasPermission(@role_superadmin, 'PERM_MANAGE_ROLES');
+call roleHasPermission(@role_user, 'PERM_GOOGLE');
 INSERT INTO `ubs`.`account`
 ( `id`,
 `first_name`,
@@ -24,7 +26,7 @@ INSERT INTO `ubs`.`account`
 `accept_terms`,
 `enabled`,
 `calendar_ok`,
-`twitter_ok`,
+`google_plus_ok`,
 `email_ok`,
 `credit`,
 `group_id`,
@@ -44,7 +46,7 @@ INSERT INTO `ubs`.`account`
 `accept_terms`,
 `enabled`,
 `calendar_ok`,
-`twitter_ok`,
+`google_plus_ok`,
 `email_ok`,
 `credit`,
 `group_id`,
@@ -64,7 +66,7 @@ INSERT INTO `ubs`.`account`
 `accept_terms`,
 `enabled`,
 `calendar_ok`,
-`twitter_ok`,
+`google_plus_ok`,
 `email_ok`,
 `credit`,
 `group_id`,

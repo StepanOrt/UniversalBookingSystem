@@ -21,7 +21,7 @@
 	</head>
 	<body>
 		<%@ include file="../includes/navigation.jspf" %>
-		<div class="container"> 
+		<div class="container" itemscope itemtype="http://schema.org/LocalBusiness"> 
 			<%@ include file="../includes/message.jspf" %>
 			<div class="page-header">
 				<h1>${pageTitle}</h1>

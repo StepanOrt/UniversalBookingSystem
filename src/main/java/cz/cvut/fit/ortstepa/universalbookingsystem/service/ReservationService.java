@@ -16,6 +16,8 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Schedule;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.UserDetailsAdapter;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Action;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Status;
+import cz.cvut.fit.ortstepa.universalbookingsystem.helper.GoogleCalendarHelper;
+import cz.cvut.fit.ortstepa.universalbookingsystem.helper.GooglePlusHelper;
 import cz.cvut.fit.ortstepa.universalbookingsystem.helper.PriceEngine;
 
 @Service
@@ -31,6 +33,12 @@ public class ReservationService {
 	@Autowired
 	private PriceEngine priceEngine;
 	
+	@Autowired
+	private GooglePlusHelper googlePlusHelper;
+	@Autowired
+	private GoogleCalendarHelper googleCalendarHelper;
+	
+	
 	@Transactional(readOnly = false)
 	@PreAuthorize("hasRole('PERM_RESERVE')")
 	public void reserve(Long scheduleId) {
@@ -45,6 +53,10 @@ public class ReservationService {
 				reservation.setAccount(account);
 				reservation.setSchedule(schedule);
 				reservation.setStatus(Status.RESERVED);
+				if (account.isCalendarOk())
+					reservation = googleCalendarHelper.createReservationEvent(reservation);
+				if (account.isGooglePlusOk())
+					reservation = googlePlusHelper.createMoment(reservation);
 				reservationDao.create(reservation);
 				updateCredit(account, getPrice(schedule, Action.CREATE));
 				return;
@@ -53,6 +65,10 @@ public class ReservationService {
 		}
 		if (reservation.getStatus().equals(Status.CANCELED)) {
 			reservation.setStatus(Status.RESERVED);
+			if(account.isCalendarOk())
+				reservation = googleCalendarHelper.createReservationEvent(reservation);
+			if (account.isGooglePlusOk())
+				reservation = googlePlusHelper.createMoment(reservation);
 			reservationDao.update(reservation);
 			updateCredit(account, getPrice(schedule, Action.CREATE));
 			return;
@@ -79,6 +95,8 @@ public class ReservationService {
 		Reservation reservation = reservationDao.find(account, schedule);
 		if (reservation == null) throw new ReservationNotExistException();
 		reservation.setStatus(Status.CANCELED);
+		reservation = googleCalendarHelper.removeReservationEvent(reservation);
+		reservation = googlePlusHelper.removeMoment(reservation);
 		reservationDao.update(reservation);
 		updateCredit(account, getPrice(schedule, Action.CANCEL));
 	}
