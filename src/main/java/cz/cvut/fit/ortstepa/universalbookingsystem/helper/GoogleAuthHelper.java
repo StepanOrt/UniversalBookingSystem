@@ -2,18 +2,14 @@ package cz.cvut.fit.ortstepa.universalbookingsystem.helper;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.http.util.EncodingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.type.StandardClassMetadata;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -28,7 +24,6 @@ import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.Oauth2Scopes;
 import com.google.api.services.oauth2.model.Userinfoplus;
-import com.google.api.services.plus.PlusScopes;
 
 import cz.cvut.fit.ortstepa.universalbookingsystem.service.StoredCredentialDataStoreFactory;
 

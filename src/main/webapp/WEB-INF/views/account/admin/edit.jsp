@@ -61,16 +61,6 @@
 						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
 					</c:if>
 	   			</div>
-	   			
-				<c:set var="groupError"><form:errors path='emailOk'/></c:set>
-				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
-					<div class="controls col-xs-offset-2 col-xs-10">
-						<label class="checkbox" for="emailOk"><form:checkbox id="emailOk" path="emailOk" /> <spring:message code="account.label.emailOk" /></label>
-						<c:if test="${not empty groupError}">
-							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
-						</c:if>
-					</div>
-				</div>
 				
 				<c:set var="groupError"><form:errors path='enabled'/></c:set>
 				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
@@ -81,17 +71,29 @@
 						</c:if>
 					</div>
 				</div>
-				
-				<c:set var="groupError"><form:errors path='credit'/></c:set>
-				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
-		      		<label class="control-label col-xs-2" for="credit"><spring:message code="account.label.credit"/> [<spring:message code="currency.sign"/>]</label>
-		      		<div class="controls col-xs-10">
-		      			<form:input path="credit" type="number" cssClass="form-control" id="credit" required="required" min="0"/>
-		      		</div>
-		      		<c:if test="${not empty groupError}">
-						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
-					</c:if>
-		  		</div>
+				<c:if test="${account.isUser()}">
+					<c:set var="groupError"><form:errors path='internal'/></c:set>
+					<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+		       			<label class="control-label col-xs-2" for="internal"><spring:message code="account.label.internal"/></label>
+		       			<div class="controls col-xs-10">
+		       				<form:input path="internal" cssClass="form-control" id="internal"/>
+		       			</div>
+		       			<c:if test="${not empty groupError}">
+							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+						</c:if>
+		   			</div>
+					
+					<c:set var="groupError"><form:errors path='credit'/></c:set>
+					<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
+			      		<label class="control-label col-xs-2" for="credit"><spring:message code="account.label.credit"/> [<spring:message code="currency.sign"/>]</label>
+			      		<div class="controls col-xs-10">
+			      			<form:input path="credit" type="number" cssClass="form-control" id="credit" required="required" min="0"/>
+			      		</div>
+			      		<c:if test="${not empty groupError}">
+							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
+						</c:if>
+			  		</div>
+		  		</c:if>
 				<div class="form-group">
 					<div class="col-xs-2"></div>
 					<div class="col-xs-offset-2 col-xs-10">

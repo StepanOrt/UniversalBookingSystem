@@ -47,11 +47,11 @@ public class PriceEngine {
 		if (action.equals(Action.CANCEL)) price *= -1;
 		for (Rule rule : rules) {
 			try {
-				if(LogicEngine.eval(rule, variableMap)) {
+				if(LogicEngine.eval(rule.getExpression(), variableMap)) {
 					price = calculatePrice(price, rule.getPriceChange());
 				}
 			} catch (Exception e) {
-				return null;
+				return price;
 			}			
 		}
 		return price;
@@ -81,28 +81,29 @@ public class PriceEngine {
 		variableMap.put("capacity", ""+schedule.getCapacity());
 		variableMap.put("available", ""+schedule.getCapacityAvailable());
 		variableMap.put("duration", ""+schedule.getDuration());
-		variableMap.put("start", DATE_FORMAT.format(schedule.getStart()));
-		variableMap.put("end", DATE_FORMAT.format(schedule.getEnd()));
+		variableMap.put("start", "new Date(\"" + DATE_FORMAT.format(schedule.getStart()) + "\")");
+		variableMap.put("end",  "new Date(\"" + DATE_FORMAT.format(schedule.getEnd()) + "\")");
 		Resource resource = schedule.getResource();
-		variableMap.put("original_price", ""+resource.getPrice());
+		variableMap.put("original_price", (""+resource.getPrice()).replace(',', '.'));
 		for (ResourcePropertyValue resourcePropertyValue : resource.getPropertyValues()) {
 			if (resourcePropertyValue.getProperty().getType().equals(PropertyType.INTERNAL))
-				variableMap.put("resource_" + resourcePropertyValue.getProperty().getName(), resourcePropertyValue.getValue());
+				variableMap.put("resource_" + resourcePropertyValue.getProperty().getName(), "'" + resourcePropertyValue.getValue() + "'");
 		}
-		String accountGroup = "";
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth.isAuthenticated() && auth.getName() != "anonymousUser") {
 			String email = ((UserDetailsAdapter)auth.getPrincipal()).getEmail();
 			Account account = accountService.getAccountByEmail(email);
-			if (account.getGroup() != null)	accountGroup = account.getGroup().getName();
+			variableMap.put("account_reservations_canceled", ""+account.canceledReservationsNum());
+			variableMap.put("account_reservations_past", ""+account.pastReservationsNum());
+			variableMap.put("account_reservations_future", ""+account.futureReservationsNum());
+			if (account.getInternal() != null && account.getInternal().length() > 0) variableMap.put("account_internal", account.getInternal());
 		}
-		variableMap.put("account_group", accountGroup);
 		return variableMap;
 	}
 	
 	public Set<String> exposedVariables() {
 		Set<String> variables = new HashSet<String>();
-		String[] vars = new String[] { "capacity", "available", "duration", "start", "end", "original_price", "accout_group" };
+		String[] vars = new String[] { "capacity", "available", "duration", "start", "end", "original_price", "account_internal", "account_reservations_canceled", "account_reservations_future", "account_reservations_past" };
 		for (String v : vars) {
 			variables.add(v);
 		}

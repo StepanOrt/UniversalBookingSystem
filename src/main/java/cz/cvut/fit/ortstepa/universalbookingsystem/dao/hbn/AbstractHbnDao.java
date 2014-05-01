@@ -99,7 +99,7 @@ public abstract class AbstractHbnDao<T extends Object> implements Dao<T> {
 	public boolean exists(Serializable id) {
 		Query query = getSession().createQuery("select count(*) from " + getDomainClassName() +" where id=:id");
 		query.setParameter("id", id);
-		int count = (Integer)query.uniqueResult();
+		long count = (Long)query.uniqueResult();
 		return (count == 1);
 	}
 }

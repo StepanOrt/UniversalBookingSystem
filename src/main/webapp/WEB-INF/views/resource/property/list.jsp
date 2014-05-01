@@ -22,42 +22,49 @@
 <%@ include file="../../includes/head.jspf"%>
 </head>
 <body>
+	<%@ include file="../../includes/navigation.jspf"%>
 	<div class="container">
 		<%@ include file="../../includes/message.jspf"%>
-		   	<table>
-				<caption>${pageTitle}</caption>
-			<thead>
-			<tr>
-				<th><spring:message code="resourceProperty.label.name" /></th>
-				<th><spring:message code="resourceProperty.label.type" /></th>
-				<th><spring:message code="resourceProperty.label.defaultValue" /></th>
-			</tr>
-			</thead>
+		<div class="page-header">
+			<h1>${pageTitle}</h1>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th><spring:message code="resourceProperty.label.name" /></th>
+						<th><spring:message code="resourceProperty.label.type" /></th>
+						<th><spring:message code="resourceProperty.label.defaultValue" /></th>
+						<th><spring:message code="label.edit"/></th>
+						<th><spring:message code="label.remove"/></th>		
+					</tr>
+				</thead>
 			<tbody>
-			<c:forEach var="resourceProperty" items="${resourcePropertyList}">	
-				<tr>
-					<td>${resourceProperty.name}</td>
-					<td>${resourceProperty.type}</td>
-					<td>${resourceProperty.defaultValue}</td>
-					<td>
-						<input type="button" value="${edit}" onClick="parent.location='${baseUrl}/${resourceProperty.id}?form'" />
-					</td>
-					<td>
-						<form:form action="${baseUrl}/${resourceProperty.id}?delete" method="POST">
-							<input type="submit" value="${remove}" />
-						</form:form>
-					</td>
-					<td>
-						<input type="button" value="${detail}" onClick="parent.location='${baseUrl}/${resourceProperty.id}'" />
-					</td>
-				</tr>
-			</c:forEach>
+				<c:forEach var="resourceProperty" items="${resourcePropertyList}">	
+					<tr>
+						<td>${resourceProperty.name}</td>
+						<td>${resourceProperty.type}</td>
+						<td>${resourceProperty.defaultValue}</td>
+						
+						<td class="col-lg-1">
+							<button class="btn btn-default" onClick="parent.location='${baseUrl}/${resourceProperty.id}?form'"><span class="icon-fallback-glyph"><i class="icon ion-edit"></i><span class="text">${edit}</span></span></button>
+						</td>
+						<td class="col-lg-1">
+							<form:form action="${baseUrl}/${resourceProperty.id}"
+								method="DELETE">
+								<a data-target="#confirmDelete" data-toggle="modal"><button  type="submit" class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-trash-a"></i><span class="text">${remove}</span></span></button></a>
+							</form:form>
+						</td>
+					</tr>
+				</c:forEach>
 			</tbody>
 			</table>
-			<span>
-			    <input type="button" value="${back}" onClick="parent.location='${resourceUrl}'" />
-				<input type="button" value="${add}" onClick="parent.location='${baseUrl}?form'" />			
-			</span>
 	    </div>
+	    <a href="${baseUrl}?form" title="${add}"><button class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-plus-round"></i><span class="text">${add}</span></span></button></a>
+	</div>
+	<%@ include file="../../includes/footer.jspf" %>
+	<div class="modals" hidden="hidden">
+		<%@ include file="../../includes/confirmDelete.jspf" %>
+	</div>
 </body>
 </html>

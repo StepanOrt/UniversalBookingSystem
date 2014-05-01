@@ -24,6 +24,7 @@
 				<h1>${pageTitle}</h1>
 			</div>
 			<div class="form-horizontal">
+				<security:authorize ifAllGranted="PERM_RESERVE">
 				<c:set var="googleDisabled" value="true"/>
 				<div class="form-group">
 					<label class="control-label col-xs-2"><spring:message code="account.label.googleAccount"/></label>
@@ -41,6 +42,7 @@
 						</c:choose>
 					</div>
 				</div>
+				</security:authorize>
 				<form:form action="${submitAccountUrl}" modelAttribute="form" acceptCharset="UTF-8">
 				<form:errors path="*">
 					<div class="alert alert-danger"><spring:message code="error.global" /></div>
@@ -77,28 +79,8 @@
 						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
 					</c:if>
 		  		</div>
-		  		
-				<c:set var="groupError"><form:errors path='marketingOk'/></c:set>
-				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
-					<div class="controls col-xs-offset-2 col-xs-10">
-						<label class="checkbox" for="marketingOk"><form:checkbox id="marketingOk" path="marketingOk" /> <spring:message code="account.label.marketingOk" /></label>
-						<c:if test="${not empty groupError}">
-							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
-						</c:if>
-					</div>
-				</div>
-				
-				<c:set var="groupError"><form:errors path='emailOk'/></c:set>
-				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
-					<div class="controls col-xs-offset-2 col-xs-10">
-						<label class="checkbox" for="emailOk"><form:checkbox id="emailOk" path="emailOk" /> <spring:message code="account.label.emailOk" /></label>
-						<c:if test="${not empty groupError}">
-							<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
-						</c:if>
-					</div>
-				</div>
-
-				
+		  				
+		  		<security:authorize ifAllGranted="PERM_RESERVE">					
 				<c:set var="groupError"><form:errors path='calendarOk'/></c:set>
 				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
 					<div class="controls col-xs-offset-2 col-xs-10">
@@ -118,6 +100,7 @@
 						</c:if>
 					</div>
 				</div>
+				</security:authorize>
 				
 				<c:set var="groupError"><form:errors path='currentPassword'/></c:set>
 				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">

@@ -8,15 +8,12 @@ create table account (
     last_name varchar(50) not null,
     email varchar(50) not null,
     password varchar(80),
-    marketing_ok boolean not null,
-    accept_terms boolean not null,
     enabled boolean not null,
 	google_credentials varchar(200),
     calendar_ok boolean not null,
     google_plus_ok boolean not null,
-    email_ok boolean not null,
     credit decimal(6,2) not null default 0.0,
-    group_id smallint unsigned default null,
+    internal varchar(1000),
     date_created timestamp default 0,
     date_modified timestamp default current_timestamp on update current_timestamp,
     unique index account_id (email)
@@ -34,7 +31,7 @@ create table role (
 
 create table permission (
     id smallint unsigned not null auto_increment primary key,
-    name varchar(50) not null
+    name varchar(50) not null unique
 ) engine = InnoDb;
 
 create table account_role (
@@ -65,7 +62,7 @@ create table resource (
 
 create table resource_property (
 	id bigint unsigned not null auto_increment primary key,
-	name varchar(50),
+	name varchar(50) not null,
     type smallint not null,
     default_value varchar(1000),
 	unique index name (name)
@@ -84,8 +81,8 @@ create table resource_property_value (
 create table schedule (
 	id bigint unsigned not null auto_increment primary key,
     start timestamp not null,
-    duration int(10),
-    capacity int(10),
+    duration int(10) unsigned,
+    capacity int(10) unsigned,
     note varchar(1000),
     resource_id bigint unsigned not null,
     visible boolean not null,
@@ -95,7 +92,6 @@ create table schedule (
 create table reservation (
 	id bigint unsigned not null auto_increment primary key,
 	status smallint,
-    amount int(10),
 	date_created timestamp default 0,
 	date_canceled timestamp default 0,
 	schedule_id bigint unsigned not null,
@@ -108,17 +104,17 @@ create table reservation (
 
 create table price_change (
 	id bigint unsigned not null auto_increment primary key,
-	value DECIMAL(10,2),
-    type smallint,
-    name varchar(50)
+	value DECIMAL(10,2) not null,
+    type smallint not null,
+    name varchar(50) not null
 ) engine = InnoDb;
 
 create table rule (
 	id bigint unsigned not null auto_increment primary key,
-	expression varchar(1000),
-	action smallint,
-	name varchar(50),
-    enabled boolean,
+	expression varchar(1000) not null,
+	action smallint not null,
+	name varchar(50) not null,
+    enabled boolean not null,
     price_change_id bigint unsigned not null,
 	foreign key (price_change_id) references price_change (id) on delete cascade
 ) engine = InnoDb;

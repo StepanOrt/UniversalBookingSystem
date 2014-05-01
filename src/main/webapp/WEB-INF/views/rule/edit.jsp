@@ -62,7 +62,15 @@
 				<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
        				<label class="control-label col-xs-2" for="priceChange"><spring:message code="rule.label.priceChange"/></label>
        				<div class="controls col-xs-10">
-       					<form:select path="priceChange" cssClass="form-control" id="priceChange" required="required"><form:options items="${priceChangeList}" itemLabel="name" itemValue="id"/></form:select>
+       					<form:select path="priceChange" cssClass="form-control" id="priceChange" required="required">
+       						<c:forEach items="${priceChangeList}" var="priceChangeItem">
+       							<c:set var="priceChangeSelected" value="${false}"/>
+       							<c:if test="${priceChangeItem.id.equals(rule.priceChange.id)}">
+       								<c:set var="priceChangeSelected" value="${true}"/>
+       							</c:if>
+       							<form:option selected="${priceChangeSelected ? 'selected' : ''}" value="${priceChangeItem.id}" label="${priceChangeItem.name}"></form:option>
+       						</c:forEach>
+       					</form:select>
        				</div>
        				<c:if test="${not empty groupError}">
 						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
@@ -97,14 +105,14 @@
 						<div class="col-xs-12">
 								<ul class="nav nav-pills">
 									<c:forEach var="variable" items="${exposedVariables}">
-										<li><a href="#">${variable}</a></li>
+										<li><a class="fill" href="#">${variable}</a></li>
 									</c:forEach>
 				   				</ul>
 						</div>
 						<div class="col-xs-12">
 								<ul class="nav nav-pills">
 									<c:forTokens var="operator" delims=" " items="+ - * / & || && == != < > <= >= ( )">
-										<li><a href="#">${operator}</a></li>
+										<li><a class="fill" href="#">${operator}</a></li>
 									</c:forTokens>
 				   				</ul>
 						</div>

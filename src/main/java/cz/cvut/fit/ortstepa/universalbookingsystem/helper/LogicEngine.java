@@ -25,17 +25,19 @@ public class LogicEngine {
             	return ((Boolean) result).booleanValue();
             else
             	throw new Exception("Invalid condition statement");
+        } catch (Exception e) {
+        	throw e;
         } finally {
             Context.exit();
         }
 	}
 
-	public static boolean eval(Rule rule, Map<String, String> variableMap) throws Exception {
+	public static boolean eval(String expression, Map<String, String> variableMap) throws Exception {
 		String script = "";
 		for (Entry<String, String> entry : variableMap.entrySet()) {
-			script += "var " + entry.getKey() + " = " + entry.getValue() + ";";
+			script += "var " + entry.getKey() + " = " + entry.getValue() + ";\n";
 		}
-		script += "\n" + rule + ";\n";
+		script += "\n" + expression + ";\n";
 		return eval(script);
 	}
 }

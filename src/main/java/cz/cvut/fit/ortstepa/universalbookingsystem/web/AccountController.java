@@ -64,7 +64,7 @@ public class AccountController {
 	public void initBinder(WebDataBinder binder) {
 		binder.setAllowedFields(new String[] { 
 			"currentPassword", "password", "confirmPassword", "firstName", "lastName",
-			"email", "marketingOk", "acceptTerms", "enabled", "emailOk", "amount", "credit"
+			"email", "acceptTerms", "enabled", "internal", "amount", "credit"
 		});
 	}
 	

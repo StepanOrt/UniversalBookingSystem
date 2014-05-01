@@ -1,6 +1,7 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.domain;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 
 import javax.persistence.Column;

@@ -18,10 +18,10 @@
 
 <security:authorize access="isAuthenticated()">
 	<security:authentication property="principal.username" var="email"/>
-	<c:set var="account" value="${accountService.getAccountByEmail(email)}"/>
+	<c:set var="loggedAccount" value="${accountService.getAccountByEmail(email)}"/>
 	<ul class="nav navbar-nav navbar-right">
 		<li class="dropdown ${active=='account' ? 'active' : '' }">
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown">${account.fullName} <b class="caret"></b></a>
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">${loggedAccount.fullName} <b class="caret"></b></a>
 			<ul class="dropdown-menu">
 				<li><a href="${accountDetailsUrl}"><spring:message code="account.label.edit"/></a></li>
 				<li><a href="${changePasswordUrl}"><spring:message code="account.label.changePassword"/></a></li>
@@ -31,7 +31,7 @@
 	</ul>
 	<security:authorize ifAllGranted="PERM_RESERVE">
 		<div class="nav navbar-form navbar-right">
-			<button type="submit" class="btn btn-default">${account.credit} <spring:message code="currency.sign"/></button>
+			<button type="submit" class="btn btn-default">${loggedAccount.credit} <spring:message code="currency.sign"/></button>
 		</div>
 	</security:authorize>
 </security:authorize>

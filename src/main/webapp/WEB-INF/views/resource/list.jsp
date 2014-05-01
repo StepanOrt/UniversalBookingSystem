@@ -69,12 +69,15 @@
 								<c:set var="propertyValuesMap"
 									value="${resource.propertyValuesMap}" />
 								<c:forEach var="property" items="${propertyValuesMap}">
-									<td>${property.value}</td>
+								    <c:set var="propertyName" value="${property.key}" />
+								    <c:if test="${propertyTypeMap[propertyName]==type}">
+										<td>${property.value}</td>
+								    </c:if>
 								</c:forEach>
 								<security:authorize ifAllGranted="PERM_RES_EDIT">
 									<td><c:out value="${resource.capacity}" /></td>
 									<td><c:out value="${resource.duration}" /></td>
-									<td><c:out value="${resource.price}" /></td>
+									<td><c:out value="${resource.price}" /> <spring:message code="currency.sign"/></td>
 									<td>
 										<span class="icon-fallback-glyph">
 											<c:choose>

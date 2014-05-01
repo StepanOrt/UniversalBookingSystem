@@ -20,6 +20,11 @@
 <html>
 <head>
 <title>${pageTitle}</title>
+<style type="text/css">
+	.past td {
+	background-color: #fcf8e3 !important;
+	}
+</style>
 <%@ include file="../../includes/head.jspf"%>
 </head>
 <body>
@@ -32,12 +37,23 @@
 		<c:set var="type" value="MAIN"/>
 		<%@ include file="../includes/resourceParametersTable.jspf"%>
 		<h2>${schedules}</h2>
+		<div class="row">
+			<div class="col-xs-6">
+				<label for="datetimepickerFrom">From</label>
+				<p><input id="datetimepickerFrom" class="form-control" type="text" ></p>
+			</div>
+			<div class="col-xs-6">
+				<label for="datetimepickerTo">To</label>
+				<p><input id="datetimepickerTo" class="form-control" type="text" ></p>
+			</div>
+		</div>
 		<div class="table-responsive">
-			<table class="table table-striped">
+			<table class="table table-striped" id="schedulesTable">
 				<thead>
 				<tr>
 					<th><spring:message code="schedule.label.start"/></th>
 					<th><spring:message code="schedule.label.end"/></th>
+					<th><spring:message code="schedule.label.duration"/></th>
 					<th><spring:message code="schedule.label.capacity"/></th>
 					<th><spring:message code="schedule.label.available"/></th>
 					<th><spring:message code="schedule.label.price"/></th>
@@ -53,19 +69,22 @@
 				</tr>				
 			</thead>
 			<tbody>
-				<c:set var="schedulesSet" value="${resource.visibleSchedules}" />
+				<c:set var="schedulesSet" value="${resource.sortedVisibleSchedules}" />
 				<security:authorize ifAllGranted="PERM_SCH_EDIT">
-					<c:set var="schedulesSet" value="${resource.schedules}" />
+					<c:set var="schedulesSet" value="${resource.sortedSchedules}" />
 				</security:authorize>
 				<c:forEach var="schedule" items="${schedulesSet}">
-				<tr>
+				<tr class="${schedule.past ? 'past' : 'future'}">
 					<fmt:formatDate value="${schedule.start}" var="startDateTimeString" pattern="dd/MM/yyyy HH:mm" />
+					<fmt:formatDate value="${schedule.start}" var="startDateString" pattern="dd.MM.yyyy" />
+					<fmt:formatDate value="${schedule.start}" var="startTimeString" pattern="HH:mm" />
 					<fmt:formatDate value="${schedule.end}" var="endDateTimeString" pattern="dd/MM/yyyy HH:mm" />
-					<td>${startDateTimeString}</td>
+					<td class="start" data-date="${startDateString}" data-time="${startTimeString}">${startDateTimeString}</td>
 					<td>${endDateTimeString}</td>
+					<td>${schedule.prettyDuration}</td>
 					<td>${schedule.capacity}</td>
 					<td>${schedule.capacityAvailable}</td>
-					<td>${priceMap[schedule]}</td>
+					<td>${priceMap[schedule]}  <spring:message code="currency.sign"/></td>
 					<td>
 						<c:if test="${not empty schedule.note}">
 							<c:set var="noteLabel"><spring:message code="schedule.label.note"/></c:set>
@@ -88,12 +107,12 @@
 						<c:choose>
 						<c:when test="${reservationMap[schedule].status.toString().equals('RESERVED')}">
 							<form:form action="${baseUrl}/${schedule.id}/reservation?cancel" method="PUT">
-								<button class="btn btn-default" type="submit">${cancel}</button>
+								<button class="btn btn-default" ${schedule.past ? 'disabled' : '' } type="submit">${cancel}</button>
 							</form:form>
 						</c:when>
 						<c:otherwise>
 							<form:form action="${baseUrl}/${schedule.id}/reservation?reserve" method="PUT">
-								<button class="btn btn-default" type="submit">${reserve}</button>
+								<button class="btn btn-default" ${schedule.past ? 'disabled' : '' } type="submit">${reserve}</button>
 							</form:form>
 						</c:otherwise>
 						</c:choose>

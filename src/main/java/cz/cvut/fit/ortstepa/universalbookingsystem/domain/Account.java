@@ -1,5 +1,6 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.domain;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -14,11 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -26,6 +26,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
+
+import cz.cvut.fit.ortstepa.universalbookingsystem.domain.helper.Status;
 
 @NamedQuery(
 		name = "findAccountByEmail",
@@ -36,11 +38,12 @@ public class Account {
 	private Long id;
 	private Double credit = 0.0d;
 	private String firstName, lastName, email;
-	private boolean marketingOk = true, acceptTerms = false, enabled = true, emailOk = true, calendarOk = true, googlePlusOk = true;
+	private boolean enabled = true, calendarOk = true, googlePlusOk = true;
 	private String googleCredentials;
 	private Date dateCreated;
 	private Collection<Role> roles = new HashSet<Role>();
-	private AccountGroup group = null;
+	private String internal;
+	private Set<Reservation> reservations;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -76,30 +79,10 @@ public class Account {
 
 	public void setEmail(String email) { this.email = email; }
 
-	@Column(name = "marketing_ok")
-	public boolean isMarketingOk() { return marketingOk; }
-
-	public void setMarketingOk(boolean marketingOk) { this.marketingOk = marketingOk; }
-
-	@AssertTrue(message = "{account.acceptTerms.assertTrue.message}")
-	@Column(name = "accept_terms")
-	public boolean getAcceptTerms() { return acceptTerms; }
-
-	public void setAcceptTerms(boolean acceptTerms) { this.acceptTerms = acceptTerms; }
-
 	@Column(name = "enabled")
 	public boolean isEnabled() { return enabled; }
 
 	public void setEnabled(boolean enabled) { this.enabled = enabled; }
-
-	@Column(name = "email_ok")
-	public boolean isEmailOk() {
-		return emailOk;
-	}
-
-	public void setEmailOk(boolean emailOk) {
-		this.emailOk = emailOk;
-	}
 
 	@Column(name = "calendar_ok")
 	public boolean isCalendarOk() {
@@ -119,16 +102,12 @@ public class Account {
 	public void setGooglePlusOk(boolean googlePlusOk) {
 		this.googlePlusOk = googlePlusOk;
 	}
-
-	@ManyToOne
-	@JoinColumn(name = "group_id", nullable = false)
-	public AccountGroup getGroup() {
-		return group;
-	}
 	
-	public void setGroup(AccountGroup group) {
-		this.group = group;
-	}
+	@Column(name = "internal")
+	public String getInternal() { return internal; }
+
+	public void setInternal(String internal) { this.internal = internal; }
+
 	
 	@Column(name = "credit")
 	public Double getCredit() {
@@ -190,8 +169,6 @@ public class Account {
 			.append("firstName", firstName)
 			.append("lastName", lastName)
 			.append("email", email)
-			.append("marketingOk", marketingOk)
-			.append("acceptTerms", acceptTerms)
 			.toString();			
 	}
 
@@ -202,5 +179,47 @@ public class Account {
 
 	public void setGoogleCredentials(String googleCredentials) {
 		this.googleCredentials = googleCredentials;
+	}
+	
+	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+	public Set<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+	
+	@Transient
+	public int canceledReservationsNum() {
+		int sum = 0;
+		for (Reservation reservation : getReservations()) {
+			if (reservation.getStatus().equals(Status.CANCELED)) {
+				sum++;
+			}
+		}
+		return sum;
+	}
+	
+	@Transient
+	public int pastReservationsNum() {
+		int sum = 0;
+		for (Reservation reservation : getReservations()) {
+			if (reservation.getStatus().equals(Status.RESERVED)) {
+				if (reservation.getSchedule().getStart().before(Calendar.getInstance().getTime())) sum++;
+			}
+		}
+		return sum;
+	}
+
+	@Transient
+	public int futureReservationsNum() {
+		int sum = 0;
+		for (Reservation reservation : getReservations()) {
+			if (reservation.getStatus().equals(Status.RESERVED)) {
+				if (reservation.getSchedule().getStart().after(Calendar.getInstance().getTime())) sum++;
+			}
+		}
+		return sum;
 	}	
 }

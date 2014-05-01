@@ -15,7 +15,7 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
 		message = "account.password.mismatch.message")
 public class RegistrationForm {
 	private String password, confirmPassword, firstName, lastName, email;
-	private boolean marketingOk = true, acceptTerms = false;
+	private boolean acceptTerms = false;
 
 	@NotNull
 	@Size(min = 6, max = 50)
@@ -48,10 +48,6 @@ public class RegistrationForm {
 
 	public void setEmail(String email) { this.email = email; }
 
-	public boolean isMarketingOk() { return marketingOk; }
-
-	public void setMarketingOk(boolean marketingOk) { this.marketingOk = marketingOk; }
-
 	@AssertTrue(message = "{account.acceptTerms.assertTrue.message}")
 	public boolean getAcceptTerms() { return acceptTerms; }
 
@@ -61,8 +57,6 @@ public class RegistrationForm {
 		account.setFirstName(firstName);
 		account.setLastName(lastName);
 		account.setEmail(email);
-		account.setMarketingOk(marketingOk);
-		account.setAcceptTerms(acceptTerms);
 		account.setEnabled(true);
 	}	
 }

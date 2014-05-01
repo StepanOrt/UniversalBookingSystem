@@ -1,6 +1,9 @@
 package cz.cvut.fit.ortstepa.universalbookingsystem.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -116,7 +119,19 @@ public class Resource {
     	return propertyValuesMap;
 	}
     
+    @Transient
+    public List<Schedule> getSortedVisibleSchedules() {
+    	List<Schedule> list = new ArrayList<Schedule>(getVisibleSchedules());
+    	Collections.sort(list);
+    	return list;
+    }
     
+    @Transient
+    public List<Schedule> getSortedSchedules() {
+    	List<Schedule> list = new ArrayList<Schedule>(getSchedules());
+    	Collections.sort(list);
+    	return list;
+    }
     
     
 }

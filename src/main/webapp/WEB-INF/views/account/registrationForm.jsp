@@ -78,15 +78,7 @@
        				<form:password path="confirmPassword" data-validation-matches-match="password" data-validation-matches-message="${matchesMessage}" required="required" cssClass="form-control" id="confirmPassword" showPassword="false"/>
        			</div>
    			</div>
-			<c:set var="groupError"><form:errors path='marketingOk'/></c:set>
-			<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
-				<div class="controls col-xs-offset-2 col-xs-10">
-					<label class="checkbox" for="marketingOk"><form:checkbox id="marketingOk" path="marketingOk" /> <spring:message code="account.label.marketingOk" /></label>
-					<c:if test="${not empty groupError}">
-						<div class="help-block"><ul role="alert"><li>${groupError}</li></ul></div>
-					</c:if>
-				</div>
-			</div>
+
 			<c:set var="groupError"><form:errors path='acceptTerms'/></c:set>
 			<div class="control-group form-group ${not empty groupError ? 'has-error' : ''}">
 				<div class="controls col-xs-offset-2 col-xs-10">

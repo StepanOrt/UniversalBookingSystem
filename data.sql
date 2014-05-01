@@ -5,6 +5,8 @@ call createPermission('PERM_RESERVE');
 call createPermission('PERM_GOOGLE');
 call createPermission('PERM_MANAGE_USERS');
 call createPermission('PERM_MANAGE_ROLES');
+call createPermission('PERM_PRICE');
+call createPermission('PERM_RULE');
 call createRole('ROLE_SUPERADMIN', @role_superadmin);
 call createRole('ROLE_USER', @role_user);
 call createRole('ROLE_ADMIN', @role_admin);
@@ -13,6 +15,8 @@ call roleHasPermission(@role_registered, 'PERM_CHANGE_PASSWORD');
 call roleHasPermission(@role_admin, 'PERM_RES_EDIT');
 call roleHasPermission(@role_admin, 'PERM_SCH_EDIT');
 call roleHasPermission(@role_admin, 'PERM_MANAGE_USERS');
+call roleHasPermission(@role_admin, 'PERM_PRICE');
+call roleHasPermission(@role_admin, 'PERM_RULE');
 call roleHasPermission(@role_user, 'PERM_RESERVE');
 call roleHasPermission(@role_superadmin, 'PERM_MANAGE_ROLES');
 call roleHasPermission(@role_user, 'PERM_GOOGLE');
@@ -22,19 +26,25 @@ INSERT INTO `ubs`.`account`
 `last_name`,
 `email`,
 `password`,
-`marketing_ok`,
-`accept_terms`,
 `enabled`,
 `calendar_ok`,
 `google_plus_ok`,
-`email_ok`,
 `credit`,
-`group_id`,
 `date_created`,
 `date_modified`)
 VALUES
 (
-1, 'Superadmin', 'account', 'superadmin@ubs.cz', '3be403f37f83a1ff0411087b67c5e0e6f23f25c7b4cf1f071f3d142d8fd7f93a7c91bf28aaf7ff00', 0, 1, 1, 1, 1, 1, 0.00, NULL, '2014-03-13 22:59:31', '2014-03-13 22:59:31'
+1,
+'Superadmin',
+'account',
+'superadmin@account.test',
+'db22fff3dcc4e38895efc67d1daae577844d2c91a00c62487e293114c9230bc21a9b922991b063cb',
+1,
+1,
+1,
+0.00,
+'2014-05-01 12:49:24',
+ '2014-05-01 12:49:24'
 );
 INSERT INTO `ubs`.`account`
 ( `id`,
@@ -42,19 +52,15 @@ INSERT INTO `ubs`.`account`
 `last_name`,
 `email`,
 `password`,
-`marketing_ok`,
-`accept_terms`,
 `enabled`,
 `calendar_ok`,
 `google_plus_ok`,
-`email_ok`,
 `credit`,
-`group_id`,
 `date_created`,
 `date_modified`)
 VALUES
 (
-2, 'Admin', 'account', 'admin@ubs.cz', '3be403f37f83a1ff0411087b67c5e0e6f23f25c7b4cf1f071f3d142d8fd7f93a7c91bf28aaf7ff00', 0, 1, 1, 1, 1, 1, 0.00, NULL, '2014-03-13 22:59:31', '2014-03-13 22:59:31'
+2, 'Admin', 'account', 'admin@account.test', 'db22fff3dcc4e38895efc67d1daae577844d2c91a00c62487e293114c9230bc21a9b922991b063cb', 1, 1, 1, 0.00, '2014-05-01 12:49:24', '2014-05-01 12:49:24'
 );
 INSERT INTO `ubs`.`account`
 ( `id`,
@@ -62,19 +68,15 @@ INSERT INTO `ubs`.`account`
 `last_name`,
 `email`,
 `password`,
-`marketing_ok`,
-`accept_terms`,
 `enabled`,
 `calendar_ok`,
 `google_plus_ok`,
-`email_ok`,
 `credit`,
-`group_id`,
 `date_created`,
 `date_modified`)
 VALUES
 (
-3, 'User', 'account', 'user@ubs.cz', '3be403f37f83a1ff0411087b67c5e0e6f23f25c7b4cf1f071f3d142d8fd7f93a7c91bf28aaf7ff00', 0, 1, 1, 1, 1, 1, 0.00, NULL, '2014-03-13 22:59:31', '2014-03-13 22:59:31'
+3, 'User', 'account', 'user@account.test', 'db22fff3dcc4e38895efc67d1daae577844d2c91a00c62487e293114c9230bc21a9b922991b063cb', 1, 1, 1, 0.00, '2014-05-01 12:49:24', '2014-05-01 12:49:24'
 );
 call accountHasRole(1, @role_superadmin);
 call accountHasRole(1, @role_admin);

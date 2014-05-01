@@ -54,10 +54,10 @@ public class ReservationController {
 	
 	@ExceptionHandler(ReservationService.NotEnoughCreditException.class)
 	public String notEnoughCreditExceptionHandler() {
-		return "forward:/error/" + "reservation.error.notEnouthCredit";
+		return "forward:reservation/error/" + "reservation.error.notEnoughCredit/";
 	}
 	
-	@RequestMapping("error/{message}")
+	@RequestMapping("error/{message}/")
 	public String errorRedirect(@PathVariable Long resourceId, @PathVariable String message, final RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("error", message);
 		return VN_SCH_REDIRECT.replace("{resourceId}", resourceId.toString());

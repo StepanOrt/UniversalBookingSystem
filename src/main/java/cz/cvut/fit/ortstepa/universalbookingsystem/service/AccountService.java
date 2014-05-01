@@ -25,6 +25,7 @@ import com.google.api.services.oauth2.model.Userinfoplus;
 import cz.cvut.fit.ortstepa.universalbookingsystem.dao.AccountDao;
 import cz.cvut.fit.ortstepa.universalbookingsystem.dao.RoleDao;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
+import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Reservation;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Role;
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.UserDetailsAdapter;
 import cz.cvut.fit.ortstepa.universalbookingsystem.helper.GoogleAuthHelper;
@@ -125,6 +126,7 @@ public class AccountService {
 	public Account get(Long id) {
 		List<Account> list = accountDao.getAll();
 		Account account = accountDao.get(id);
+		Set<Reservation> reservations = account.getReservations();
 		return account;
 	}
 
@@ -180,8 +182,7 @@ public class AccountService {
 			account.setEnabled(newAccount.isEnabled());
 			account.setFirstName(newAccount.getFirstName());
 			account.setLastName(newAccount.getLastName());
-			account.setGroup(newAccount.getGroup());
-			account.setEmailOk(newAccount.isEmailOk());
+			account.setInternal(newAccount.getInternal());
 			accountDao.update(account);
 		}
 	}

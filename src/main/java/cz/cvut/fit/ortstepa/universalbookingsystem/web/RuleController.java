@@ -45,7 +45,7 @@ public class RuleController {
 	public void initBinder(WebDataBinder binder) {
 		List<String> allowedFields = new ArrayList<String>(priceEngine.exposedVariables());
 		allowedFields.addAll(Arrays.asList(new String[] { 
-				"expression", "event", "name", "enabled", "priceChange"
+				"expression", "action", "name", "enabled", "priceChange"
 			}));
 		String[] sArray = allowedFields.toArray(new String[]{});
 		binder.setAllowedFields(sArray);

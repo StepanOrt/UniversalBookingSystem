@@ -9,7 +9,8 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
 
 public class AccountForm {
 	private String firstName, lastName, email, currentPassword; 
-	private boolean marketingOk = true, emailOk = true, calendarOk = true, googlePlusOk = true;
+	private boolean calendarOk = true, googlePlusOk = true;
+	private String internal;
 
 	@NotNull
 	@Size(min = 1, max = 50)
@@ -30,14 +31,6 @@ public class AccountForm {
 
 	public void setEmail(String email) { this.email = email; }
 
-	public boolean isMarketingOk() { return marketingOk; }
-
-	public void setMarketingOk(boolean marketingOk) { this.marketingOk = marketingOk; }
-	
-	public boolean isEmailOk() { return emailOk; }
-
-	public void setEmailOk(boolean emailOk) { this.emailOk = emailOk; }
-
 	public boolean isCalendarOk() {	return calendarOk; }
 
 	public void setCalendarOk(boolean calendarOk) {	this.calendarOk = calendarOk; }
@@ -51,27 +44,28 @@ public class AccountForm {
 
 	public void setCurrentPassword(String currentPassword) { this.currentPassword = currentPassword; }
 
+	public String getInternal() { return internal; }
 	
+	public void setInternal(String internal) {	this.internal = internal; }
 	
 	public static AccountForm create(Account account) {
 		AccountForm form = new AccountForm();
 		form.setEmail(account.getEmail());
 		form.setFirstName(account.getFirstName());
 		form.setLastName(account.getLastName());
-		form.setMarketingOk(account.isMarketingOk());
-		form.setEmailOk(account.isEmailOk());
 		form.setCalendarOk(account.isCalendarOk());
 		form.setGooglePlusOk(account.isGooglePlusOk());
+		form.setInternal(account.getInternal());
 		return form;
 	}
+
 
 	public void fill(Account account) {
 		account.setEmail(email);
 		account.setFirstName(firstName);
 		account.setLastName(lastName);
-		account.setMarketingOk(marketingOk);
-		account.setEmailOk(emailOk);
 		account.setCalendarOk(calendarOk);
 		account.setGooglePlusOk(googlePlusOk);
+		account.setInternal(internal);
 	}
 }

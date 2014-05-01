@@ -19,10 +19,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Formula;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
  
 @Entity
 @Table(name="schedule")
-public class Schedule implements Serializable {
+public class Schedule implements Serializable, Comparable<Schedule> {
      
     private Long id;
     private Integer capacity = null;
@@ -131,10 +134,44 @@ public class Schedule implements Serializable {
 		}
 		return valids;
 	}
+	
+	@Transient
+	public boolean isPast() {
+		return start.before(Calendar.getInstance().getTime());
+	}
+	
+	@Transient
+	public boolean isFuture() {
+		return !isPast();
+	}
 
 	@Transient
 	public Integer getCapacityAvailable() {
 		return capacity - numberOfValidReservations;
 	}
+	
+	@Transient
+	public String getPrettyDuration() {
+		PeriodFormatter daysHoursMinutes = new PeriodFormatterBuilder()
+	    .appendDays()
+	    .appendSuffix(" day", " days")
+	    .appendHours()
+	    .appendSuffix(" hour", " hours")
+	    .appendMinutes()
+	    .appendSuffix(" minute", " minutes")
+	    .toFormatter();
+
+		
+	  Period period = new Period().withMinutes(getDuration());
+
+	  return daysHoursMinutes.print(period.normalizedStandard());
+	}
+
+	@Override
+	public int compareTo(Schedule o) {
+		return this.getStart().compareTo(o.getStart());
+	}
+	
+	
 }
 

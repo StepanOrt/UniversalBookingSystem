@@ -80,7 +80,7 @@ public class ResourcePropertyController {
 	}
 	
 			
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public String edit(@Valid @ModelAttribute ResourceProperty resourceProperty, BindingResult result, @PathVariable Long id, Model model, final RedirectAttributes redirectAttributes) {
 		if (!result.hasErrors()) {
 			resourceProperty.setId(id);
@@ -94,7 +94,7 @@ public class ResourcePropertyController {
 	}
 	
 		
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST, params={"delete"})
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String remove(Model model, @PathVariable Long id, final RedirectAttributes redirectAttributes) {
 		if (resourcePropertyService.delete(id)) {
 			redirectAttributes.addFlashAttribute("success", "resourceProperty.remove.success");
