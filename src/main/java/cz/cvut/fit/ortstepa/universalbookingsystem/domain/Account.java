@@ -47,6 +47,71 @@ public class Account {
 	private String internal;
 	private Set<Reservation> reservations;
 
+	@Transient
+	public Set<Permission> getPermissions() {
+		Set<Permission> perms = new HashSet<Permission>();
+		for (Role role : roles) { perms.addAll(role.getPermissions()); }
+		return perms;
+	}
+	
+	@Transient
+	public Collection<GrantedAuthority> getAuthorities() {
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		authorities.addAll(getRoles());
+		authorities.addAll(getPermissions());
+		return authorities;
+	}
+	
+	@Transient
+	public boolean isAdmin() {
+		for (Role role : getRoles()) {
+			if (role.getName().equals("ROLE_ADMIN")) return true;
+		}
+		return false;
+	}
+	
+	@Transient
+	public boolean isUser() {
+		for (Role role : getRoles()) {
+			if (role.getName().equals("ROLE_USER")) return true;
+		}
+		return false;
+	}
+
+	
+	@Transient
+	public int canceledReservationsNum() {
+		int sum = 0;
+		for (Reservation reservation : getReservations()) {
+			if (reservation.getStatus().equals(Status.CANCELED)) {
+				sum++;
+			}
+		}
+		return sum;
+	}
+	
+	@Transient
+	public int pastReservationsNum() {
+		int sum = 0;
+		for (Reservation reservation : getReservations()) {
+			if (reservation.getStatus().equals(Status.RESERVED)) {
+				if (reservation.getSchedule().getStart().before(Calendar.getInstance().getTime())) sum++;
+			}
+		}
+		return sum;
+	}
+
+	@Transient
+	public int futureReservationsNum() {
+		int sum = 0;
+		for (Reservation reservation : getReservations()) {
+			if (reservation.getStatus().equals(Status.RESERVED)) {
+				if (reservation.getSchedule().getStart().after(Calendar.getInstance().getTime())) sum++;
+			}
+		}
+		return sum;
+	}	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
@@ -129,37 +194,7 @@ public class Account {
 
 	public void setRoles(Collection<Role> roles) { this.roles = roles; }
 	
-	@Transient
-	public Set<Permission> getPermissions() {
-		Set<Permission> perms = new HashSet<Permission>();
-		for (Role role : roles) { perms.addAll(role.getPermissions()); }
-		return perms;
-	}
 	
-	@Transient
-	public Collection<GrantedAuthority> getAuthorities() {
-		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-		authorities.addAll(getRoles());
-		authorities.addAll(getPermissions());
-		return authorities;
-	}
-	
-	@Transient
-	public boolean isAdmin() {
-		for (Role role : getRoles()) {
-			if (role.getName().equals("ROLE_ADMIN")) return true;
-		}
-		return false;
-	}
-	
-	@Transient
-	public boolean isUser() {
-		for (Role role : getRoles()) {
-			if (role.getName().equals("ROLE_USER")) return true;
-		}
-		return false;
-	}
-
 	@Column(name = "date_created")
 	public Date getDateCreated() { return dateCreated; }
 
@@ -191,37 +226,5 @@ public class Account {
 	public void setReservations(Set<Reservation> reservations) {
 		this.reservations = reservations;
 	}
-	
-	@Transient
-	public int canceledReservationsNum() {
-		int sum = 0;
-		for (Reservation reservation : getReservations()) {
-			if (reservation.getStatus().equals(Status.CANCELED)) {
-				sum++;
-			}
-		}
-		return sum;
-	}
-	
-	@Transient
-	public int pastReservationsNum() {
-		int sum = 0;
-		for (Reservation reservation : getReservations()) {
-			if (reservation.getStatus().equals(Status.RESERVED)) {
-				if (reservation.getSchedule().getStart().before(Calendar.getInstance().getTime())) sum++;
-			}
-		}
-		return sum;
-	}
 
-	@Transient
-	public int futureReservationsNum() {
-		int sum = 0;
-		for (Reservation reservation : getReservations()) {
-			if (reservation.getStatus().equals(Status.RESERVED)) {
-				if (reservation.getSchedule().getStart().after(Calendar.getInstance().getTime())) sum++;
-			}
-		}
-		return sum;
-	}	
 }

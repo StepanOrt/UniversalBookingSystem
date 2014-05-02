@@ -15,7 +15,7 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Account;
 @Repository
 public class HbnAccountDao extends AbstractHbnDao<Account> implements AccountDao {
 
-	private static final Logger log = LoggerFactory.getLogger(HbnAccountDao.class);
+	//private static final Logger log = LoggerFactory.getLogger(HbnAccountDao.class);
 
 	private static final String UPDATE_PASSWORD_SQL =
 			"update account set password = ? where email = ?";
@@ -27,10 +27,7 @@ public class HbnAccountDao extends AbstractHbnDao<Account> implements AccountDao
 
 	@Override
 	public void create(Account account, String password) {
-		log.debug("Creating account: {}", account);
 		create(account);
-
-		log.debug("Updating password");
 		updatePassword(account.getEmail(), password);
 	}
 

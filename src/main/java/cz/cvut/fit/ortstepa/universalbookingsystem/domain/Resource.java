@@ -31,7 +31,7 @@ public class Resource {
 	
 	@Transient
 	private Map<String, String> propertyValuesMap;
-	
+ 
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id", nullable=false, unique=true)
@@ -99,6 +99,19 @@ public class Resource {
 		this.schedules = schedules;
 	}
     
+
+
+    @Transient
+	@Override
+	public String toString() {
+    	String out = "Reservation: ";
+		for (ResourcePropertyValue propertyValue : getPropertyValues()) {
+			out += propertyValue.getProperty().getName() + "=" + propertyValue.getValue() + " ";
+		}
+		return out.substring(0, out.length() - 1);
+	}
+    
+    
     @Transient
     public Set<Schedule> getVisibleSchedules() {
 		Set<Schedule> selection = new HashSet<Schedule>();
@@ -133,16 +146,7 @@ public class Resource {
     	return list;
     }
 
-    @Transient
-	@Override
-	public String toString() {
-    	String out = "Reservation: ";
-		for (ResourcePropertyValue propertyValue : getPropertyValues()) {
-			out += propertyValue.getProperty().getName() + "=" + propertyValue.getValue() + " ";
-		}
-		return out.substring(0, out.length() - 1);
-	}
-    
+	
     
     
     

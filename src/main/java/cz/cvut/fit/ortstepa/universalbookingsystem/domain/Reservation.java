@@ -80,12 +80,7 @@ public class Reservation implements Serializable {
 	public Date getDateCanceled() { return dateCanceled; }
 
 	public void setDateCanceled(Date dateCanceled) { this.dateCanceled = dateCanceled; }
-	
-	@Transient
-	public boolean isValid() {
-		if (status == Status.RESERVED) return true;
-		return false;
-	}
+
 	
 	@Column(name = "calendar_event_id")
 	public String getCalendarEventId() {
@@ -106,4 +101,9 @@ public class Reservation implements Serializable {
 	}
 	
 	
+	@Transient
+	public boolean isValid() {
+		if (status == Status.RESERVED) return true;
+		return false;
+	}
 }

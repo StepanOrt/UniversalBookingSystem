@@ -34,7 +34,7 @@ import cz.cvut.fit.ortstepa.universalbookingsystem.web.form.AccountForm;
 @Transactional(readOnly = true)
 public class AccountService {
 	
-	private static final Logger log = LoggerFactory.getLogger(AccountService.class);
+	//private static final Logger log = LoggerFactory.getLogger(AccountService.class);
 	
 	@Autowired
 	private GoogleAuthHelper googleAuthHelper;
@@ -76,7 +76,6 @@ public class AccountService {
 		Account account = accountDao.findByEmail(email);
 		if (account != null)  {
 			if (id == null || !account.getId().equals(id)) {
-				log.debug("Validation failed: duplicate email");
 				errors.rejectValue("email", "error.duplicate", new String[] { email }, null);
 			}
 		}

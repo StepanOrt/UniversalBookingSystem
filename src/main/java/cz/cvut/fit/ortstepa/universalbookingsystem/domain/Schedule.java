@@ -122,6 +122,13 @@ public class Schedule implements Serializable, Comparable<Schedule> {
 	public void setReservations(Set<Reservation> reservations) {
 		this.reservations = reservations;
 	}
+
+	@Override
+	public int compareTo(Schedule o) {
+		return this.getStart().compareTo(o.getStart());
+	}
+	
+	
 		
 	@Transient
 	public Set<Reservation> getValidReservations() {
@@ -166,11 +173,5 @@ public class Schedule implements Serializable, Comparable<Schedule> {
 	  return daysHoursMinutes.print(period.normalizedStandard());
 	}
 
-	@Override
-	public int compareTo(Schedule o) {
-		return this.getStart().compareTo(o.getStart());
-	}
-	
-	
 }
 
