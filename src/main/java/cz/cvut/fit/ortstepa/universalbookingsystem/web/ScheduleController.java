@@ -120,7 +120,6 @@ public class ScheduleController {
 	public String edit(@Valid @ModelAttribute Schedule schedule, BindingResult result, @PathVariable Long resourceId, @PathVariable Long id, Model model, final RedirectAttributes redirectAttributes) {
 		if (!result.hasErrors()) {
 			schedule.setId(id);
-			schedule.setResource(resourceService.get(resourceId));
 			scheduleService.update(schedule, result);
 			if (!result.hasErrors()) {
 				redirectAttributes.addFlashAttribute("success", "schedule.edit.success");

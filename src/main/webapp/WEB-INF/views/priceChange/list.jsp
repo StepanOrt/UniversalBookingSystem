@@ -21,7 +21,7 @@
 <%@ include file="../includes/head.jspf"%>
 </head>
 <body>
-	<c:set var="active" value="resources" />
+	<c:set var="active" value="priceChanges" />
 	<%@ include file="../includes/navigation.jspf"%>
 	<div class="container">
 		<%@ include file="../includes/message.jspf"%>

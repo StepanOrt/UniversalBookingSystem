@@ -36,9 +36,6 @@ public class Schedule implements Serializable, Comparable<Schedule> {
 	private boolean visible = false;
 	private Set<Reservation> reservations;
 
-	@Formula("SELECT count(amount) FROM reservation WHERE status = 1 AND schedule_id = id")
-	private int numberOfValidReservations;
-     
     public Schedule() {}
      
     @Id
@@ -147,7 +144,7 @@ public class Schedule implements Serializable, Comparable<Schedule> {
 
 	@Transient
 	public Integer getCapacityAvailable() {
-		return capacity - numberOfValidReservations;
+		return getCapacity() - getValidReservations().size();
 	}
 	
 	@Transient
@@ -155,8 +152,10 @@ public class Schedule implements Serializable, Comparable<Schedule> {
 		PeriodFormatter daysHoursMinutes = new PeriodFormatterBuilder()
 	    .appendDays()
 	    .appendSuffix(" day", " days")
+	    .appendSeparatorIfFieldsAfter(" ")
 	    .appendHours()
 	    .appendSuffix(" hour", " hours")
+	    .appendSeparatorIfFieldsAfter(" ")
 	    .appendMinutes()
 	    .appendSuffix(" minute", " minutes")
 	    .toFormatter();

@@ -50,9 +50,7 @@ public class PriceEngine {
 				if(LogicEngine.eval(rule.getExpression(), variableMap)) {
 					price = calculatePrice(price, rule.getPriceChange());
 				}
-			} catch (Exception e) {
-				return price;
-			}			
+			} catch (Exception e) {	}			
 		}
 		return price;
 	}

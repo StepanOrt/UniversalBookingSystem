@@ -32,6 +32,11 @@
 		<div class="page-header">
 			<h1>${pageTitle}</h1>
 		</div>
+		<security:authorize ifAllGranted="PERM_RES_EDIT">
+
+			<a href="${baseUrl}/property"><button class="btn btn-default">${editProperties}</button></a>
+	
+		</security:authorize>
 		<div class="table-responsive">
 			<c:set var="type" value="MAIN" />
 			<c:set var="firstResource" value="${resourceList[0]}" />
@@ -111,7 +116,6 @@
 		</div>
 		<security:authorize ifAllGranted="PERM_RES_EDIT">
 
-			<a href="${baseUrl}/property"><button class="btn btn-default">${editProperties}</button></a>
 			<a href="${baseUrl}?form" title="${add}"><button class="btn btn-default"><span class="icon-fallback-glyph"><i class="icon ion-plus-round"></i><span class="text">${add}</span></span></button></a>
 	
 		</security:authorize>

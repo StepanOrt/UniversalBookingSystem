@@ -18,6 +18,7 @@
 		<%@ include file="../../includes/head.jspf"%>
 	</head>
 	<body>
+	    <c:set var="active" value="resources" />
 		<%@ include file="../../includes/navigation.jspf" %>
 		<div class="container"> 
 			<%@ include file="../../includes/message.jspf" %>

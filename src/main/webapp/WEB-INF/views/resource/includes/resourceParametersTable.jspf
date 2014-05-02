@@ -11,10 +11,7 @@
 		<h2 class="panel-title"><spring:message code="resource.label.properties.${type}" /></h2>
   	</div>
   	<c:set var="itemprop" value=""/>
-  	<c:if test="${type == 'MAIN' }">
-  		<c:set var="itemprop" value="itemprop=\"name\""/>
-  	</c:if>
-	<div class="panel-body" ${itemprop}>
+	<div class="panel-body">
 		<c:forEach var="property" items="${resource.propertyValuesMap}">
 			<c:set var="propertyName" value="${property.key}" />
 			<c:set var="propertyValue" value="${property.value}"/>

@@ -64,14 +64,17 @@ public class ReservationService {
 			throw new NotEnoughCreditException();
 		}
 		if (reservation.getStatus().equals(Status.CANCELED)) {
-			reservation.setStatus(Status.RESERVED);
-			if(account.isCalendarOk())
-				reservation = googleCalendarHelper.createReservationEvent(reservation);
-			if (account.isGooglePlusOk())
-				reservation = googlePlusHelper.createMoment(reservation);
-			reservationDao.update(reservation);
-			updateCredit(account, getPrice(schedule, Action.CREATE));
-			return;
+			if (priceEngine.canReserve(account, schedule)) {
+				reservation.setStatus(Status.RESERVED);
+				if(account.isCalendarOk())
+					reservation = googleCalendarHelper.createReservationEvent(reservation);
+				if (account.isGooglePlusOk())
+					reservation = googlePlusHelper.createMoment(reservation);
+				reservationDao.update(reservation);
+				updateCredit(account, getPrice(schedule, Action.CREATE));
+				return;
+			}
+			throw new NotEnoughCreditException();
 		}
 		throw new ReservationAlreadyExistsException();
 	}

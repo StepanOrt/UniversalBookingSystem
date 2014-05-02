@@ -132,6 +132,18 @@ public class Resource {
     	Collections.sort(list);
     	return list;
     }
+
+    @Transient
+	@Override
+	public String toString() {
+    	String out = "Reservation: ";
+		for (ResourcePropertyValue propertyValue : getPropertyValues()) {
+			out += propertyValue.getProperty().getName() + "=" + propertyValue.getValue() + " ";
+		}
+		return out.substring(0, out.length() - 1);
+	}
+    
+    
     
     
 }

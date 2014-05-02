@@ -19,6 +19,7 @@
 		<%@ include file="../includes/head.jspf"%>
 	</head>
 	<body>
+	    <c:set var="active" value="rules" />
 		<%@ include file="../includes/navigation.jspf" %>
 		<div class="container"> 
 			<%@ include file="../includes/message.jspf" %>

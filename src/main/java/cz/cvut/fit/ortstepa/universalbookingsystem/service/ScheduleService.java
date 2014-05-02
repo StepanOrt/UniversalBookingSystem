@@ -45,7 +45,13 @@ public class ScheduleService {
 	
 	@Transactional(readOnly = false)
 	public void update(Schedule schedule, Errors errors) {
-		scheduleDao.update(schedule);
+		Schedule dbSchedule = scheduleDao.get(schedule.getId());
+		dbSchedule.setCapacity(schedule.getCapacity());
+		dbSchedule.setDuration(schedule.getDuration());
+		dbSchedule.setNote(schedule.getNote());
+		dbSchedule.setStart(schedule.getStart());
+		dbSchedule.setVisible(schedule.isVisible());
+		scheduleDao.update(dbSchedule);
 	}
 
 	

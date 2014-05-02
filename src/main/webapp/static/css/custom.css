@@ -218,3 +218,7 @@ ADDED BY afontgarde.js:
 .supports-fontface.supports-generatedcontent .icon-fallback-img .icon {
 	background-image: none;
 }
+
+.xdsoft_datetimepicker .xdsoft_label {
+	z-index: 1040 !important;
+}

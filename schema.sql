@@ -70,7 +70,7 @@ create table resource_property (
 
 create table resource_property_value (
 	id bigint unsigned not null auto_increment primary key,
-	value varchar(1000),
+	value varchar(5000),
 	resource_id bigint unsigned not null,
 	resource_property_id bigint unsigned not null, 
     foreign key (resource_id) references resource (id) on delete cascade,

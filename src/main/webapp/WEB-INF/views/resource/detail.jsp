@@ -19,9 +19,10 @@
 		<title>${pageTitle}</title>
 		<%@ include file="../includes/head.jspf"%>
 	</head>
-	<body>
+	<body itemscope itemtype="http://schema.org/LocalBusiness">
+	    <c:set var="active" value="resources" />
 		<%@ include file="../includes/navigation.jspf" %>
-		<div class="container" itemscope itemtype="http://schema.org/LocalBusiness"> 
+		<div class="container"> 
 			<%@ include file="../includes/message.jspf" %>
 			<div class="page-header">
 				<h1>${pageTitle}</h1>
