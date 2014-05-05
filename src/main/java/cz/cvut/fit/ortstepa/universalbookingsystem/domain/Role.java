@@ -27,7 +27,7 @@ public class Role implements GrantedAuthority {
 	private Set<Permission> permissions = new HashSet<Permission>();
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	public Long getId() { return id; }
 

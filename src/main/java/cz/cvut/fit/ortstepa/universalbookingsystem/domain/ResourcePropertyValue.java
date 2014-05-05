@@ -27,7 +27,7 @@ public class ResourcePropertyValue implements Serializable {
     public ResourcePropertyValue() {}
      
     @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
     public Long getId() {
 		return id;

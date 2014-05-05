@@ -251,7 +251,7 @@ public class AccountController {
 			accountService.updateAccount(email, form, result);
 		
 		if (!result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("message", "account.message.sucess");
+			redirectAttributes.addFlashAttribute("success", "account.message.sucess");
 			Authentication authRequest = new UsernamePasswordAuthenticationToken(form.getEmail(), currentPassword);
 			Authentication authResult = authMgr.authenticate(authRequest);
 			SecurityContextHolder.getContext().setAuthentication(authResult);

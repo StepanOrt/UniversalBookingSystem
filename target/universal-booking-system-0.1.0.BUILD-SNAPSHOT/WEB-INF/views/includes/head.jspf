@@ -1,0 +1,105 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<meta charset="UTF-8" />
+
+<link rel="stylesheet" href="/static/css/bootstrap.css"/>
+<link rel="stylesheet" href="/static/css/ionicons.min.css"/>
+<link rel="stylesheet" href="/static/css/custom.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css"/>
+<script type="text/javascript" src="/static/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+<script type="text/javascript" src="/static/js/jqBootstrapValidation.js"></script>
+<script type="text/javascript" src="/static/js/jquery.datetimepicker.js"></script>
+<script type="text/javascript">
+
+  $(function () {
+	  $("form").attr('novalidate', 'novalidate');
+	  //$(".note").hide();
+	  $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+  	  
+	  $('#confirmDelete').on('show.bs.modal', function (e) {
+		  $('.modals').removeAttr('hidden');
+	      $message = $(e.relatedTarget).attr('data-message');
+	      $(this).find('.modal-body p').text($message);
+	      $title = $(e.relatedTarget).attr('data-title');
+	      $(this).find('.modal-title').text($title);
+	
+	      // Pass form reference to modal for submission on yes/ok
+	      var form = $(e.relatedTarget).closest('form');
+	      $(this).find('.modal-footer #confirm').data('form', form);
+	  });
+	  
+	  // Form confirm (yes/ok) handler, submits form
+	  $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
+	      $(this).data('form').submit();
+	  });
+  
+	  $('.fill').click( function(event) {
+			var expression = $('#expression').val();
+			var fill = $(event.target).text();
+			if (fill.slice(-1) != ' ' && expression.length > 0) expression += ' ';
+			expression += fill;
+			$('#expression').val(expression);
+	  });
+	  
+	  var startDateTime = null;
+	  var endDateTime = null;
+	  
+	  var schedules = $("#schedulesTable > tbody > tr");
+	  var lastSchedule = schedules.last();
+	  var lastScheduleStart = lastSchedule.find("td.start");
+	  
+	  var lastScheduleDateArray = lastScheduleStart.attr('data-date').split('.');
+	  var lastScheduleTimeArray = lastScheduleStart.attr('data-time').split(':');
+	  
+	  startDateTime = new Date();  
+	  endDateTime = new Date(lastScheduleDateArray[2], lastScheduleDateArray[1] - 1, lastScheduleDateArray[0], lastScheduleTimeArray[0], lastScheduleTimeArray[1], 0, 0);
+	  
+	
+	  var startDateString = startDateTime.getDate() + "." + (startDateTime.getMonth()+1) + "." + (startDateTime.getYear()+1900);
+	  $('#datetimepickerFrom').attr('value', startDateString);
+	  $('#datetimepickerFrom').datetimepicker({
+		  format:'d.m.Y',
+		  inline:true,
+		  timepicker:false,
+		  lang:'en',
+		  onChangeDateTime:function(dp,$input){
+			 startTime = $input.val();
+			 var dateArray = startTime.split(".");
+			 startDateTime = new Date(dateArray[2], dateArray[1] - 1, dateArray[0], 0, 0, 0);
+			 refreshSchedules();
+		  }
+	  });
+
+	  var endDateString = endDateTime.getDate() + "." + (endDateTime.getMonth()+1) + "." + (endDateTime.getYear() + 1900);
+	  $('#datetimepickerTo').attr('value', endDateString);
+	  $('#datetimepickerTo').datetimepicker({
+		  format:'d.m.Y',
+		  inline:true,
+		  timepicker:false,
+		  lang:'en',
+		  onChangeDateTime:function(dp,$input){
+	 	  	endTime = $input.val();
+			var dateArray = endTime.split(".");
+			endDateTime = new Date(dateArray[2], dateArray[1] - 1, dateArray[0], 0, 0, 0);
+			endDateTime.setDate(endDateTime.getDate() + 1);
+			refreshSchedules();
+		  }
+      });
+	  
+	  var refreshSchedules = function () {
+		  $("#schedulesTable > tbody > tr").each(function( index ) {
+			  var selectedDate = $(this).find("td.start").attr('data-date');
+			  var selectedTime = $(this).find("td.start").attr('data-time');
+			  var dateArray = selectedDate.split(".");
+			  var timeArray = selectedTime.split(":");
+			  var selectedDateTime = new Date(dateArray[2], dateArray[1] - 1, dateArray[0], timeArray[0], timeArray[1], 0, 0);
+			  $(this).hide();
+			  if (selectedDateTime >= startDateTime && selectedDateTime <= endDateTime) {
+				  $(this).show();
+			  }
+	   });
+	};
+    refreshSchedules();
+} );
+  
+</script>

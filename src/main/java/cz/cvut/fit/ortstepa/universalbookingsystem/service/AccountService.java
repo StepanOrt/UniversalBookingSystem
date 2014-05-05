@@ -144,8 +144,10 @@ public class AccountService {
 	}
 	
 	private void makeAdmin(Account account) {
-		removeRole(account, "ROLE_ADMIN");
-		removeRole(account, "ROLE_USER");
+		//removeRole(account, "ROLE_ADMIN");
+		//removeRole(account, "ROLE_USER");
+		account.getRoles().clear();
+		account.getRoles().add(roleDao.findByName("ROLE_REGISTERED"));
 		account.getRoles().add(roleDao.findByName("ROLE_ADMIN"));
 		accountDao.update(account);
 	}
@@ -156,14 +158,15 @@ public class AccountService {
 			Role role = (Role) iterator.next();
 			if (role.getName().equals(roleName)) {
 				account.getRoles().remove(role);
-				return;
 			}
 		}
 	}
 
 	private void makeUser(Account account) {
-		removeRole(account, "ROLE_ADMIN");
-		removeRole(account, "ROLE_USER");
+		//removeRole(account, "ROLE_ADMIN");
+		//removeRole(account, "ROLE_USER");
+		account.getRoles().clear();
+		account.getRoles().add(roleDao.findByName("ROLE_REGISTERED"));
 		account.getRoles().add(roleDao.findByName("ROLE_USER"));
 		accountDao.update(account);
 	}

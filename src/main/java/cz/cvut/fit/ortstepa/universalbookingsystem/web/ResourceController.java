@@ -76,8 +76,9 @@ public class ResourceController {
 	
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String list(Model model, @RequestParam(required=false) String success, final RedirectAttributes redirectAttributes) {
+	public String list(Model model, @RequestParam(required=false) String success,  @RequestParam(required=false) String message, final RedirectAttributes redirectAttributes) {
 		if (success != null) redirectAttributes.addFlashAttribute("success", success);
+		if (message != null) redirectAttributes.addFlashAttribute("message", message);
 		return page(model);				
 	}
 

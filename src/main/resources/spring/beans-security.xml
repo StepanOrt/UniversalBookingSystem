@@ -31,7 +31,7 @@
 		<intercept-url pattern="^/resource(/$|$)" method="POST" access="hasRole('PERM_RES_EDIT')"/>
 		<intercept-url pattern="^/resource/[0-9]+(/$|$)" method="PUT" access="hasRole('PERM_RES_EDIT')"/>
 		<intercept-url pattern="^/resource/[0-9]+(/$|$)" method="DELETE" access="hasRole('PERM_RES_EDIT')"/>
-		<intercept-url pattern="^/resource(/$|$)" method="GET" access="permitAll"/>
+		<intercept-url pattern="^/resource/?(\?message=.*)?$" method="GET" access="permitAll"/>
 		<intercept-url pattern="^/resource/[0-9]+(/$|$)" method="GET" access="permitAll"/>
 
 		<intercept-url pattern="^/resource/[0-9]+/schedule/?\?form$" method="GET" access="hasRole('PERM_SCH_EDIT')"/>

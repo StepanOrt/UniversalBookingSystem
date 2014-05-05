@@ -6,20 +6,45 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
-	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/UniversalBookingSystemDB" resource-ref="true"/>
+	<jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="ALL">
+		<jdbc:script location="classpath:db-schema.sql"/>
+		<jdbc:script location="classpath:db-test-data.sql"/>
+	</jdbc:initialize-database>
 	
+	<!-- 
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/ubs"/>
+		<property name="username" value="root"/>
+		<property name="password" value="root"/>
+	</bean>
+	-->
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver"/>
+		<property name="url" value="jdbc:postgresql://localhost:5432/ubs"/>
+		<property name="username" value="postgres"/>
+		<property name="password" value="postgres_password"/>
+	</bean>
+ 	
+
+
 	<bean class="org.springframework.jdbc.core.JdbcTemplate" p:dataSource-ref="dataSource" />
 
 	<util:properties id="hibernateProperties">
-		<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+		<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+		<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 		<prop key="hibernate.show_sql">true</prop>
+		<!-- <prop key="hibernate.hbm2ddl.import_files">classpath:db-schema.sql</prop> -->
 	</util:properties>
 
 	<bean id="sessionFactory"

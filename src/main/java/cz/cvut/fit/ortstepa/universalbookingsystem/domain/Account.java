@@ -24,8 +24,6 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.Hibernate;
-import org.hibernate.engine.Cascade;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -113,7 +111,7 @@ public class Account {
 	}	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	public Long getId() { return id; }
 
@@ -140,8 +138,8 @@ public class Account {
 
 	@NotNull
 	@Size(min = 6, max = 50)
-	@Email
-	@Column(name = "email")
+	@Email	
+	@Column(name="email", unique=true)
 	public String getEmail() { return email; }
 
 	public void setEmail(String email) { this.email = email; }
