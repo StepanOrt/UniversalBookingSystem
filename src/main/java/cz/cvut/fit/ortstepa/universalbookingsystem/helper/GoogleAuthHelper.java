@@ -42,7 +42,7 @@ public class GoogleAuthHelper {
 	private List<String> requestVisibleActions = new ArrayList<String>();
 	
 	public GoogleAuthHelper() throws IOException {
-		this("/client_secrets.json");
+		this("/client_secret.json");
 	}
 		
 	public GoogleAuthHelper(String clientSecretsJsonLocation) throws IOException {
@@ -71,7 +71,7 @@ public class GoogleAuthHelper {
 		return null;
 	}
 	
-	private String getRedirectUri() {
+	public String getRedirectUri() {
 		return clientSecrets.getDetails().getRedirectUris().get(0);
 	}
 

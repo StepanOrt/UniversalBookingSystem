@@ -11,10 +11,8 @@ import com.google.api.client.googleapis.services.AbstractGoogleClient;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.PlusScopes;
-import com.google.api.services.plus.model.Activity.PlusObject;
 import com.google.api.services.plus.model.ItemScope;
 import com.google.api.services.plus.model.Moment;
-import com.google.api.services.plus.model.PeopleFeed;
 
 import cz.cvut.fit.ortstepa.universalbookingsystem.domain.Reservation;
 
@@ -25,7 +23,6 @@ public class GooglePlusHelper {
 	
 	private static final Logger log = LoggerFactory.getLogger(GooglePlusHelper.class);
 	
-	private String urlPattern;
 	private GoogleAuthHelper googleAuthHelper;
 	
 	@Required
@@ -43,7 +40,7 @@ public class GooglePlusHelper {
 			ItemScope targetItemScope = new ItemScope();
 			ItemScope resultItemScope = new ItemScope();
 			resultItemScope.setType(RESERVATION_SCHEMA);
-			String reservationMomentUrl = urlPattern.replace("{id}", reservation.getSchedule().getResource().getId().toString());
+			String reservationMomentUrl = googleAuthHelper.getRedirectUri().replace("/account/oauth2callback", "/resource/" + reservation.getSchedule().getResource().getId().toString());
 			targetItemScope.setUrl(reservationMomentUrl);
 			resultItemScope.setStartDate(new DateTime(reservation.getSchedule().getStart(), TimeZone.getDefault()).toString());
 			moment.setTarget(targetItemScope);
@@ -72,14 +69,4 @@ public class GooglePlusHelper {
 		log.debug(client.getApplicationName());
 		return plus;
 	}
-
-	public String getUrlPattern() {
-		return urlPattern;
-	}
-	
-	@Required
-	public void setUrlPattern(String urlPattern) {
-		this.urlPattern = urlPattern;
-	}
-
 }

@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS account (
 	google_plus_ok BOOLEAN NOT NULL DEFAULT TRUE,
 	credit DECIMAL(6,2) NOT NULL DEFAULT 0.0,
 	internal VARCHAR(1000),
-	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	date_created TIMESTAMP,
 	date_modified TIMESTAMP,
 	UNIQUE (email),
 	CONSTRAINT account_pk PRIMARY KEY (id)
@@ -113,7 +113,7 @@ ALTER TABLE schedule ALTER COLUMN id SET DEFAULT nextval('schedule_id_seq');
 CREATE TABLE IF NOT EXISTS reservation (
 	id BIGINT NOT NULL,
 	status SMALLINT,
-	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	date_created TIMESTAMP,
 	date_canceled TIMESTAMP,
 	schedule_id BIGINT NOT NULL,
 	account_id BIGINT NOT NULL,

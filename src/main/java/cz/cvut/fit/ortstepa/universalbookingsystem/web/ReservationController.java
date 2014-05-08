@@ -57,6 +57,11 @@ public class ReservationController {
 		return "forward:reservation/error/" + "reservation.error.notEnoughCredit/";
 	}
 	
+	@ExceptionHandler(ReservationService.ScheduleFullException.class)
+	public String scheduleFullExceptionHandler() {
+		return "forward:reservation/error/" + "reservation.error.scheduleFull/";
+	}
+	
 	@RequestMapping("error/{message}/")
 	public String errorRedirect(@PathVariable Long resourceId, @PathVariable String message, final RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("error", message);

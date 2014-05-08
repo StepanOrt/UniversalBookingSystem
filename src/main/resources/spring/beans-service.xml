@@ -19,32 +19,12 @@
 		<jdbc:script location="classpath:db-schema.sql"/>
 		<jdbc:script location="classpath:db-test-data.sql"/>
 	</jdbc:initialize-database>
-	
-	<!-- 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/ubs"/>
-		<property name="username" value="root"/>
-		<property name="password" value="root"/>
-	</bean>
-	-->
-	
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.postgresql.Driver"/>
-		<property name="url" value="jdbc:postgresql://localhost:5432/ubs"/>
-		<property name="username" value="postgres"/>
-		<property name="password" value="postgres_password"/>
-	</bean>
- 	
-
 
 	<bean class="org.springframework.jdbc.core.JdbcTemplate" p:dataSource-ref="dataSource" />
 
 	<util:properties id="hibernateProperties">
 		<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-		<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 		<prop key="hibernate.show_sql">true</prop>
-		<!-- <prop key="hibernate.hbm2ddl.import_files">classpath:db-schema.sql</prop> -->
 	</util:properties>
 
 	<bean id="sessionFactory"
@@ -58,20 +38,13 @@
 		p:sessionFactory-ref="sessionFactory" />
 
 	<bean id="accountDao" class="cz.cvut.fit.ortstepa.universalbookingsystem.dao.hbn.HbnAccountDao"/>
-	<bean id="googleAuthHelper" class="cz.cvut.fit.ortstepa.universalbookingsystem.helper.GoogleAuthHelper">
-		<constructor-arg name="clientSecretsJsonLocation">
-			<value>/client_secret_647374944578-sdfbmidtqona2e6tkcjg28ing5ls2f11.apps.googleusercontent.com.json</value>
-		</constructor-arg>
-	</bean>
+	<bean id="googleAuthHelper" class="cz.cvut.fit.ortstepa.universalbookingsystem.helper.GoogleAuthHelper"/>
 	<bean id="googleCalendarHelper" class="cz.cvut.fit.ortstepa.universalbookingsystem.helper.GoogleCalendarHelper">
 		<property name="googleAuthHelper" ref="googleAuthHelper" />
 	</bean>
 
 	<bean id="googlePlusHelper" class="cz.cvut.fit.ortstepa.universalbookingsystem.helper.GooglePlusHelper">
 		<property name="googleAuthHelper" ref="googleAuthHelper"/>			
-		<property name="urlPattern">
-			<value>http://stepan-storage.tk:85/resource/{id}</value>
-		</property>
 	</bean>
 	
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.dao.hbn" />
@@ -80,5 +53,34 @@
 	<context:component-scan base-package="cz.cvut.fit.ortstepa.universalbookingsystem.helper" />
 
 	<tx:annotation-driven />
+
+	<beans profile="default">
+		<util:properties id="hibernateProperties">
+			<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+			<prop key="hibernate.show_sql">true</prop>
+		</util:properties>
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="driverClassName" value="org.postgresql.Driver"/>
+			<property name="url" value="jdbc:postgresql://localhost:5432/ubs"/>
+			<property name="username" value="postgres"/>
+			<property name="password" value="postgres_password"/>
+		</bean>
+	</beans>
+ 	
+ 	<beans profile="prod">
+ 		<util:properties id="hibernateProperties">
+			<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+			<prop key="hibernate.show_sql">false</prop>
+		</util:properties>
+	 	<bean class="java.net.URI" id="dbUrl">
+	        <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
+	    </bean>
+	
+	    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	        <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
+	        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+	        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+		</bean>
+	</beans>
 
 </beans>
